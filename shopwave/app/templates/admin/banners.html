@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% block title %}Banners — ShopWave Admin{% endblock %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h4 class="fw-bold mb-0"><i class="bi bi-image me-1 text-primary"></i>Homepage Banners</h4>
+  <button class="btn btn-primary btn-sm" type="button"
+          data-bs-toggle="collapse" data-bs-target="#addBannerForm">
+    <i class="bi bi-plus-circle me-1"></i>Add Banner
+  </button>
+</div>
+
+<div class="alert alert-info small mb-3">
+  <i class="bi bi-info-circle me-1"></i>
+  Maximum <strong>3 active banners</strong> are shown on the homepage carousel.
+  Adding a 4th will deactivate the lowest-priority active banner.
+</div>
+
+<div class="collapse mb-4" id="addBannerForm">
+  <div class="card border-0 shadow-sm">
+    <div class="card-header bg-white fw-semibold border-0">Add New Banner</div>
+    <div class="card-body">
+      <form method="POST" action="{{ url_for('admin.add_banner') }}" enctype="multipart/form-data">
+        <div class="row g-3">
+          <div class="col-md-6">
+            <label class="form-label fw-semibold small">Title <span class="text-danger">*</span></label>
+            <input type="text" name="title" class="form-control" placeholder="Banner title" required />
+          </div>
+          <div class="col-md-6">
+            <label class="form-label fw-semibold small">Link URL</label>
+            <input type="text" name="link" class="form-control" placeholder="/deals/ or https://..." />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-semibold small">Position (sort order)</label>
+            <input type="number" name="position" class="form-control" value="0" min="0" />
+          </div>
+          <div class="col-md-8">
+            <label class="form-label fw-semibold small">Banner Image <span class="text-danger">*</span></label>
+            <input type="file" name="image" class="form-control" accept="image/*" required />
+            <div class="form-text">JPEG, PNG, WebP — max 2MB. Recommended: 1200x320px</div>
+          </div>
+          <div class="col-12">
+            <button type="submit" class="btn btn-primary fw-semibold">
+              <i class="bi bi-upload me-1"></i>Upload Banner
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% if banners %}
+<div class="row g-3">
+  {% for b in banners %}
+  <div class="col-md-6 col-lg-4">
+    <div class="card border-0 shadow-sm h-100">
+      <div class="position-relative">
+        <img src="{{ url_for('static', filename='uploads/' + b.image) }}"
+             class="card-img-top"
+             style="height:160px;object-fit:cover;"
+             alt="{{ b.title }}"
+             onerror="this.src='https://placehold.co/400x160/eee/999?text=Banner'" />
+        {% if b.is_active %}
+        <span class="badge bg-success position-absolute top-0 end-0 m-2">Active</span>
+        {% else %}
+        <span class="badge bg-secondary position-absolute top-0 end-0 m-2">Inactive</span>
+        {% endif %}
+      </div>
+      <div class="card-body">
+        <h6 class="fw-semibold mb-1">{{ b.title }}</h6>
+        {% if b.link %}
+        <p class="text-muted small mb-1"><i class="bi bi-link-45deg me-1"></i>{{ b.link }}</p>
+        {% endif %}
+        <p class="text-muted small mb-2">Position: {{ b.position }}</p>
+        <div class="d-flex gap-2">
+          <form method="POST" action="{{ url_for('admin.toggle_banner', bid=b.id) }}" class="d-inline">
+            <button type="submit" class="btn btn-sm {% if b.is_active %}btn-outline-warning{% else %}btn-outline-success{% endif %}">
+              {% if b.is_active %}<i class="bi bi-eye-slash me-1"></i>Deactivate{% else %}<i class="bi bi-eye me-1"></i>Activate{% endif %}
+            </button>
+          </form>
+          <form method="POST" action="{{ url_for('admin.delete_banner', bid=b.id) }}" class="d-inline"
+                onsubmit="return confirm('Delete this banner?')">
+            <button type="submit" class="btn btn-sm btn-outline-danger">
+              <i class="bi bi-trash me-1"></i>Delete
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="text-center py-5">
+  <i class="bi bi-image fs-1 text-muted"></i>
+  <h5 class="mt-3 text-muted">No banners yet</h5>
+  <p class="text-muted">Add banners to display on the homepage carousel.</p>
+</div>
+{% endif %}
+
+{% endblock %}

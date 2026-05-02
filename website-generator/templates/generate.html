@@ -1,0 +1,236 @@
+{% extends 'base.html' %}
+{% block title %}AI Website Builder — WebGen{% endblock %}
+{% block content %}
+<div class="cgen-page">
+
+  <!-- Hero -->
+  <div class="cgen-hero">
+    <div class="hero-badge">⚡ AI-Powered · 3-Step Engine</div>
+    <h1>Build Any Website<br><span class="cgen-hero-sub">from a Single Sentence</span></h1>
+    <p>Intent Analysis → Auto Design → Full Code Generation. No coding required.</p>
+    <div class="cgen-hero-stats">
+      <div class="chs"><strong>3</strong><span>Steps</span></div>
+      <div class="chs-sep">·</div>
+      <div class="chs"><strong>4</strong><span>Project Types</span></div>
+      <div class="chs-sep">·</div>
+      <div class="chs"><strong>8</strong><span>Themes</span></div>
+      <div class="chs-sep">·</div>
+      <div class="chs"><strong>100%</strong><span>Working Code</span></div>
+    </div>
+  </div>
+
+  <!-- Main prompt card -->
+  <div class="cgen-card">
+    <form method="POST" action="{{ url_for('generate_page') }}" id="cgenForm">
+
+      <div class="cgen-prompt-wrap" id="promptWrap">
+        <div class="cgen-prompt-label">
+          <span>📝</span> Describe your website
+          <span class="cgen-lang-hint">English · اردو · हिंदी</span>
+        </div>
+        <textarea name="prompt" id="cgenPrompt" rows="4" required
+          placeholder="Examples:&#10;• Build a startup landing page for AI tool with pricing and waitlist&#10;• Create Meesho-like ecommerce platform with seller dashboard&#10;• Make portfolio website with animations and dark theme&#10;• Create a blog with login system using Python and SQLite"></textarea>
+        <div class="cgen-prompt-footer">
+          <span class="cgen-char"><span id="cgenCount">0</span>/500</span>
+          <button type="button" class="cgen-clear" onclick="clearPrompt()">✕ Clear</button>
+        </div>
+      </div>
+
+      <!-- Live intent preview -->
+      <div class="cgen-intent-preview" id="intentPreview" style="display:none">
+        <div class="cip-label">🧠 Detected Intent</div>
+        <div class="cip-grid">
+          <div class="cip-item"><span>Type</span><strong id="cipType">—</strong></div>
+          <div class="cip-item"><span>Stack</span><strong id="cipStack">—</strong></div>
+          <div class="cip-item"><span>Theme</span><strong id="cipTheme">—</strong></div>
+          <div class="cip-item"><span>Complexity</span><strong id="cipComplexity">—</strong></div>
+          <div class="cip-item"><span>UI Style</span><strong id="cipStyle">—</strong></div>
+          <div class="cip-item"><span>Auth</span><strong id="cipAuth">—</strong></div>
+        </div>
+      </div>
+
+      <!-- Example prompts -->
+      <div class="cgen-examples">
+        <div class="cgen-examples-label">Quick examples — click to use:</div>
+        <div class="cgen-chips">
+          <button type="button" class="cgen-chip cgen-chip-ecom" onclick="usePrompt(this)">Build an e-commerce site like Meesho with seller dashboard</button>
+          <button type="button" class="cgen-chip cgen-chip-portfolio" onclick="usePrompt(this)">Create a portfolio website with dark theme and animations</button>
+          <button type="button" class="cgen-chip cgen-chip-startup" onclick="usePrompt(this)">Build a startup landing page for AI tool with pricing and waitlist</button>
+          <button type="button" class="cgen-chip cgen-chip-blog" onclick="usePrompt(this)">Create a blog with login system using Python and SQLite</button>
+          <button type="button" class="cgen-chip" onclick="usePrompt(this)">Make a corporate business site with services, testimonials and contact form</button>
+          <button type="button" class="cgen-chip" onclick="usePrompt(this)">Build a Flask portfolio with SQLite database and auth system</button>
+          <button type="button" class="cgen-chip" onclick="usePrompt(this)">Create a minimal blog with green theme and Inter font</button>
+          <button type="button" class="cgen-chip" onclick="usePrompt(this)">Build a dark e-commerce store with product catalog and admin panel</button>
+        </div>
+      </div>
+
+      <button type="submit" class="cgen-submit" id="cgenSubmit">
+        <span id="cgenBtnText">⚡ Generate Complete Project</span>
+        <span id="cgenBtnSpin" style="display:none">
+          <span class="spin-dot"></span>&nbsp; Analyzing → Designing → Generating...
+        </span>
+      </button>
+    </form>
+  </div>
+
+  <!-- 3-step pipeline visual -->
+  <div class="cgen-pipeline">
+    <div class="cpipe-step">
+      <div class="cpipe-num">1</div>
+      <div class="cpipe-icon">🧠</div>
+      <h4>Intent Analysis</h4>
+      <p>Detects type, complexity, UI style, features, platform references</p>
+    </div>
+    <div class="cpipe-arrow">→</div>
+    <div class="cpipe-step">
+      <div class="cpipe-num">2</div>
+      <div class="cpipe-icon">🎨</div>
+      <h4>Auto Design</h4>
+      <p>Chooses colors, layout, components, UX flow automatically</p>
+    </div>
+    <div class="cpipe-arrow">→</div>
+    <div class="cpipe-step">
+      <div class="cpipe-num">3</div>
+      <div class="cpipe-icon">⚙️</div>
+      <h4>Architecture Plan</h4>
+      <p>Designs frontend, backend, DB schema, API routes</p>
+    </div>
+    <div class="cpipe-arrow">→</div>
+    <div class="cpipe-step">
+      <div class="cpipe-num">4</div>
+      <div class="cpipe-icon">💻</div>
+      <h4>Code Generation</h4>
+      <p>Generates every file with full working code</p>
+    </div>
+  </div>
+
+  <!-- What gets generated -->
+  <div class="cgen-section-title">What you get</div>
+  <div class="cgen-info-grid">
+    <div class="cgen-info-card"><span>🏗</span><h4>Architecture Plan</h4><p>Frontend + backend structure, component list, UX flow diagram.</p></div>
+    <div class="cgen-info-card"><span>💻</span><h4>Full Working Code</h4><p>Every file complete — no placeholders, no partial snippets.</p></div>
+    <div class="cgen-info-card"><span>🗄</span><h4>Database Schema</h4><p>SQL CREATE TABLE statements for all required tables.</p></div>
+    <div class="cgen-info-card"><span>🔌</span><h4>API Routes</h4><p>All routes documented with method, path, and description.</p></div>
+    <div class="cgen-info-card"><span>🚀</span><h4>Deployment Guide</h4><p>Local, Netlify, Render, Railway, and Docker instructions.</p></div>
+    <div class="cgen-info-card"><span>🛍️</span><h4>E-commerce Mode</h4><p>Seller dashboard, product CRUD, image upload, order management.</p></div>
+  </div>
+
+  <!-- Theme showcase -->
+  <div class="cgen-section-title">Themes</div>
+  <div class="cgen-themes">
+    <div class="cgen-theme-row">
+      {% for name, t in themes.items() %}
+      <button class="cgen-theme-pill" onclick="useThemePrompt('{{ name }}')" style="--tc:{{ t.primary }}">
+        <span style="background:linear-gradient(135deg,{{ t.primary }},{{ t.secondary }})"></span>
+        {{ name|capitalize }}
+      </button>
+      {% endfor %}
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const textarea = document.getElementById('cgenPrompt');
+const counter  = document.getElementById('cgenCount');
+
+// ── Char counter ──────────────────────────────────────────────────────────────
+textarea.addEventListener('input', () => {
+  const len = textarea.value.length;
+  counter.textContent = len;
+  if (len > 450) counter.style.color = '#f44336';
+  else counter.style.color = '';
+  updateIntentPreview(textarea.value);
+});
+
+// ── Live intent preview (client-side heuristic) ───────────────────────────────
+const TYPE_MAP = {
+  ecommerce: ['ecommerce','e-commerce','shop','store','meesho','shopify','seller','product','cart','order'],
+  portfolio: ['portfolio','showcase','personal','resume','cv','designer','developer','freelance'],
+  blog:      ['blog','article','post','cms','news','magazine','journal'],
+  business:  ['business','company','agency','startup','saas','landing','corporate','ai tool'],
+};
+const STACK_MAP = {
+  ecommerce: ['ecommerce','meesho','shop','store','seller'],
+  flask:     ['flask','python','backend','fullstack','database','db','login','auth'],
+  static:    ['html','css','static','simple','basic'],
+};
+const THEME_MAP = {
+  dark:['dark','night','black'],minimal:['minimal','clean','simple','white'],
+  business:['corporate','professional','enterprise'],nature:['green','eco','organic'],
+  warm:['warm','red','pink','vibrant'],ocean:['blue','ocean','teal'],
+  luxury:['luxury','premium','gold','elegant'],modern:['modern','trendy','fresh'],
+};
+const COMPLEXITY_MAP = {
+  advanced:['meesho','shopify','admin panel','dashboard','analytics','cms','saas','platform','animation','gsap'],
+  medium:  ['login','signup','auth','database','backend','flask','portfolio','pricing'],
+};
+const STYLE_MAP = {
+  dark:['dark','night'],minimal:['minimal','clean','simple'],
+  gradient:['gradient','colorful','vibrant','neon'],
+  creative:['animation','animated','portfolio','artistic'],
+  saas:['saas','startup','landing','product'],
+  corporate:['corporate','enterprise','professional'],
+};
+
+function detectIntent(text) {
+  const t = text.toLowerCase();
+  let type = 'business';
+  for (const [k,kws] of Object.entries(TYPE_MAP)) { if (kws.some(w => t.includes(w))) { type = k; break; } }
+  let stack = type === 'ecommerce' ? 'ecommerce' : (STACK_MAP.flask.some(w => t.includes(w)) ? 'flask' : 'static');
+  let theme = 'modern';
+  for (const [k,kws] of Object.entries(THEME_MAP)) { if (kws.some(w => t.includes(w))) { theme = k; break; } }
+  let complexity = 'simple';
+  if (COMPLEXITY_MAP.advanced.some(w => t.includes(w))) complexity = 'advanced';
+  else if (COMPLEXITY_MAP.medium.some(w => t.includes(w))) complexity = 'medium';
+  let style = 'saas';
+  for (const [k,kws] of Object.entries(STYLE_MAP)) { if (kws.some(w => t.includes(w))) { style = k; break; } }
+  const hasAuth = ['login','signup','auth','register','account'].some(w => t.includes(w));
+  return { type, stack, theme, complexity, style, hasAuth };
+}
+
+function updateIntentPreview(text) {
+  const preview = document.getElementById('intentPreview');
+  if (text.trim().length < 10) { preview.style.display = 'none'; return; }
+  const i = detectIntent(text);
+  preview.style.display = 'block';
+  document.getElementById('cipType').textContent       = i.type;
+  document.getElementById('cipStack').textContent      = i.stack;
+  document.getElementById('cipTheme').textContent      = i.theme;
+  document.getElementById('cipComplexity').textContent = i.complexity;
+  document.getElementById('cipStyle').textContent      = i.style;
+  document.getElementById('cipAuth').textContent       = i.hasAuth ? '✓ Yes' : '— No';
+  // Color complexity
+  const cEl = document.getElementById('cipComplexity');
+  cEl.className = 'complexity-' + i.complexity;
+}
+
+function usePrompt(btn) {
+  textarea.value = btn.textContent.trim();
+  counter.textContent = textarea.value.length;
+  updateIntentPreview(textarea.value);
+  textarea.focus();
+  textarea.scrollIntoView({ behavior:'smooth', block:'center' });
+}
+function useThemePrompt(theme) {
+  const types = ['portfolio','business','blog','e-commerce'];
+  const t = types[Math.floor(Math.random() * types.length)];
+  textarea.value = `Create a ${theme} theme ${t} website`;
+  counter.textContent = textarea.value.length;
+  updateIntentPreview(textarea.value);
+  textarea.focus();
+}
+function clearPrompt() {
+  textarea.value = ''; counter.textContent = '0';
+  document.getElementById('intentPreview').style.display = 'none';
+  textarea.focus();
+}
+document.getElementById('cgenForm').addEventListener('submit', () => {
+  document.getElementById('cgenBtnText').style.display = 'none';
+  document.getElementById('cgenBtnSpin').style.display = 'inline-flex';
+  document.getElementById('cgenSubmit').disabled = true;
+});
+</script>
+{% endblock %}

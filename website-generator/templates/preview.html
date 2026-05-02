@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Preview — {{ project.name }}{% endblock %}
+{% block content %}
+<div class="preview-page">
+  <div class="container">
+    <div class="preview-header">
+      <div>
+        <h2>{{ project.name }}</h2>
+        <span class="type-badge type-{{ project.project_type }}">{{ project.project_type }}</span>
+      </div>
+      <div style="display:flex;gap:1rem">
+        <a href="{{ url_for('download', project_id=project.id) }}" class="btn-submit" style="padding:.6rem 1.4rem">⬇ Download ZIP</a>
+        <a href="{{ url_for('dashboard') }}" class="btn-back">← Dashboard</a>
+      </div>
+    </div>
+
+    <div class="run-instructions">
+      <h4>Run this project locally</h4>
+      <ol>
+        <li>Download the ZIP and extract it</li>
+        <li>Open a terminal in the extracted folder</li>
+        <li>Run: <code>pip install -r requirements.txt</code></li>
+        <li>Run: <code>python app.py</code></li>
+        <li>Open <code>http://localhost:5000</code> in your browser</li>
+      </ol>
+    </div>
+  </div>
+</div>
+{% endblock %}

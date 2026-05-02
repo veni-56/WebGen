@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% block title %}Order #{{ order.id }} — ShopWave{% endblock %}
+{% block content %}
+
+<nav aria-label="breadcrumb" class="mb-3">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{{ url_for('customer.index') }}">Home</a></li>
+    <li class="breadcrumb-item"><a href="{{ url_for('customer.my_orders') }}">My Orders</a></li>
+    <li class="breadcrumb-item active">Order #{{ order.id }}</li>
+  </ol>
+</nav>
+
+<div class="row g-4">
+  <div class="col-lg-8">
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-header bg-white border-0 d-flex justify-content-between align-items-center">
+        <h5 class="fw-bold mb-0"><i class="bi bi-receipt me-1 text-primary"></i>Order #{{ order.id }}</h5>
+        {% set status_colors = {
+          'pending': 'warning',
+          'paid': 'info',
+          'confirmed': 'primary',
+          'shipped': 'secondary',
+          'delivered': 'success',
+          'cancelled': 'danger'
+        } %}
+        <span class="badge bg-{{ status_colors.get(order.status, 'secondary') }} fs-6">
+          {{ order.status | capitalize }}
+        </span>
+      </div>
+      <div class="card-body p-0">
+        {% for item in order.items %}
+        <div class="d-flex align-items-center gap-3 p-3 {% if not loop.last %}border-bottom{% endif %}">
+          <img src="{{ url_for('static', filename='uploads/' + item.product.image) }}"
+               class="rounded-2"
+               style="width:70px;height:70px;object-fit:cover;"
+               alt="{{ item.product.name }}"
+               onerror="this.src='https://placehold.co/70x70/eee/999?text=?'" />
+          <div class="flex-grow-1">
+            <div class="fw-semibold">{{ item.product.name }}</div>
+            <div class="text-muted small">{{ item.product.category }}</div>
+            <div class="text-muted small">Unit price: ${{ '%.2f' % item.price }}</div>
+          </div>
+          <div class="text-end">
+            <div class="text-muted small">× {{ item.quantity }}</div>
+            <div class="fw-bold text-primary">${{ '%.2f' % (item.price * item.quantity) }}</div>
+          </div>
+        </div>
+        {% endfor %}
+        <div class="p-3 border-top d-flex justify-content-between fw-bold fs-5">
+          <span>Total</span>
+          <span class="text-primary">${{ '%.2f' % order.total_price }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card border-0 shadow-sm mb-3">
+      <div class="card-header bg-white fw-bold border-0">
+        <i class="bi bi-info-circle me-1 text-primary"></i>Order Info
+      </div>
+      <div class="card-body">
+        <dl class="row mb-0 small">
+          <dt class="col-5 text-muted">Order ID</dt>
+          <dd class="col-7 fw-semibold">#{{ order.id }}</dd>
+
+          <dt class="col-5 text-muted">Date</dt>
+          <dd class="col-7">{{ order.created_at.strftime('%b %d, %Y %H:%M') }}</dd>
+
+          <dt class="col-5 text-muted">Payment Ref</dt>
+          <dd class="col-7 font-monospace text-success">{{ order.payment_ref }}</dd>
+
+          <dt class="col-5 text-muted">Status</dt>
+          <dd class="col-7">
+            <span class="badge bg-{{ status_colors.get(order.status, 'secondary') }}">
+              {{ order.status | capitalize }}
+            </span>
+          </dd>
+        </dl>
+      </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+      <div class="card-header bg-white fw-bold border-0">
+        <i class="bi bi-geo-alt me-1 text-primary"></i>Delivery Address
+      </div>
+      <div class="card-body">
+        <p class="mb-0 text-muted small">{{ order.address }}</p>
+      </div>
+    </div>
+
+    {% if order.discount > 0 %}
+    <div class="card border-0 shadow-sm mt-3">
+      <div class="card-body py-2">
+        <div class="d-flex justify-content-between small">
+          <span class="text-muted">Coupon <code>{{ order.coupon_code }}</code></span>
+          <span class="text-success fw-semibold">-${{ '%.2f' % order.discount }}</span>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Order Timeline -->
+    {% if order.timeline %}
+    <div class="card border-0 shadow-sm mt-3">
+      <div class="card-header bg-white fw-bold border-0">
+        <i class="bi bi-clock-history me-1 text-primary"></i>Order Timeline
+      </div>
+      <div class="card-body p-0">
+        {% for event in order.timeline %}
+        <div class="d-flex gap-3 p-3 {% if not loop.last %}border-bottom{% endif %}">
+          <div class="flex-shrink-0 mt-1">
+            <span class="badge bg-{{ status_colors.get(event.status, 'secondary') }} rounded-pill">{{ event.status|capitalize }}</span>
+          </div>
+          <div>
+            <div class="small text-muted">{{ event.created_at.strftime('%b %d, %Y %H:%M') }}</div>
+            {% if event.note %}<div class="small">{{ event.note }}</div>{% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <a href="{{ url_for('customer.my_orders') }}" class="btn btn-outline-secondary w-100 mt-3">
+      <i class="bi bi-arrow-left me-1"></i>Back to Orders
+    </a>
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,86 @@
+<!-- ============================================================
+     components/navbar.html — Reusable navbar
+     Loaded via fetch() in script.js
+     Placeholders: {{site_name}} replaced by generator
+     ============================================================ -->
+<nav id="mainNav" role="navigation" aria-label="Main navigation"
+     class="sticky top-0 z-50 bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl
+            border-b border-gray-100 dark:border-gray-800 transition-shadow"
+     x-data="{ mobileOpen: false }">
+
+  <!-- Scroll progress bar -->
+  <div id="scrollProgress"
+       class="absolute bottom-0 left-0 h-0.5 bg-gradient-to-r from-[var(--primary)] to-[var(--secondary)] transition-all duration-100"
+       style="width:0%"></div>
+
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+
+    <!-- Logo -->
+    <a href="../index.html" class="flex items-center gap-2.5 font-black text-xl tracking-tight group"
+       aria-label="{{site_name}} home">
+      <span class="w-8 h-8 rounded-xl btn-gradient flex items-center justify-center text-white text-sm
+                   group-hover:scale-110 transition-transform">
+        {{site_initial}}
+      </span>
+      <span class="dark:text-white">{{site_name_prefix}}<span class="text-primary">{{site_name_suffix}}</span></span>
+    </a>
+
+    <!-- Desktop nav -->
+    <div class="hidden md:flex items-center gap-1">
+      <a href="../index.html"          class="nav-link px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-all">Home</a>
+      <a href="../pages/about.html"    class="nav-link px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-all">About</a>
+      <a href="../pages/services.html" class="nav-link px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-all">Services</a>
+      <a href="../pages/portfolio.html"class="nav-link px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-all">Portfolio</a>
+      <a href="../pages/blog.html"     class="nav-link px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-all">Blog</a>
+      <a href="../pages/contact.html"  class="nav-link px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-all">Contact</a>
+      <a href="../pages/pricing.html"
+         class="btn-gradient ml-2 px-5 py-2 rounded-full text-sm font-bold
+                hover:scale-105 hover:shadow-glow transition-all focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2">
+        Pricing
+      </a>
+    </div>
+
+    <!-- Right controls -->
+    <div class="flex items-center gap-1.5">
+      <!-- Dark mode toggle -->
+      <button onclick="toggleDark()"
+              class="w-9 h-9 rounded-xl flex items-center justify-center text-gray-500 dark:text-gray-400
+                     hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors
+                     focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-1"
+              aria-label="Toggle dark mode" id="darkToggle">
+        <svg id="iconSun" class="w-5 h-5 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
+        </svg>
+        <svg id="iconMoon" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
+        </svg>
+      </button>
+
+      <!-- Mobile hamburger -->
+      <button @click="mobileOpen=!mobileOpen"
+              class="md:hidden w-9 h-9 rounded-xl flex items-center justify-center text-gray-500
+                     hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors
+                     focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-1"
+              :aria-expanded="mobileOpen.toString()" aria-label="Toggle mobile menu">
+        <svg x-show="!mobileOpen" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+        <svg x-show="mobileOpen" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <div x-show="mobileOpen" x-transition x-cloak
+       class="md:hidden border-t border-gray-100 dark:border-gray-800 bg-white/95 dark:bg-gray-950/95 backdrop-blur-xl px-4 py-3 space-y-1">
+    <a href="../index.html"          class="block px-3 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">Home</a>
+    <a href="../pages/about.html"    class="block px-3 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">About</a>
+    <a href="../pages/services.html" class="block px-3 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">Services</a>
+    <a href="../pages/portfolio.html"class="block px-3 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">Portfolio</a>
+    <a href="../pages/blog.html"     class="block px-3 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">Blog</a>
+    <a href="../pages/contact.html"  class="block px-3 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">Contact</a>
+    <a href="../pages/pricing.html"  class="block px-3 py-2.5 rounded-xl text-sm font-bold text-primary">Pricing</a>
+  </div>
+</nav>

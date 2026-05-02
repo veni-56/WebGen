@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block title %}My Projects — WebGen{% endblock %}
+{% block content %}
+<div class="projects-page">
+  <div class="container">
+    <div class="page-header">
+      <h2>My Projects</h2>
+      <a href="{{ url_for('index') }}" class="btn-generate" style="padding:.6rem 1.5rem">+ New Project</a>
+    </div>
+    {% if projects %}
+    <div class="projects-grid">
+      {% for p in projects %}
+      <div class="project-card-big">
+        <div class="project-type-badge badge-{{ p.project_type }}">{{ p.project_type }}</div>
+        <h3>{{ p.name }}</h3>
+        <p class="project-prompt">{{ p.prompt[:80] }}{% if p.prompt|length > 80 %}...{% endif %}</p>
+        <p class="project-date">{{ p.created_at }}</p>
+        <div class="project-actions">
+          <a href="{{ url_for('preview', project_id=p.id) }}" target="_blank" class="btn-action">Preview</a>
+          <a href="{{ url_for('download', project_id=p.id) }}" class="btn-action">Download ZIP</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <p>No projects yet.</p>
+      <a href="{{ url_for('index') }}" class="btn-generate">Generate your first website</a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

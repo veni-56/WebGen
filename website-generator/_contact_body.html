@@ -1,0 +1,111 @@
+﻿<section class="py-20 px-4 sm:px-6 text-center bg-gradient-to-br from-primary-500/10 to-secondary-500/5 border-b border-gray-200 dark:border-gray-700">
+  <div class="max-w-3xl mx-auto">
+    <h1 class="text-4xl sm:text-5xl font-extrabold mb-4">Get in <span class="bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent">Touch</span></h1>
+    <p class="text-gray-500 dark:text-gray-400 text-lg">We would love to hear from you. Send us a message and we will respond within 24 hours.</p>
+  </div>
+</section>
+<section class="py-20 px-4 sm:px-6">
+  <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12">
+    <div>
+      <h2 class="text-2xl font-bold mb-4">Contact Information</h2>
+      <p class="text-gray-500 dark:text-gray-400 mb-8 leading-relaxed">Have a question or want to work together? Fill out the form or reach us directly through any of the channels below.</p>
+      <div class="space-y-4">
+        <div class="flex items-center gap-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4">
+          <div class="text-2xl flex-shrink-0">&#128231;</div>
+          <div><strong class="block text-sm">Email</strong><span class="text-sm text-gray-500 dark:text-gray-400">hello@novatech.io</span></div>
+        </div>
+        <div class="flex items-center gap-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4">
+          <div class="text-2xl flex-shrink-0">&#128222;</div>
+          <div><strong class="block text-sm">Phone</strong><span class="text-sm text-gray-500 dark:text-gray-400">+1 (555) 000-1234</span></div>
+        </div>
+        <div class="flex items-center gap-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4">
+          <div class="text-2xl flex-shrink-0">&#128205;</div>
+          <div><strong class="block text-sm">Address</strong><span class="text-sm text-gray-500 dark:text-gray-400">123 Tech Ave, San Francisco, CA 94105</span></div>
+        </div>
+        <div class="flex items-center gap-4 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl p-4">
+          <div class="text-2xl flex-shrink-0">&#128336;</div>
+          <div><strong class="block text-sm">Hours</strong><span class="text-sm text-gray-500 dark:text-gray-400">Mon-Fri 9am-6pm PST</span></div>
+        </div>
+      </div>
+      <div class="mt-10" x-data="{ open: null }">
+        <h3 class="font-semibold text-lg mb-4">Quick FAQ</h3>
+        <div class="space-y-3">
+          <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden" :class="open===0 ? 'border-primary-500' : ''">
+            <button @click="open = open===0 ? null : 0" class="w-full flex justify-between items-center px-5 py-4 text-left font-medium text-sm">
+              How quickly do you respond?
+              <span class="text-primary-500 text-lg" x-text="open===0 ? '&#8722;' : '&#43;'">+</span>
+            </button>
+            <div x-show="open===0" x-cloak class="px-5 pb-4 text-sm text-gray-500 dark:text-gray-400">We respond to all inquiries within 24 hours on business days. For urgent matters, call us directly.</div>
+          </div>
+          <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden" :class="open===1 ? 'border-primary-500' : ''">
+            <button @click="open = open===1 ? null : 1" class="w-full flex justify-between items-center px-5 py-4 text-left font-medium text-sm">
+              Do you offer free consultations?
+              <span class="text-primary-500 text-lg" x-text="open===1 ? '&#8722;' : '&#43;'">+</span>
+            </button>
+            <div x-show="open===1" x-cloak class="px-5 pb-4 text-sm text-gray-500 dark:text-gray-400">Yes! We offer a free 30-minute consultation to understand your needs and see if we are a good fit.</div>
+          </div>
+          <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden" :class="open===2 ? 'border-primary-500' : ''">
+            <button @click="open = open===2 ? null : 2" class="w-full flex justify-between items-center px-5 py-4 text-left font-medium text-sm">
+              What is your typical project timeline?
+              <span class="text-primary-500 text-lg" x-text="open===2 ? '&#8722;' : '&#43;'">+</span>
+            </button>
+            <div x-show="open===2" x-cloak class="px-5 pb-4 text-sm text-gray-500 dark:text-gray-400">Most projects take 4-12 weeks depending on scope. We will give you a detailed timeline during the consultation.</div>
+          </div>
+          <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden" :class="open===3 ? 'border-primary-500' : ''">
+            <button @click="open = open===3 ? null : 3" class="w-full flex justify-between items-center px-5 py-4 text-left font-medium text-sm">
+              Do you work with international clients?
+              <span class="text-primary-500 text-lg" x-text="open===3 ? '&#8722;' : '&#43;'">+</span>
+            </button>
+            <div x-show="open===3" x-cloak class="px-5 pb-4 text-sm text-gray-500 dark:text-gray-400">Absolutely! We work with clients in 60+ countries. Our team is distributed globally to support all time zones.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div x-data="{ submitted: false }">
+      <div x-show="!submitted" class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-8">
+        <h2 class="text-xl font-bold mb-6">Send a Message</h2>
+        <form @submit.prevent="submitted=true; showToast('Message sent! We\'ll get back to you soon. &#10003;')">
+          <div class="grid grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">First Name</label>
+              <input type="text" required placeholder="Alex" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:border-primary-500 transition-colors"/>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">Last Name</label>
+              <input type="text" required placeholder="Kim" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:border-primary-500 transition-colors"/>
+            </div>
+          </div>
+          <div class="mb-4">
+            <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">Email</label>
+            <input type="email" required placeholder="alex@company.com" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:border-primary-500 transition-colors"/>
+          </div>
+          <div class="mb-4">
+            <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">Company</label>
+            <input type="text" placeholder="Acme Corp" class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:border-primary-500 transition-colors"/>
+          </div>
+          <div class="mb-4">
+            <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">Subject</label>
+            <select class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:border-primary-500 transition-colors">
+              <option>General Inquiry</option>
+              <option>Sales</option>
+              <option>Technical Support</option>
+              <option>Partnership</option>
+              <option>Other</option>
+            </select>
+          </div>
+          <div class="mb-6">
+            <label class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1.5">Message</label>
+            <textarea required rows="4" placeholder="Tell us about your project..." class="w-full px-4 py-2.5 bg-gray-50 dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl text-sm focus:outline-none focus:border-primary-500 transition-colors resize-none"></textarea>
+          </div>
+          <button type="submit" class="w-full py-3 bg-gradient-to-r from-primary-500 to-secondary-500 text-white font-semibold rounded-xl hover:opacity-90 transition-opacity">Send Message</button>
+        </form>
+      </div>
+      <div x-show="submitted" x-cloak class="bg-white dark:bg-gray-800 border border-green-500 rounded-2xl p-8 text-center">
+        <div class="text-5xl mb-4">&#10003;</div>
+        <h3 class="text-xl font-bold text-green-600 dark:text-green-400 mb-2">Message Sent!</h3>
+        <p class="text-gray-500 dark:text-gray-400">Thank you for reaching out. We will get back to you within 24 hours.</p>
+        <button @click="submitted=false" class="mt-6 px-6 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl text-sm font-semibold hover:border-primary-500 hover:text-primary-500 transition-colors">Send Another</button>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,111 @@
+{% extends 'base.html' %}
+{% block title %}About Us — ShopWave{% endblock %}
+{% block content %}
+
+<div class="row justify-content-center">
+  <div class="col-lg-9">
+
+    {# ── Hero ── #}
+    <div class="text-center py-5 mb-4">
+      <i class="bi bi-bag-heart-fill fs-1 text-primary"></i>
+      <h2 class="fw-bold mt-2">About ShopWave</h2>
+      <p class="lead text-muted">India's fastest-growing multi-vendor marketplace connecting buyers and sellers.</p>
+    </div>
+
+    {# ── Mission ── #}
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-body p-4">
+        <h5 class="fw-bold mb-3"><i class="bi bi-bullseye me-1 text-primary"></i>Our Mission</h5>
+        <p class="text-muted">
+          ShopWave was built to empower small businesses and independent sellers across India to reach
+          millions of customers without the complexity of running their own e-commerce store.
+          We believe every entrepreneur deserves a fair shot at success.
+        </p>
+        <p class="text-muted mb-0">
+          For buyers, we offer a curated selection of quality products at competitive prices,
+          with secure payments, easy returns, and fast delivery — all in one place.
+        </p>
+      </div>
+    </div>
+
+    {# ── Stats ── #}
+    <div class="row g-3 mb-4">
+      <div class="col-6 col-md-3">
+        <div class="card border-0 shadow-sm text-center p-3">
+          <div class="fs-2 fw-bold text-primary">{{ stats.sellers }}</div>
+          <div class="text-muted small">Active Sellers</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="card border-0 shadow-sm text-center p-3">
+          <div class="fs-2 fw-bold text-success">{{ stats.products }}</div>
+          <div class="text-muted small">Products Listed</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="card border-0 shadow-sm text-center p-3">
+          <div class="fs-2 fw-bold text-warning">{{ stats.orders }}</div>
+          <div class="text-muted small">Orders Fulfilled</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="card border-0 shadow-sm text-center p-3">
+          <div class="fs-2 fw-bold text-info">{{ stats.customers }}</div>
+          <div class="text-muted small">Happy Customers</div>
+        </div>
+      </div>
+    </div>
+
+    {# ── Values ── #}
+    <div class="card border-0 shadow-sm mb-4">
+      <div class="card-body p-4">
+        <h5 class="fw-bold mb-3"><i class="bi bi-heart me-1 text-danger"></i>Our Values</h5>
+        <div class="row g-3">
+          <div class="col-md-4">
+            <div class="d-flex gap-3">
+              <i class="bi bi-shield-check fs-4 text-primary flex-shrink-0"></i>
+              <div>
+                <h6 class="fw-semibold mb-1">Trust & Safety</h6>
+                <p class="text-muted small mb-0">Verified sellers, secure payments, and buyer protection on every order.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="d-flex gap-3">
+              <i class="bi bi-people fs-4 text-success flex-shrink-0"></i>
+              <div>
+                <h6 class="fw-semibold mb-1">Community First</h6>
+                <p class="text-muted small mb-0">We grow when our sellers and buyers grow together.</p>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="d-flex gap-3">
+              <i class="bi bi-lightning fs-4 text-warning flex-shrink-0"></i>
+              <div>
+                <h6 class="fw-semibold mb-1">Speed & Simplicity</h6>
+                <p class="text-muted small mb-0">Fast checkout, quick delivery, and hassle-free returns.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {# ── CTA ── #}
+    <div class="text-center py-4">
+      <h5 class="fw-bold mb-3">Ready to join ShopWave?</h5>
+      <div class="d-flex justify-content-center gap-3 flex-wrap">
+        <a href="{{ url_for('customer.product_listing') }}" class="btn btn-primary px-4">
+          <i class="bi bi-bag-heart me-1"></i>Start Shopping
+        </a>
+        <a href="{{ url_for('customer.become_supplier') }}" class="btn btn-outline-primary px-4">
+          <i class="bi bi-shop me-1"></i>Become a Seller
+        </a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

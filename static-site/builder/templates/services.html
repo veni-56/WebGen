@@ -1,0 +1,40 @@
+<section class="py-20 px-4 bg-gradient-to-br from-indigo-50 via-white to-pink-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 text-center border-b border-gray-100 dark:border-gray-800">
+  <div class="max-w-3xl mx-auto {{reveal_class}}">
+    <span class="text-primary text-sm font-semibold uppercase tracking-wider">What We Offer</span>
+    <h1 class="text-4xl md:text-5xl font-black mt-2 mb-4 dark:text-white">Our <span class="gradient-text">Services</span></h1>
+    <p class="text-lg text-gray-500 dark:text-gray-400">From cloud infrastructure to AI-powered tooling — everything your team needs to ship faster.</p>
+  </div>
+</section>
+
+<section class="py-24 px-4">
+  <div class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    {{#each services}}
+    <article class="{{reveal_class}} card-hover card-gradient-border bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7">
+      <div class="w-12 h-12 rounded-xl bg-primary-10 flex items-center justify-center text-2xl mb-5" aria-hidden="true">{{icon}}</div>
+      <h2 class="font-black text-lg mb-2 dark:text-white">{{title}}</h2>
+      <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed mb-4">{{desc}}</p>
+      <ul class="space-y-1.5 mb-5" role="list">
+        {{#each features}}
+        <li class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400"><span class="text-primary font-bold" aria-hidden="true">✓</span>{{this}}</li>
+        {{/each}}
+      </ul>
+      <a href="contact.html" class="text-primary text-sm font-semibold hover:underline focus:outline-none focus:ring-2 focus:ring-[var(--primary)] rounded">Learn more →</a>
+    </article>
+    {{/each}}
+  </div>
+</section>
+
+<section class="py-24 px-4 bg-gray-50 dark:bg-gray-900 border-y border-gray-100 dark:border-gray-800">
+  <div class="max-w-5xl mx-auto">
+    <div class="text-center mb-16 {{reveal_class}}">
+      <span class="text-primary text-sm font-semibold uppercase tracking-wider">How It Works</span>
+      <h2 class="text-4xl font-black mt-2 dark:text-white">Get Started in <span class="gradient-text">Minutes</span></h2>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="{{reveal_class}} text-center"><div class="text-4xl font-black gradient-text mb-3">01</div><h3 class="font-bold mb-2 dark:text-white">Sign Up</h3><p class="text-sm text-gray-500 dark:text-gray-400">Create your account in seconds. No credit card required.</p></div>
+      <div class="{{reveal_class}} text-center"><div class="text-4xl font-black gradient-text mb-3">02</div><h3 class="font-bold mb-2 dark:text-white">Connect</h3><p class="text-sm text-gray-500 dark:text-gray-400">Link your repo. We detect your stack automatically.</p></div>
+      <div class="{{reveal_class}} text-center"><div class="text-4xl font-black gradient-text mb-3">03</div><h3 class="font-bold mb-2 dark:text-white">Deploy</h3><p class="text-sm text-gray-500 dark:text-gray-400">Push to main and your app is live globally in 30 seconds.</p></div>
+      <div class="{{reveal_class}} text-center"><div class="text-4xl font-black gradient-text mb-3">04</div><h3 class="font-bold mb-2 dark:text-white">Scale</h3><p class="text-sm text-gray-500 dark:text-gray-400">Traffic spikes? We handle it automatically.</p></div>
+    </div>
+  </div>
+</section>

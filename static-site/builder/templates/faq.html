@@ -1,0 +1,32 @@
+<section class="py-20 px-4 bg-gradient-to-br from-indigo-50 via-white to-pink-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 text-center border-b border-gray-100 dark:border-gray-800">
+  <div class="max-w-3xl mx-auto {{reveal_class}}">
+    <span class="text-primary text-sm font-semibold uppercase tracking-wider">Help Center</span>
+    <h1 class="text-4xl md:text-5xl font-black mt-2 mb-4 dark:text-white">Frequently Asked <span class="gradient-text">Questions</span></h1>
+    <p class="text-lg text-gray-500 dark:text-gray-400">Quick answers to the questions we hear most often.</p>
+  </div>
+</section>
+
+<section class="py-24 px-4">
+  <div class="max-w-3xl mx-auto space-y-3">
+    {{#each faq}}
+    <div x-data="{open:false}" class="{{reveal_class}} glass rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
+      <button @click="open=!open" :aria-expanded="open.toString()"
+              class="w-full flex items-center justify-between px-6 py-5 text-left focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-inset">
+        <span class="font-semibold text-sm dark:text-white">{{q}}</span>
+        <span :class="open?'rotate-45':''" class="text-primary text-xl font-bold transition-transform duration-200 flex-shrink-0 ml-4" aria-hidden="true">+</span>
+      </button>
+      <div x-show="open" x-transition class="px-6 pb-5">
+        <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{{a}}</p>
+      </div>
+    </div>
+    {{/each}}
+  </div>
+</section>
+
+<section class="py-16 px-4 bg-gray-50 dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 text-center">
+  <div class="max-w-xl mx-auto {{reveal_class}}">
+    <h2 class="text-2xl font-black mb-3 dark:text-white">Still have questions?</h2>
+    <p class="text-gray-500 dark:text-gray-400 mb-6">Our team is happy to help. Reach out anytime.</p>
+    <a href="contact.html" class="btn-gradient px-7 py-3 rounded-full font-bold text-sm inline-block focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2">Contact Support</a>
+  </div>
+</section>

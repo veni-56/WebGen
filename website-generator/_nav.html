@@ -1,0 +1,33 @@
+﻿<nav id="navbar" class="sticky top-0 z-50 bg-white/95 dark:bg-gray-900/95 backdrop-blur border-b border-gray-200 dark:border-gray-800 transition-shadow">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+    <a href="index.html" class="text-xl font-bold bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent">&#9889; NovaTech</a>
+    <ul class="hidden md:flex items-center gap-6 list-none">
+      <li><a href="index.html" data-nav class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary-500 transition-colors">Home</a></li>
+      <li><a href="about.html" data-nav class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary-500 transition-colors">About</a></li>
+      <li><a href="services.html" data-nav class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary-500 transition-colors">Services</a></li>
+      <li><a href="portfolio.html" data-nav class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary-500 transition-colors">Portfolio</a></li>
+      <li><a href="blog.html" data-nav class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary-500 transition-colors">Blog</a></li>
+      <li><a href="contact.html" data-nav class="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary-500 transition-colors">Contact</a></li>
+      <li><a href="pricing.html" data-nav class="text-sm font-medium bg-gradient-to-r from-primary-500 to-secondary-500 text-white px-4 py-1.5 rounded-full hover:opacity-90">Pricing</a></li>
+    </ul>
+    <div class="flex items-center gap-3">
+      <button @click="dark=!dark; localStorage.setItem('dark', dark)" class="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" aria-label="Toggle dark mode">
+        <svg x-show="!dark" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        <svg x-show="dark" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+      </button>
+      <button @click="mobileOpen=!mobileOpen" class="md:hidden p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" aria-label="Toggle menu">
+        <svg x-show="!mobileOpen" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <svg x-show="mobileOpen" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+  </div>
+  <div x-show="mobileOpen" x-cloak x-transition class="md:hidden border-t border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 px-4 py-3 flex flex-col gap-3">
+    <a href="index.html" data-nav @click="mobileOpen=false" class="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-500">Home</a>
+    <a href="about.html" data-nav @click="mobileOpen=false" class="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-500">About</a>
+    <a href="services.html" data-nav @click="mobileOpen=false" class="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-500">Services</a>
+    <a href="portfolio.html" data-nav @click="mobileOpen=false" class="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-500">Portfolio</a>
+    <a href="blog.html" data-nav @click="mobileOpen=false" class="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-500">Blog</a>
+    <a href="contact.html" data-nav @click="mobileOpen=false" class="text-sm font-medium text-gray-700 dark:text-gray-300 hover:text-primary-500">Contact</a>
+    <a href="pricing.html" data-nav @click="mobileOpen=false" class="text-sm font-medium text-primary-500 font-semibold">Pricing</a>
+  </div>
+</nav>

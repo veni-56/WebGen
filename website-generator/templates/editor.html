@@ -1,0 +1,374 @@
+{% extends 'base.html' %}
+{% block title %}Editor — {{ project.name }}{% endblock %}
+{% block content %}
+<div class="editor-layout">
+
+  <!-- Left: Controls panel -->
+  <aside class="editor-panel" id="editorPanel">
+    <div class="ep-header">
+      <h3>✏️ {{ project.name }}</h3>
+      <span class="ep-type-badge">{{ project.project_type }}</span>
+    </div>
+
+    <div class="ep-tabs">
+      <button class="ep-tab active" onclick="switchETab('design', this)">🎨 Design</button>
+      <button class="ep-tab" onclick="switchETab('sections', this)">📐 Sections</button>
+      <button class="ep-tab" onclick="switchETab('content', this)">✍️ Content</button>
+      <button class="ep-tab" onclick="switchETab('code', this)">💻 Code</button>
+    </div>
+
+    <!-- Design tab -->
+    <div class="ep-tab-content active" id="etab-design">
+      <div class="ep-section">
+        <label class="ep-label">Theme Preset</label>
+        <div class="ep-theme-grid">
+          {% for name, t in themes.items() %}
+          <button class="ep-theme-btn {% if config.get('theme') == name %}active{% endif %}"
+                  data-theme="{{ name }}" data-primary="{{ t.primary }}" data-secondary="{{ t.secondary }}"
+                  onclick="applyTheme(this)" title="{{ name|capitalize }}">
+            <span style="background:linear-gradient(135deg,{{ t.primary }},{{ t.secondary }})"></span>
+            {{ name|capitalize }}
+          </button>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="ep-section">
+        <label class="ep-label">Colors</label>
+        <div class="ep-color-row">
+          <div>
+            <label>Primary</label>
+            <div class="color-pick-row">
+              <input type="color" id="ep_primary" value="{{ config.get('primary_color','#6c63ff') }}" oninput="liveUpdate()"/>
+              <span id="ep_primary_hex">{{ config.get('primary_color','#6c63ff') }}</span>
+            </div>
+          </div>
+          <div>
+            <label>Secondary</label>
+            <div class="color-pick-row">
+              <input type="color" id="ep_secondary" value="{{ config.get('secondary_color','#f50057') }}" oninput="liveUpdate()"/>
+              <span id="ep_secondary_hex">{{ config.get('secondary_color','#f50057') }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ep-section">
+        <label class="ep-label">Font</label>
+        <select id="ep_font" onchange="liveUpdate()">
+          {% for f in ['Poppins','Inter','Roboto','Montserrat','Lato','Nunito','Raleway'] %}
+          <option value="{{ f }}" {% if config.get('font') == f %}selected{% endif %}>{{ f }}</option>
+          {% endfor %}
+        </select>
+      </div>
+    </div>
+
+    <!-- Sections tab -->
+    <div class="ep-tab-content" id="etab-sections">
+      <div class="ep-section">
+        <label class="ep-label">Sections (drag to reorder)</label>
+        <ul class="sections-sortable" id="sectionsList">
+          {% set all_sections = ['header','hero','about','services','portfolio','products','blog','testimonials','contact','footer'] %}
+          {% set active = config.get('sections', ['header','hero','about','contact','footer']) %}
+          {% for s in active %}
+          <li class="section-item active" data-section="{{ s }}" draggable="true">
+            <span class="drag-handle">⠿</span>
+            <span class="section-icon">{{ {'header':'🔝','hero':'🌟','about':'ℹ️','services':'⚙️','portfolio':'🖼️','products':'📦','blog':'✍️','testimonials':'💬','contact':'📧','footer':'🔻'}.get(s,'📄') }}</span>
+            {{ s|capitalize }}
+            <button class="section-toggle" onclick="toggleSection(this, '{{ s }}')">✓</button>
+          </li>
+          {% endfor %}
+          {% for s in all_sections %}
+          {% if s not in active %}
+          <li class="section-item" data-section="{{ s }}" draggable="true">
+            <span class="drag-handle">⠿</span>
+            <span class="section-icon">{{ {'header':'🔝','hero':'🌟','about':'ℹ️','services':'⚙️','portfolio':'🖼️','products':'📦','blog':'✍️','testimonials':'💬','contact':'📧','footer':'🔻'}.get(s,'📄') }}</span>
+            {{ s|capitalize }}
+            <button class="section-toggle inactive" onclick="toggleSection(this, '{{ s }}')">+</button>
+          </li>
+          {% endif %}
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <!-- Content tab -->
+    <div class="ep-tab-content" id="etab-content">
+      <div class="ep-section">
+        <label class="ep-label">Site Name</label>
+        <input type="text" id="ep_site_name" value="{{ config.get('site_name','My Website') }}" oninput="liveUpdate()"/>
+      </div>
+      <div class="ep-section">
+        <label class="ep-label">Tagline</label>
+        <input type="text" id="ep_tagline" value="{{ config.get('tagline','') }}" oninput="liveUpdate()"/>
+      </div>
+      {% if project.project_type in ['flask','ecommerce'] %}
+      <div class="ep-section">
+        <label class="ep-label">Backend Features</label>
+        <label class="ep-toggle">
+          <input type="checkbox" id="ep_has_auth" {% if config.get('has_auth') %}checked{% endif %} onchange="liveUpdate()"/>
+          <span>🔐 Login / Signup</span>
+        </label>
+        <label class="ep-toggle">
+          <input type="checkbox" id="ep_has_db" {% if config.get('has_db') %}checked{% endif %} onchange="liveUpdate()"/>
+          <span>🗄️ SQLite Database</span>
+        </label>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Code tab -->
+    <div class="ep-tab-content" id="etab-code">
+      <div class="ep-section">
+        <label class="ep-label">Generated Files</label>
+        <div class="ep-file-list" id="epFileList">
+          <p class="ep-hint">Save to see files</p>
+        </div>
+      </div>
+      <div class="ep-section">
+        <pre class="ep-code-display" id="epCodeDisplay"><code>← Select a file</code></pre>
+      </div>
+    </div>
+
+    <!-- Save / actions -->
+    <div class="ep-footer">
+      <button class="ep-save-btn" onclick="saveProject()" id="saveBtn">💾 Save & Regenerate</button>
+      <div class="ep-footer-actions">
+        <button class="ep-action-btn" onclick="downloadProject()">⬇ ZIP</button>
+        <button class="ep-action-btn" onclick="openPreview()">🚀 Preview</button>
+        <a href="{{ url_for('dashboard') }}" class="ep-action-btn">← Dashboard</a>
+      </div>
+      <div id="saveStatus" class="save-status"></div>
+    </div>
+  </aside>
+
+  <!-- Right: Live preview -->
+  <div class="editor-preview-area">
+    <div class="preview-bar">
+      <div class="preview-bar-left">
+        <button class="pv-device active" onclick="setDevice('desktop', this)" title="Desktop">🖥</button>
+        <button class="pv-device" onclick="setDevice('tablet', this)" title="Tablet">📱</button>
+        <button class="pv-device" onclick="setDevice('mobile', this)" title="Mobile">📲</button>
+      </div>
+      <div class="preview-bar-center">
+        <span id="previewStatus">Live Preview</span>
+      </div>
+      <div class="preview-bar-right">
+        <button class="pv-btn" onclick="refreshPreview()">🔄 Refresh</button>
+        <button class="pv-btn" onclick="openPreview()">↗ Open</button>
+      </div>
+    </div>
+    <div class="preview-frame-wrap" id="previewWrap">
+      <iframe id="previewFrame" src="{{ url_for('preview', project_id=project.id) }}"
+              class="preview-iframe desktop"></iframe>
+    </div>
+  </div>
+
+</div>
+
+<!-- Hidden state -->
+<script>
+const PROJECT_ID   = "{{ project.id }}";
+const PROJECT_TYPE = "{{ project.project_type }}";
+let currentConfig  = {{ config | tojson }};
+let debounceTimer  = null;
+let isDirty        = false;
+
+// ── Tab switching ─────────────────────────────────────────────────────────────
+function switchETab(name, btn) {
+  document.querySelectorAll('.ep-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.ep-tab-content').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('etab-' + name).classList.add('active');
+  if (name === 'code') loadFileList();
+}
+
+// ── Theme apply ───────────────────────────────────────────────────────────────
+function applyTheme(btn) {
+  document.querySelectorAll('.ep-theme-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('ep_primary').value   = btn.dataset.primary;
+  document.getElementById('ep_secondary').value = btn.dataset.secondary;
+  document.getElementById('ep_primary_hex').textContent   = btn.dataset.primary;
+  document.getElementById('ep_secondary_hex').textContent = btn.dataset.secondary;
+  liveUpdate();
+}
+
+// ── Color hex display ─────────────────────────────────────────────────────────
+document.getElementById('ep_primary').addEventListener('input', function() {
+  document.getElementById('ep_primary_hex').textContent = this.value;
+});
+document.getElementById('ep_secondary').addEventListener('input', function() {
+  document.getElementById('ep_secondary_hex').textContent = this.value;
+});
+
+// ── Section toggle ────────────────────────────────────────────────────────────
+function toggleSection(btn, section) {
+  const li = btn.closest('li');
+  li.classList.toggle('active');
+  if (li.classList.contains('active')) {
+    btn.textContent = '✓';
+    btn.classList.remove('inactive');
+  } else {
+    btn.textContent = '+';
+    btn.classList.add('inactive');
+  }
+  liveUpdate();
+}
+
+// ── Drag-and-drop section reorder ─────────────────────────────────────────────
+let dragSrc = null;
+document.getElementById('sectionsList').addEventListener('dragstart', e => {
+  dragSrc = e.target.closest('li');
+  dragSrc.classList.add('dragging');
+});
+document.getElementById('sectionsList').addEventListener('dragend', e => {
+  e.target.closest('li').classList.remove('dragging');
+  liveUpdate();
+});
+document.getElementById('sectionsList').addEventListener('dragover', e => {
+  e.preventDefault();
+  const target = e.target.closest('li');
+  if (target && target !== dragSrc) {
+    const rect = target.getBoundingClientRect();
+    const mid  = rect.top + rect.height / 2;
+    if (e.clientY < mid) target.parentNode.insertBefore(dragSrc, target);
+    else target.parentNode.insertBefore(dragSrc, target.nextSibling);
+  }
+});
+
+// ── Build config from UI ──────────────────────────────────────────────────────
+function buildConfig() {
+  const sections = [];
+  document.querySelectorAll('#sectionsList li.active').forEach(li => {
+    sections.push(li.dataset.section);
+  });
+  return {
+    ...currentConfig,
+    site_name:      document.getElementById('ep_site_name').value,
+    tagline:        document.getElementById('ep_tagline').value,
+    primary_color:  document.getElementById('ep_primary').value,
+    secondary_color:document.getElementById('ep_secondary').value,
+    font:           document.getElementById('ep_font').value,
+    sections:       sections,
+    has_auth:       document.getElementById('ep_has_auth')?.checked || false,
+    has_db:         document.getElementById('ep_has_db')?.checked || false,
+  };
+}
+
+// ── Live preview (debounced) ──────────────────────────────────────────────────
+function liveUpdate() {
+  isDirty = true;
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(refreshPreview, 1200);
+}
+
+async function refreshPreview() {
+  if (PROJECT_TYPE !== 'static') {
+    document.getElementById('previewStatus').textContent = 'Flask projects: save to preview';
+    return;
+  }
+  document.getElementById('previewStatus').textContent = '⏳ Updating...';
+  const config = buildConfig();
+  try {
+    const res  = await fetch('/api/editor/preview', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({config})
+    });
+    const data = await res.json();
+    if (data.html) {
+      const frame = document.getElementById('previewFrame');
+      frame.srcdoc = data.html;
+      document.getElementById('previewStatus').textContent = '✅ Live Preview';
+    }
+  } catch(e) {
+    document.getElementById('previewStatus').textContent = '⚠ Preview error';
+  }
+}
+
+// ── Save ──────────────────────────────────────────────────────────────────────
+async function saveProject() {
+  const btn    = document.getElementById('saveBtn');
+  const status = document.getElementById('saveStatus');
+  btn.disabled = true;
+  btn.textContent = '⏳ Saving...';
+  status.textContent = '';
+
+  const config = buildConfig();
+  try {
+    const res  = await fetch('/api/editor/save', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({project_id: PROJECT_ID, config})
+    });
+    const data = await res.json();
+    if (data.ok) {
+      currentConfig = config;
+      isDirty = false;
+      status.textContent = '✅ Saved';
+      status.className = 'save-status ok';
+      loadFileList(data.files);
+      // Refresh preview
+      document.getElementById('previewFrame').src = '/preview/' + PROJECT_ID + '?t=' + Date.now();
+    } else {
+      status.textContent = '⚠ ' + (data.error || 'Save failed');
+      status.className = 'save-status err';
+    }
+  } catch(e) {
+    status.textContent = '⚠ Network error';
+    status.className = 'save-status err';
+  }
+  btn.disabled = false;
+  btn.textContent = '💾 Save & Regenerate';
+  setTimeout(() => { status.textContent = ''; }, 3000);
+}
+
+// ── File list ─────────────────────────────────────────────────────────────────
+async function loadFileList(files) {
+  if (!files) {
+    // Fetch from server
+    try {
+      const res = await fetch('/api/generate', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({config: currentConfig})
+      });
+    } catch(e) {}
+    return;
+  }
+  const icons = {html:'📄',css:'🎨',js:'⚡',py:'🐍',txt:'📝'};
+  document.getElementById('epFileList').innerHTML = files.map(f => {
+    const ext = f.split('.').pop();
+    return `<button class="ep-file-btn" onclick="loadCode('${f}', this)">${icons[ext]||'📄'} ${f}</button>`;
+  }).join('');
+}
+
+async function loadCode(filepath, btn) {
+  document.querySelectorAll('.ep-file-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const res = await fetch(`/file/${PROJECT_ID}/${filepath}`);
+  document.getElementById('epCodeDisplay').textContent = await res.text();
+}
+
+// ── Device preview ────────────────────────────────────────────────────────────
+function setDevice(device, btn) {
+  document.querySelectorAll('.pv-device').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const frame = document.getElementById('previewFrame');
+  frame.className = 'preview-iframe ' + device;
+}
+
+function openPreview() {
+  window.open('/preview/' + PROJECT_ID, '_blank');
+}
+function downloadProject() {
+  window.location.href = '/download/' + PROJECT_ID;
+}
+
+// Warn on unsaved changes
+window.addEventListener('beforeunload', e => {
+  if (isDirty) { e.preventDefault(); e.returnValue = ''; }
+});
+</script>
+{% endblock %}

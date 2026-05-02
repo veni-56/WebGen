@@ -1,0 +1,28 @@
+# WebGen SaaS — Python Dependencies
+# Install: pip install -r requirements.txt
+
+# ── Core ──────────────────────────────────────────────────────────────────────
+Flask==3.0.0
+Werkzeug==3.0.1
+
+# ── Environment ───────────────────────────────────────────────────────────────
+python-dotenv==1.0.0
+
+# ── Production server ─────────────────────────────────────────────────────────
+gunicorn==21.2.0
+
+# ── Payments ──────────────────────────────────────────────────────────────────
+stripe==7.9.0
+
+# ── Database (PostgreSQL for production) ─────────────────────────────────────
+# Uncomment for PostgreSQL:
+# psycopg2-binary==2.9.9
+
+# ── AI (optional) ─────────────────────────────────────────────────────────────
+# Uncomment to enable OpenAI integration:
+# openai==1.12.0
+
+# ── Security ──────────────────────────────────────────────────────────────────
+# Uncomment for enhanced security:
+# Flask-Limiter==3.5.0
+# Flask-Talisman==1.1.0

@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% block title %}{{ product.name }} — Meesho{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <nav aria-label="breadcrumb" class="mb-3">
+    <ol class="breadcrumb small">
+      <li class="breadcrumb-item"><a href="{{ url_for('customer.index') }}">Home</a></li>
+      <li class="breadcrumb-item">
+        <a href="{{ url_for('customer.index', category=product.category) }}">{{ product.category }}</a>
+      </li>
+      <li class="breadcrumb-item active text-truncate" style="max-width:200px">{{ product.name }}</li>
+    </ol>
+  </nav>
+
+  <div class="row g-4">
+    <!-- Image -->
+    <div class="col-md-5">
+      <div class="product-detail-img-wrap">
+        <img src="{{ url_for('static', filename='uploads/' + product.image) }}"
+             class="img-fluid rounded-4" style="max-height:460px;object-fit:contain;width:100%"
+             alt="{{ product.name }}"
+             onerror="this.src='https://placehold.co/460x460/f8f9fa/adb5bd?text=No+Image'"/>
+      </div>
+    </div>
+
+    <!-- Info -->
+    <div class="col-md-7">
+      <span class="badge bg-primary-subtle text-primary rounded-pill mb-2">{{ product.category }}</span>
+      <h2 class="fw-bold mb-1">{{ product.name }}</h2>
+      <h3 class="text-primary fw-bold my-3">₹{{ "%.0f"|format(product.price) }}</h3>
+
+      {% if product.stock > 5 %}
+        <span class="badge bg-success-subtle text-success mb-3"><i class="bi bi-check-circle"></i> In Stock</span>
+      {% elif product.stock > 0 %}
+        <span class="badge bg-warning-subtle text-warning mb-3"><i class="bi bi-exclamation-circle"></i> Only {{ product.stock }} left</span>
+      {% else %}
+        <span class="badge bg-danger-subtle text-danger mb-3"><i class="bi bi-x-circle"></i> Out of Stock</span>
+      {% endif %}
+
+      <p class="text-muted lh-lg">{{ product.description or 'No description provided.' }}</p>
+
+      <!-- Seller info -->
+      <div class="seller-info-box mb-4">
+        <a href="{{ url_for('customer.seller_shop', seller_id=product.seller_id) }}" class="d-flex align-items-center gap-2 text-decoration-none">
+          {% if seller_profile and seller_profile.shop_logo != 'default.png' %}
+          <img src="{{ url_for('static', filename='uploads/' + seller_profile.shop_logo) }}"
+               class="rounded-circle" style="width:36px;height:36px;object-fit:cover"/>
+          {% else %}
+          <span class="avatar-sm">{{ product.seller.username[0]|upper }}</span>
+          {% endif %}
+          <div>
+            <span class="fw-semibold text-dark">
+              {{ seller_profile.shop_name if seller_profile and seller_profile.shop_name else product.seller.username }}
+            </span>
+            <span class="d-block text-muted small">View all products →</span>
+          </div>
+        </a>
+      </div>
+
+      {% if current_user.is_authenticated and current_user.role == 'customer' and product.stock > 0 %}
+      <form method="POST" action="{{ url_for('customer.add_to_cart', pid=product.id) }}" class="d-flex gap-2">
+        <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}"
+               class="form-control" style="width:90px"/>
+        <button class="btn btn-primary rounded-pill px-4 fw-semibold">
+          <i class="bi bi-cart-plus"></i> Add to Cart
+        </button>
+      </form>
+      {% elif not current_user.is_authenticated %}
+      <a href="{{ url_for('auth.login') }}" class="btn btn-primary rounded-pill px-4">Login to Buy</a>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if related %}
+  <hr class="my-5"/>
+  <h5 class="fw-bold mb-3">You may also like</h5>
+  <div class="row row-cols-2 row-cols-md-4 g-3">
+    {% for p in related %}
+    <div class="col">
+      <div class="card product-card h-100 border-0 shadow-sm">
+        <a href="{{ url_for('customer.product_detail', pid=p.id) }}" class="product-img-wrap">
+          <img src="{{ url_for('static', filename='uploads/' + p.image) }}"
+               class="product-thumb" alt="{{ p.name }}"
+               onerror="this.src='https://placehold.co/300x300/f8f9fa/adb5bd?text=?'"/>
+        </a>
+        <div class="card-body p-2">
+          <p class="product-name mb-1">{{ p.name }}</p>
+          <p class="product-price mb-0">₹{{ "%.0f"|format(p.price) }}</p>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

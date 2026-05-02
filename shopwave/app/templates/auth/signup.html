@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% block title %}Sign Up — ShopWave{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6 col-lg-5">
+    <div class="card shadow-sm border-0 mt-4">
+      <div class="card-body p-4">
+        <div class="text-center mb-4">
+          <i class="bi bi-bag-heart-fill text-primary fs-1"></i>
+          <h4 class="fw-bold mt-2">Create an account</h4>
+          <p class="text-muted small">Join ShopWave today</p>
+        </div>
+        <form method="POST" action="{{ url_for('auth.signup') }}" id="signupForm">
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Full Name</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-person"></i></span>
+              <input type="text" name="name" class="form-control" placeholder="John Doe" required autofocus />
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Email address</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+              <input type="email" name="email" class="form-control" placeholder="you@example.com" required />
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-semibold">Password</label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-lock"></i></span>
+              <input type="password" name="password" class="form-control" placeholder="Min. 6 characters" required minlength="6" />
+            </div>
+          </div>
+
+          <!-- Role selection -->
+          <div class="mb-3">
+            <label class="form-label fw-semibold">I want to</label>
+            <div class="d-flex gap-3">
+              <div class="form-check role-card flex-fill p-3 border rounded">
+                <input class="form-check-input" type="radio" name="role" id="roleCustomer" value="customer" checked
+                       onchange="toggleShopField(false)"/>
+                <label class="form-check-label w-100" for="roleCustomer">
+                  <i class="bi bi-bag-check fs-4 d-block text-primary mb-1"></i>
+                  <strong>Shop</strong>
+                  <div class="text-muted small">Buy products</div>
+                </label>
+              </div>
+              <div class="form-check role-card flex-fill p-3 border rounded">
+                <input class="form-check-input" type="radio" name="role" id="roleSeller" value="seller"
+                       onchange="toggleShopField(true)"/>
+                <label class="form-check-label w-100" for="roleSeller">
+                  <i class="bi bi-shop fs-4 d-block text-success mb-1"></i>
+                  <strong>Sell</strong>
+                  <div class="text-muted small">List products</div>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <!-- Shop name — shown only for sellers -->
+          <div class="mb-4" id="shopNameField" style="display:none">
+            <label class="form-label fw-semibold">
+              <i class="bi bi-shop me-1 text-success"></i>Your Shop Name
+              <span class="text-danger">*</span>
+            </label>
+            <div class="input-group">
+              <span class="input-group-text"><i class="bi bi-tag"></i></span>
+              <input type="text" name="shop_name" id="shopNameInput" class="form-control"
+                     placeholder="e.g. Priya's Boutique" maxlength="120"/>
+            </div>
+            <div class="form-text text-muted">
+              This will be your public store name. Your store URL: <code>/store/<span id="slugPreview">your-shop</span></code>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100 fw-semibold">
+            <i class="bi bi-person-plus me-1"></i>Create Account
+          </button>
+        </form>
+        <hr class="my-3" />
+        <p class="text-center text-muted small mb-0">
+          Already have an account?
+          <a href="{{ url_for('auth.login') }}" class="text-primary fw-semibold">Sign in</a>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function toggleShopField(show) {
+  const field = document.getElementById('shopNameField');
+  const input = document.getElementById('shopNameInput');
+  field.style.display = show ? 'block' : 'none';
+  input.required = show;
+}
+// Live slug preview
+document.getElementById('shopNameInput').addEventListener('input', function() {
+  const slug = this.value.toLowerCase().trim()
+    .replace(/[^\w\s-]/g, '')
+    .replace(/[\s_-]+/g, '-') || 'your-shop';
+  document.getElementById('slugPreview').textContent = slug;
+});
+</script>
+{% endblock %}

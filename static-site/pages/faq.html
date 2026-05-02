@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="{{site_name}} FAQ — Answers to the most common questions."/>
+  <title>FAQ — {{site_name}}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:'class'}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="stylesheet" href="../style.css"/>
+  <style>:root{--primary:{{primary_color}};--secondary:{{secondary_color}};--primary-rgb:{{primary_rgb}};--secondary-rgb:{{secondary_rgb}}}</style>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 antialiased">
+<div id="scrollProgress"></div>
+<div id="navbar"></div>
+
+<section class="py-20 px-4 bg-gradient-to-br from-indigo-50 via-white to-pink-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 text-center border-b border-gray-100 dark:border-gray-800">
+  <div class="max-w-3xl mx-auto reveal">
+    <span class="text-primary text-sm font-semibold uppercase tracking-wider">Help Center</span>
+    <h1 class="text-4xl md:text-5xl font-black mt-2 mb-4 dark:text-white">Frequently Asked <span class="gradient-text">Questions</span></h1>
+    <p class="text-lg text-gray-500 dark:text-gray-400">Quick answers to the questions we hear most often.</p>
+  </div>
+</section>
+
+<section class="py-24 px-4">
+  <div class="max-w-3xl mx-auto space-y-3">
+
+    <div x-data="{open:false}" class="reveal glass rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
+      <button @click="open=!open" :aria-expanded="open.toString()"
+              class="w-full flex items-center justify-between px-6 py-5 text-left
+                     focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-inset"
+              aria-controls="faq1">
+        <span class="font-semibold text-sm dark:text-white">How long does it take to get started?</span>
+        <span :class="open ? 'rotate-45' : ''" class="text-primary text-xl font-bold transition-transform duration-200 flex-shrink-0 ml-4" aria-hidden="true">+</span>
+      </button>
+      <div id="faq1" x-show="open" x-transition class="px-6 pb-5">
+        <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">You can be up and running in under 5 minutes. Sign up, connect your repository, and deploy. No configuration required.</p>
+      </div>
+    </div>
+
+    <div x-data="{open:false}" class="reveal glass rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
+      <button @click="open=!open" :aria-expanded="open.toString()"
+              class="w-full flex items-center justify-between px-6 py-5 text-left
+                     focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-inset"
+              aria-controls="faq2">
+        <span class="font-semibold text-sm dark:text-white">Do you offer a free plan?</span>
+        <span :class="open ? 'rotate-45' : ''" class="text-primary text-xl font-bold transition-transform duration-200 flex-shrink-0 ml-4" aria-hidden="true">+</span>
+      </button>
+      <div id="faq2" x-show="open" x-transition class="px-6 pb-5">
+        <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">Yes! Our free plan includes 3 projects, 100GB bandwidth, and community support. No credit card required to start.</p>
+      </div>
+    </div>
+
+    <div x-data="{open:false}" class="reveal glass rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
+      <button @click="open=!open" :aria-expanded="open.toString()"
+              class="w-full flex items-center justify-between px-6 py-5 text-left
+                     focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-inset"
+              aria-controls="faq3">
+        <span class="font-semibold text-sm dark:text-white">What kind of support do you offer?</span>
+        <span :class="open ? 'rotate-45' : ''" class="text-primary text-xl font-bold transition-transform duration-200 flex-shrink-0 ml-4" aria-hidden="true">+</span>
+      </button>
+      <div id="faq3" x-show="open" x-transition class="px-6 pb-5">
+        <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">Free plan gets community support. Pro and Business plans include email support with 24-hour response time. Enterprise gets dedicated Slack support.</p>
+      </div>
+    </div>
+
+    <div x-data="{open:false}" class="reveal glass rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
+      <button @click="open=!open" :aria-expanded="open.toString()"
+              class="w-full flex items-center justify-between px-6 py-5 text-left
+                     focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-inset"
+              aria-controls="faq4">
+        <span class="font-semibold text-sm dark:text-white">Can I migrate from another platform?</span>
+        <span :class="open ? 'rotate-45' : ''" class="text-primary text-xl font-bold transition-transform duration-200 flex-shrink-0 ml-4" aria-hidden="true">+</span>
+      </button>
+      <div id="faq4" x-show="open" x-transition class="px-6 pb-5">
+        <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">Absolutely. We have migration guides for all major platforms and our team can assist with complex migrations at no extra cost.</p>
+      </div>
+    </div>
+
+    <div x-data="{open:false}" class="reveal glass rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
+      <button @click="open=!open" :aria-expanded="open.toString()"
+              class="w-full flex items-center justify-between px-6 py-5 text-left
+                     focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-inset"
+              aria-controls="faq5">
+        <span class="font-semibold text-sm dark:text-white">Is my data secure?</span>
+        <span :class="open ? 'rotate-45' : ''" class="text-primary text-xl font-bold transition-transform duration-200 flex-shrink-0 ml-4" aria-hidden="true">+</span>
+      </button>
+      <div id="faq5" x-show="open" x-transition class="px-6 pb-5">
+        <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">Yes. We are SOC 2 Type II certified, use end-to-end encryption, and follow zero-trust architecture principles. Your data is always encrypted at rest and in transit.</p>
+      </div>
+    </div>
+
+    <div x-data="{open:false}" class="reveal glass rounded-2xl border border-gray-100 dark:border-gray-800 overflow-hidden">
+      <button @click="open=!open" :aria-expanded="open.toString()"
+              class="w-full flex items-center justify-between px-6 py-5 text-left
+                     focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-inset"
+              aria-controls="faq6">
+        <span class="font-semibold text-sm dark:text-white">Can I cancel my subscription anytime?</span>
+        <span :class="open ? 'rotate-45' : ''" class="text-primary text-xl font-bold transition-transform duration-200 flex-shrink-0 ml-4" aria-hidden="true">+</span>
+      </button>
+      <div id="faq6" x-show="open" x-transition class="px-6 pb-5">
+        <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">Yes, you can cancel at any time. Your subscription will remain active until the end of the billing period, and you won't be charged again.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="py-16 px-4 bg-gray-50 dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 text-center">
+  <div class="max-w-xl mx-auto reveal">
+    <h2 class="text-2xl font-black mb-3 dark:text-white">Still have questions?</h2>
+    <p class="text-gray-500 dark:text-gray-400 mb-6">Our team is happy to help. Reach out anytime.</p>
+    <a href="contact.html" class="btn-gradient px-7 py-3 rounded-full font-bold text-sm inline-block
+             focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2">
+      Contact Support
+    </a>
+  </div>
+</section>
+
+<div id="footer"></div>
+<script src="../script.js"></script>
+</body>
+</html>

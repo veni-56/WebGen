@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% block title %}My Cart — ShopWave{% endblock %}
+{% block content %}
+<div class="container px-3 px-md-4 py-4">
+  <h4 class="fw-bold mb-4"><i class="bi bi-cart3 me-2 text-pink"></i>My Cart
+    {% if items %}<span class="badge bg-primary ms-2 rounded-pill">{{ items|length }}</span>{% endif %}
+  </h4>
+
+  {% if items %}
+  <div class="row g-4">
+    <div class="col-lg-8">
+      {% for item in items %}
+      <div class="cart-item bg-white rounded-3 shadow-sm p-3 mb-3 d-flex gap-3 align-items-start">
+        <a href="{{ url_for('customer.product_detail_slug', slug=item.product.slug) if item.product.slug else url_for('customer.product_detail', pid=item.product.id) }}" class="flex-shrink-0">
+          <img src="{{ url_for('static', filename='uploads/' + item.product.image) }}"
+               style="width:90px;height:90px;object-fit:cover;border-radius:10px;"
+               alt="{{ item.product.name }}"
+               onerror="this.src='https://placehold.co/90x90/fce4f3/f43397?text=?'"/>
+        </a>
+        <div class="flex-grow-1 min-w-0">
+          <a href="{{ url_for('customer.product_detail_slug', slug=item.product.slug) if item.product.slug else url_for('customer.product_detail', pid=item.product.id) }}"
+             class="text-dark text-decoration-none fw-semibold d-block mb-1" style="font-size:.9rem;">{{ item.product.name }}</a>
+          {% if item.variant %}
+          <span class="badge bg-light text-secondary border mb-1" style="font-size:.72rem;">
+            {% if item.variant.size %}{{ item.variant.size }}{% endif %}{% if item.variant.size and item.variant.color %} / {% endif %}{% if item.variant.color %}{{ item.variant.color }}{% endif %}
+          </span>
+          {% endif %}
+          <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="fw-bold text-primary">₹{{ '%.0f' % (item.variant.price if item.variant else item.product.price) }}</span>
+            {% if item.product.discount_percent > 0 %}
+            <span class="badge bg-success-subtle text-success border border-success-subtle" style="font-size:.68rem;">{{ item.product.discount_percent|int }}% OFF</span>
+            {% endif %}
+          </div>
+          <div class="d-flex align-items-center gap-3 flex-wrap">
+            <form method="POST" action="{{ url_for('customer.update_cart', iid=item.id) }}" class="d-flex align-items-center">
+              <div class="qty-control">
+                <button type="submit" name="quantity" value="{{ item.quantity - 1 }}">−</button>
+                <input type="number" name="quantity" value="{{ item.quantity }}" min="1" max="{{ item.product.stock }}" readonly/>
+                <button type="submit" name="quantity" value="{{ item.quantity + 1 }}" {% if item.quantity >= item.product.stock %}disabled{% endif %}>+</button>
+              </div>
+            </form>
+            <form method="POST" action="{{ url_for('customer.remove_from_cart', iid=item.id) }}">
+              <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill px-3" onclick="return confirm('Remove this item?')">
+                <i class="bi bi-trash me-1"></i>Remove
+              </button>
+            </form>
+          </div>
+        </div>
+        <div class="text-end flex-shrink-0">
+          <div class="fw-bold text-primary fs-6">₹{{ '%.0f' % ((item.variant.price if item.variant else item.product.price) * item.quantity) }}</div>
+          <div class="text-muted" style="font-size:.72rem;">{{ item.quantity }} × ₹{{ '%.0f' % (item.variant.price if item.variant else item.product.price) }}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="col-lg-4">
+      <div class="bg-white rounded-3 shadow-sm p-4 sticky-top" style="top:80px;">
+        <h6 class="fw-bold mb-3 pb-2 border-bottom">Order Summary</h6>
+        {% for item in items %}
+        <div class="d-flex justify-content-between small text-muted mb-2">
+          <span class="text-truncate me-2" style="max-width:180px;">{{ item.product.name }}{% if item.variant %} ({{ item.variant.size or '' }}{{ '/' if item.variant.size and item.variant.color else '' }}{{ item.variant.color or '' }}){% endif %}</span>
+          <span class="fw-semibold text-dark">₹{{ '%.0f' % ((item.variant.price if item.variant else item.product.price) * item.quantity) }}</span>
+        </div>
+        {% endfor %}
+        <hr/>
+        <div class="d-flex justify-content-between mb-2">
+          <span class="text-muted small">Subtotal</span>
+          <span class="fw-semibold">₹{{ '%.0f' % total }}</span>
+        </div>
+        <div class="d-flex justify-content-between mb-2">
+          <span class="text-muted small">Delivery</span>
+          <span class="text-success fw-semibold small">{% if total >= 499 %}FREE{% else %}₹49{% endif %}</span>
+        </div>
+        {% if total < 499 %}
+        <div class="alert alert-warning py-2 px-3 mb-2" style="font-size:.78rem;border-radius:8px;">
+          <i class="bi bi-truck me-1"></i>Add ₹{{ '%.0f' % (499 - total) }} more for free delivery!
+        </div>
+        {% endif %}
+        <hr/>
+        <div class="d-flex justify-content-between mb-4">
+          <span class="fw-bold">Total</span>
+          <span class="fw-bold fs-5 text-primary">₹{{ '%.0f' % (total + (0 if total >= 499 else 49)) }}</span>
+        </div>
+        <a href="{{ url_for('customer.checkout') }}" class="btn btn-primary w-100 fw-bold py-2 rounded-pill">
+          <i class="bi bi-lock me-1"></i>Proceed to Checkout
+        </a>
+        <a href="{{ url_for('customer.product_listing') }}" class="btn btn-outline-secondary w-100 mt-2 rounded-pill">
+          Continue Shopping
+        </a>
+      </div>
+    </div>
+  </div>
+
+  {% else %}
+  <div class="text-center py-5">
+    <div style="font-size:5rem;margin-bottom:1rem;">🛒</div>
+    <h5 class="fw-bold mb-2">Your cart is empty</h5>
+    <p class="text-muted mb-4">Looks like you haven't added anything yet.</p>
+    <a href="{{ url_for('customer.product_listing') }}" class="btn btn-primary rounded-pill px-5 py-2 fw-bold">Start Shopping</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

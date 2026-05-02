@@ -1,0 +1,14 @@
+version: "3.9"
+
+services:
+  webgen:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./generated:/app/generated
+      - ./platform.db:/app/platform.db
+    environment:
+      - SECRET_KEY=change-this-in-production
+      - FLASK_ENV=production
+    restart: unless-stopped

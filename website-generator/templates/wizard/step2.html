@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% block title %}Step 2 — Customise{% endblock %}
+{% block content %}
+<div class="wizard-page">
+  <div class="wizard-progress">
+    <div class="wp-step done"><span>✓</span> Type</div>
+    <div class="wp-line active"></div>
+    <div class="wp-step active"><span>2</span> Customise</div>
+    <div class="wp-line"></div>
+    <div class="wp-step"><span>3</span> Generate</div>
+  </div>
+
+  <div class="wizard-card">
+    <h2>Customise your website</h2>
+    <p class="wizard-sub">Type: <strong>{{ wiz_type }}</strong> &nbsp;|&nbsp; Stack: <strong>{{ wiz_stack }}</strong></p>
+
+    <form method="POST" action="{{ url_for('wizard_step3') }}">
+
+      <!-- Basic info -->
+      <div class="wiz-section">
+        <label class="wiz-label">Basic Info</label>
+        <div class="field-row">
+          <div class="field">
+            <label>Site Name</label>
+            <input name="site_name" type="text" placeholder="My Awesome Site" required/>
+          </div>
+          <div class="field">
+            <label>Tagline</label>
+            <input name="tagline" type="text" placeholder="A short description"/>
+          </div>
+        </div>
+      </div>
+
+      <!-- Colors -->
+      <div class="wiz-section">
+        <label class="wiz-label">Colors</label>
+        <div class="theme-presets-row">
+          <button type="button" class="preset-btn active" data-p="#6c63ff" data-s="#f50057" onclick="applyPreset(this)"><span style="background:#6c63ff"></span> Purple</button>
+          <button type="button" class="preset-btn" data-p="#1565c0" data-s="#e91e63" onclick="applyPreset(this)"><span style="background:#1565c0"></span> Blue</button>
+          <button type="button" class="preset-btn" data-p="#00897b" data-s="#ff6f00" onclick="applyPreset(this)"><span style="background:#00897b"></span> Teal</button>
+          <button type="button" class="preset-btn" data-p="#e91e63" data-s="#ff5722" onclick="applyPreset(this)"><span style="background:#e91e63"></span> Pink</button>
+          <button type="button" class="preset-btn" data-p="#2e7d32" data-s="#ffc107" onclick="applyPreset(this)"><span style="background:#2e7d32"></span> Green</button>
+          <button type="button" class="preset-btn" data-p="#212121" data-s="#ff9800" onclick="applyPreset(this)"><span style="background:#212121"></span> Dark</button>
+        </div>
+        <div class="field-row" style="margin-top:1rem">
+          <div class="field">
+            <label>Primary Color</label>
+            <div class="color-pick-row">
+              <input type="color" id="primary_color" name="primary_color" value="#6c63ff"/>
+              <span id="primary_hex">#6c63ff</span>
+            </div>
+          </div>
+          <div class="field">
+            <label>Secondary Color</label>
+            <div class="color-pick-row">
+              <input type="color" id="secondary_color" name="secondary_color" value="#f50057"/>
+              <span id="secondary_hex">#f50057</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Font -->
+      <div class="wiz-section">
+        <label class="wiz-label">Font</label>
+        <div class="font-grid">
+          {% for f in ['Poppins','Inter','Roboto','Montserrat','Lato','Nunito','Raleway'] %}
+          <label class="font-option">
+            <input type="radio" name="font" value="{{ f }}" {% if f=='Poppins' %}checked{% endif %}/>
+            <span style="font-family:'{{ f }}',sans-serif">{{ f }}</span>
+          </label>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Sections -->
+      {% if wiz_type != 'ecommerce' %}
+      <div class="wiz-section">
+        <label class="wiz-label">Sections to include</label>
+        <div class="sections-grid">
+          {% set all_sections = [
+            ('header','🔝','Header / Navbar'),
+            ('hero','🌟','Hero Banner'),
+            ('about','ℹ️','About'),
+            ('services','⚙️','Services'),
+            ('portfolio','🖼️','Portfolio'),
+            ('products','📦','Products'),
+            ('blog','✍️','Blog'),
+            ('testimonials','💬','Testimonials'),
+            ('contact','📧','Contact Form'),
+            ('footer','🔻','Footer'),
+          ] %}
+          {% for val, icon, label in all_sections %}
+          <label class="section-check">
+            <input type="checkbox" name="sections" value="{{ val }}"
+              {% if val in ['header','hero','about','contact','footer'] %}checked{% endif %}/>
+            <span>{{ icon }} {{ label }}</span>
+          </label>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Features -->
+      {% if wiz_stack in ['flask','fullstack'] and wiz_type != 'ecommerce' %}
+      <div class="wiz-section">
+        <label class="wiz-label">Backend Features</label>
+        <div class="sections-grid">
+          <label class="section-check">
+            <input type="checkbox" name="has_auth" value="1" {% if wiz_stack=='fullstack' %}checked{% endif %}/>
+            <span>🔐 Login / Signup</span>
+          </label>
+          <label class="section-check">
+            <input type="checkbox" name="has_db" value="1" {% if wiz_stack in ['flask','fullstack'] %}checked{% endif %}/>
+            <span>🗄️ SQLite Database</span>
+          </label>
+        </div>
+      </div>
+      {% endif %}
+
+      <div class="wiz-footer">
+        <a href="{{ url_for('wizard_step1') }}" class="btn-back">← Back</a>
+        <button type="submit" class="btn-submit">Next: Generate →</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% block scripts %}
+<script>
+function applyPreset(btn) {
+  document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('primary_color').value = btn.dataset.p;
+  document.getElementById('secondary_color').value = btn.dataset.s;
+  document.getElementById('primary_hex').textContent = btn.dataset.p;
+  document.getElementById('secondary_hex').textContent = btn.dataset.s;
+}
+document.getElementById('primary_color').addEventListener('input', function(){
+  document.getElementById('primary_hex').textContent = this.value;
+});
+document.getElementById('secondary_color').addEventListener('input', function(){
+  document.getElementById('secondary_hex').textContent = this.value;
+});
+</script>
+{% endblock %}
+{% endblock %}

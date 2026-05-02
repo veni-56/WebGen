@@ -1,0 +1,276 @@
+{# ============================================================
+   components/navbar.html  — Premium refactor v2
+   Usage: {% include 'components/navbar.html' %}
+   ============================================================ #}
+
+{# ── Announcement strip ───────────────────────────────────── #}
+<div class="hidden md:block bg-gray-950 text-gray-400 text-center text-[11px] py-1.5 tracking-wide font-medium">
+  🚚 Free delivery above ₹499 &nbsp;·&nbsp; 7-day easy returns &nbsp;·&nbsp; 10,000+ verified sellers
+</div>
+
+{# ── Main navbar ──────────────────────────────────────────── #}
+<nav class="sticky top-0 z-50 bg-white border-b border-gray-100 shadow-[0_1px_6px_rgba(0,0,0,.05)]" id="mainNav">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="flex items-center gap-3 h-14 md:h-[60px]">
+
+      {# ── Logo ─────────────────────────────────────────── #}
+      <a href="{{ url_for('customer.home') }}"
+         class="flex items-center gap-2 flex-shrink-0 group">
+        <span class="w-8 h-8 rounded-lg bg-pink-500 flex items-center justify-center text-white text-sm shadow-sm group-hover:bg-pink-600 transition-colors">
+          🛍️
+        </span>
+        <span class="hidden sm:inline font-black text-gray-900 text-[17px] tracking-tight leading-none">
+          Shop<span class="text-pink-500">Wave</span>
+        </span>
+      </a>
+
+      {# ── Search bar — customer / guest only ───────────── #}
+      {% if not current_user.is_authenticated or current_user.role == 'customer' %}
+      <form action="{{ url_for('customer.product_listing') }}" method="get"
+            role="search"
+            aria-label="Search products"
+            class="flex-1 max-w-xl mx-2 md:mx-4 hidden sm:block">
+        <div class="flex items-center bg-gray-50 border border-gray-200 rounded-full
+                    focus-within:border-pink-400 focus-within:ring-2 focus-within:ring-pink-100
+                    transition-all duration-150 overflow-hidden">
+          <input type="search" name="q"
+                 value="{{ request.args.get('q', '') }}"
+                 placeholder="Search sarees, kurtis, electronics…"
+                 class="flex-1 px-4 py-2.5 text-sm text-gray-800 bg-transparent outline-none min-w-0 placeholder-gray-400"/>
+          <button type="submit"
+                  class="flex-shrink-0 px-4 py-2.5 text-gray-400 hover:text-pink-500 transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
+            </svg>
+          </button>
+        </div>
+      </form>
+      {% else %}
+      <div class="flex-1"></div>
+      {% endif %}
+
+      {# ── Right actions ────────────────────────────────── #}
+      <div class="flex items-center gap-0.5 flex-shrink-0">
+
+        {# ── GUEST ──────────────────────────────────────── #}
+        {% if not current_user.is_authenticated %}
+          <a href="{{ url_for('customer.deals') }}"
+             class="hidden md:inline-flex items-center gap-1.5 text-gray-500 hover:text-pink-500
+                    text-sm font-medium px-3 py-1.5 rounded-lg hover:bg-pink-50 transition-colors">
+            ⚡ Deals
+          </a>
+          <a href="{{ url_for('auth.login') }}"
+             class="text-gray-700 hover:text-pink-500 text-sm font-semibold px-3 py-1.5
+                    rounded-lg hover:bg-gray-50 transition-colors">
+            Login
+          </a>
+          <a href="{{ url_for('auth.signup') }}"
+             class="bg-pink-500 hover:bg-pink-600 text-white text-sm font-bold px-4 py-2
+                    rounded-full transition-colors shadow-sm hover:shadow ml-1">
+            Sign Up
+          </a>
+
+        {# ── ADMIN ──────────────────────────────────────── #}
+        {% elif current_user.role == 'admin' %}
+          <a href="{{ url_for('admin.dashboard') }}" class="nav-icon-btn" title="Dashboard">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
+            </svg>
+          </a>
+          {% if pending_kyc is defined and pending_kyc > 0 %}
+          <a href="{{ url_for('admin.kyc_queue') }}" class="nav-icon-btn relative" title="KYC Pending">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span class="nav-badge">{{ pending_kyc }}</span>
+          </a>
+          {% endif %}
+          <div class="nav-avatar-menu" x-data="{ open: false }">
+            <button @click="open = !open"
+                    :aria-expanded="open.toString()"
+                    aria-haspopup="true"
+                    class="nav-avatar nav-avatar--admin ml-1">
+              {{ current_user.name[0].upper() }}
+            </button>
+            <div x-show="open" @click.away="open = false"
+                 x-transition:enter="transition ease-out duration-100"
+                 x-transition:enter-start="opacity-0 scale-95"
+                 x-transition:enter-end="opacity-100 scale-100"
+                 x-transition:leave="transition ease-in duration-75"
+                 x-transition:leave-start="opacity-100 scale-100"
+                 x-transition:leave-end="opacity-0 scale-95"
+                 class="nav-dropdown" role="menu">
+              <div class="px-4 py-3 border-b border-gray-100">
+                <p class="font-semibold text-sm text-gray-900">{{ current_user.name }}</p>
+                <p class="text-xs text-gray-400 truncate mt-0.5">{{ current_user.email }}</p>
+              </div>
+              <a href="{{ url_for('auth.logout') }}" class="nav-dropdown-item text-red-500 hover:bg-red-50" role="menuitem">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                </svg>
+                Logout
+              </a>
+            </div>
+          </div>
+
+        {# ── SELLER ─────────────────────────────────────── #}
+        {% elif current_user.role == 'seller' %}
+          <a href="{{ url_for('seller.dashboard') }}" class="nav-icon-btn" title="Dashboard">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+            </svg>
+          </a>
+          <a href="{{ url_for('seller.notifications') }}" class="nav-icon-btn relative" title="Notifications">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+            </svg>
+            {% if unread_count is defined and unread_count > 0 %}<span class="nav-badge">{{ unread_count }}</span>{% endif %}
+          </a>
+          <div class="nav-avatar-menu" x-data="{ open: false }">
+            <button @click="open = !open"
+                    :aria-expanded="open.toString()"
+                    aria-haspopup="true"
+                    class="nav-avatar nav-avatar--seller ml-1">
+              {{ current_user.name[0].upper() }}
+            </button>
+            <div x-show="open" @click.away="open = false"
+                 x-transition:enter="transition ease-out duration-100"
+                 x-transition:enter-start="opacity-0 scale-95"
+                 x-transition:enter-end="opacity-100 scale-100"
+                 x-transition:leave="transition ease-in duration-75"
+                 x-transition:leave-start="opacity-100 scale-100"
+                 x-transition:leave-end="opacity-0 scale-95"
+                 class="nav-dropdown" role="menu">
+              <div class="px-4 py-3 border-b border-gray-100">
+                <p class="font-semibold text-sm text-gray-900">{{ current_user.name }}</p>
+                <p class="text-xs text-gray-400 truncate mt-0.5">{{ current_user.email }}</p>
+              </div>
+              <a href="{{ url_for('seller.shop_profile') }}" class="nav-dropdown-item" role="menuitem">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+                </svg>
+                My Shop
+              </a>
+              <a href="{{ url_for('seller.earnings') }}" class="nav-dropdown-item" role="menuitem">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                </svg>
+                Wallet
+              </a>
+              <div class="divider"></div>
+              <a href="{{ url_for('auth.logout') }}" class="nav-dropdown-item text-red-500 hover:bg-red-50" role="menuitem">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                </svg>
+                Logout
+              </a>
+            </div>
+          </div>
+
+        {# ── CUSTOMER ───────────────────────────────────── #}
+        {% else %}
+          {% set cart_count = current_user.cart_items | length %}
+          <a href="{{ url_for('customer.deals') }}"
+             class="hidden md:inline-flex items-center gap-1.5 text-gray-500 hover:text-pink-500
+                    text-sm font-medium px-3 py-1.5 rounded-lg hover:bg-pink-50 transition-colors">
+            ⚡ Deals
+          </a>
+          <a href="{{ url_for('customer.cart') }}" class="nav-icon-btn relative" title="Cart"
+             x-data="{ count: {{ current_user.cart_items | length }} }"
+             @cart-updated.window="count = $event.detail.count">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"/>
+            </svg>
+            <span x-show="count > 0" x-text="count" class="nav-badge"></span>
+          </a>
+          <a href="{{ url_for('customer.notifications') }}" class="nav-icon-btn relative" title="Notifications">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+            </svg>
+            {% if unread_count is defined and unread_count > 0 %}<span class="nav-badge">{{ unread_count }}</span>{% endif %}
+          </a>
+          <div class="nav-avatar-menu" x-data="{ open: false }">
+            <button @click="open = !open"
+                    :aria-expanded="open.toString()"
+                    aria-haspopup="true"
+                    class="nav-avatar nav-avatar--customer ml-1">
+              {{ current_user.name[0].upper() }}
+            </button>
+            <div x-show="open" @click.away="open = false"
+                 x-transition:enter="transition ease-out duration-100"
+                 x-transition:enter-start="opacity-0 scale-95"
+                 x-transition:enter-end="opacity-100 scale-100"
+                 x-transition:leave="transition ease-in duration-75"
+                 x-transition:leave-start="opacity-100 scale-100"
+                 x-transition:leave-end="opacity-0 scale-95"
+                 class="nav-dropdown" role="menu">
+              <div class="px-4 py-3 border-b border-gray-100">
+                <p class="font-semibold text-sm text-gray-900">{{ current_user.name }}</p>
+                <p class="text-xs text-gray-400 truncate mt-0.5">{{ current_user.email }}</p>
+              </div>
+              <a href="{{ url_for('customer.my_orders') }}" class="nav-dropdown-item" role="menuitem">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+                </svg>
+                My Orders
+              </a>
+              <div class="divider"></div>
+              <a href="{{ url_for('auth.logout') }}" class="nav-dropdown-item text-red-500 hover:bg-red-50" role="menuitem">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+                </svg>
+                Logout
+              </a>
+            </div>
+          </div>
+        {% endif %}
+
+        {# Mobile search toggle #}
+        {% if not current_user.is_authenticated or current_user.role == 'customer' %}
+        <button class="sm:hidden nav-icon-btn ml-0.5" id="mobileSearchBtn" aria-label="Search">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="1.75" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
+          </svg>
+        </button>
+        {% endif %}
+
+      </div>
+    </div>
+
+    {# Mobile search bar #}
+    {% if not current_user.is_authenticated or current_user.role == 'customer' %}
+    <div class="sm:hidden pb-2.5 hidden" id="mobileSearch">
+      <form action="{{ url_for('customer.product_listing') }}" method="get">
+        <div class="flex items-center bg-gray-50 border border-gray-200 rounded-full
+                    focus-within:border-pink-400 focus-within:ring-2 focus-within:ring-pink-100
+                    transition-all overflow-hidden">
+          <input type="search" name="q" value="{{ request.args.get('q', '') }}"
+                 placeholder="Search products…"
+                 class="flex-1 px-4 py-2.5 text-sm text-gray-800 bg-transparent outline-none min-w-0 placeholder-gray-400"
+                 autofocus/>
+          <button type="submit" class="px-4 py-2.5 text-gray-400 hover:text-pink-500 transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M17 11A6 6 0 1 1 5 11a6 6 0 0 1 12 0z"/>
+            </svg>
+          </button>
+        </div>
+      </form>
+    </div>
+    {% endif %}
+  </div>
+</nav>
+
+<script defer>
+  // Mobile search toggle — deferred so DOM is ready
+  document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('mobileSearchBtn');
+    const bar = document.getElementById('mobileSearch');
+    if (btn && bar) {
+      btn.addEventListener('click', () => {
+        const isHidden = bar.classList.toggle('hidden');
+        btn.setAttribute('aria-expanded', (!isHidden).toString());
+        if (!isHidden) bar.querySelector('input')?.focus();
+      });
+    }
+  });
+</script>

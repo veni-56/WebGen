@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="{{site_name}} Portfolio — Our best work across design, development, and strategy."/>
+  <title>Portfolio — {{site_name}}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:'class'}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="stylesheet" href="../style.css"/>
+  <style>:root{--primary:{{primary_color}};--secondary:{{secondary_color}};--primary-rgb:{{primary_rgb}};--secondary-rgb:{{secondary_rgb}}}</style>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 antialiased">
+<div id="scrollProgress"></div>
+<div id="navbar"></div>
+
+<section class="py-20 px-4 bg-gradient-to-br from-indigo-50 via-white to-pink-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 text-center border-b border-gray-100 dark:border-gray-800">
+  <div class="max-w-3xl mx-auto reveal">
+    <span class="text-primary text-sm font-semibold uppercase tracking-wider">Our Work</span>
+    <h1 class="text-4xl md:text-5xl font-black mt-2 mb-4 dark:text-white"><span class="gradient-text">Portfolio</span></h1>
+    <p class="text-lg text-gray-500 dark:text-gray-400">A selection of our best work across design, development, and strategy.</p>
+  </div>
+</section>
+
+<section class="py-24 px-4" x-data="{filter:'all'}">
+  <div class="max-w-6xl mx-auto">
+    <!-- Filter buttons -->
+    <div class="flex flex-wrap gap-3 justify-center mb-14 reveal" role="group" aria-label="Filter projects by category">
+      <button @click="filter='all'"    :class="filter==='all'    ? 'btn-gradient' : 'btn-outline-primary'" class="px-5 py-2 rounded-full text-sm font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-[var(--primary)]" :aria-pressed="(filter==='all').toString()">All</button>
+      <button @click="filter='web'"    :class="filter==='web'    ? 'btn-gradient' : 'btn-outline-primary'" class="px-5 py-2 rounded-full text-sm font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-[var(--primary)]" :aria-pressed="(filter==='web').toString()">Web Design</button>
+      <button @click="filter='mobile'" :class="filter==='mobile' ? 'btn-gradient' : 'btn-outline-primary'" class="px-5 py-2 rounded-full text-sm font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-[var(--primary)]" :aria-pressed="(filter==='mobile').toString()">Mobile</button>
+      <button @click="filter='brand'"  :class="filter==='brand'  ? 'btn-gradient' : 'btn-outline-primary'" class="px-5 py-2 rounded-full text-sm font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-[var(--primary)]" :aria-pressed="(filter==='brand').toString()">Branding</button>
+      <button @click="filter='saas'"   :class="filter==='saas'   ? 'btn-gradient' : 'btn-outline-primary'" class="px-5 py-2 rounded-full text-sm font-semibold transition-all focus:outline-none focus:ring-2 focus:ring-[var(--primary)]" :aria-pressed="(filter==='saas').toString()">SaaS</button>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <article x-show="filter==='all'||filter==='web'" x-transition class="group relative overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all cursor-pointer card-hover">
+        <img src="https://picsum.photos/seed/p1/600/400" alt="E-Commerce Platform — web design project" class="w-full h-52 object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-5" aria-hidden="true">
+          <div><span class="text-xs font-semibold text-primary bg-white/20 px-2 py-0.5 rounded-full">Web Design</span><h3 class="text-white font-black text-lg mt-1">E-Commerce Platform</h3></div>
+        </div>
+        <div class="p-4 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800">
+          <span class="text-xs font-semibold text-primary uppercase tracking-wider">Web Design</span>
+          <h3 class="font-bold mt-0.5 dark:text-white">E-Commerce Platform</h3>
+        </div>
+      </article>
+      <article x-show="filter==='all'||filter==='brand'" x-transition class="group relative overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all cursor-pointer card-hover">
+        <img src="https://picsum.photos/seed/p2/600/400" alt="Brand Identity — branding project" class="w-full h-52 object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-5" aria-hidden="true">
+          <div><span class="text-xs font-semibold text-primary bg-white/20 px-2 py-0.5 rounded-full">Branding</span><h3 class="text-white font-black text-lg mt-1">Brand Identity</h3></div>
+        </div>
+        <div class="p-4 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800">
+          <span class="text-xs font-semibold text-primary uppercase tracking-wider">Branding</span>
+          <h3 class="font-bold mt-0.5 dark:text-white">Brand Identity</h3>
+        </div>
+      </article>
+      <article x-show="filter==='all'||filter==='mobile'" x-transition class="group relative overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all cursor-pointer card-hover">
+        <img src="https://picsum.photos/seed/p3/600/400" alt="Mobile Banking App — mobile development project" class="w-full h-52 object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-5" aria-hidden="true">
+          <div><span class="text-xs font-semibold text-primary bg-white/20 px-2 py-0.5 rounded-full">Mobile</span><h3 class="text-white font-black text-lg mt-1">Mobile Banking App</h3></div>
+        </div>
+        <div class="p-4 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800">
+          <span class="text-xs font-semibold text-primary uppercase tracking-wider">Mobile</span>
+          <h3 class="font-bold mt-0.5 dark:text-white">Mobile Banking App</h3>
+        </div>
+      </article>
+      <article x-show="filter==='all'||filter==='saas'" x-transition class="group relative overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all cursor-pointer card-hover">
+        <img src="https://picsum.photos/seed/p4/600/400" alt="SaaS Dashboard — SaaS project" class="w-full h-52 object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-5" aria-hidden="true">
+          <div><span class="text-xs font-semibold text-primary bg-white/20 px-2 py-0.5 rounded-full">SaaS</span><h3 class="text-white font-black text-lg mt-1">SaaS Dashboard</h3></div>
+        </div>
+        <div class="p-4 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800">
+          <span class="text-xs font-semibold text-primary uppercase tracking-wider">SaaS</span>
+          <h3 class="font-bold mt-0.5 dark:text-white">SaaS Dashboard</h3>
+        </div>
+      </article>
+      <article x-show="filter==='all'||filter==='web'" x-transition class="group relative overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all cursor-pointer card-hover">
+        <img src="https://picsum.photos/seed/p5/600/400" alt="Restaurant Website — web design project" class="w-full h-52 object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-5" aria-hidden="true">
+          <div><span class="text-xs font-semibold text-primary bg-white/20 px-2 py-0.5 rounded-full">Web Design</span><h3 class="text-white font-black text-lg mt-1">Restaurant Website</h3></div>
+        </div>
+        <div class="p-4 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800">
+          <span class="text-xs font-semibold text-primary uppercase tracking-wider">Web Design</span>
+          <h3 class="font-bold mt-0.5 dark:text-white">Restaurant Website</h3>
+        </div>
+      </article>
+      <article x-show="filter==='all'||filter==='mobile'" x-transition class="group relative overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all cursor-pointer card-hover">
+        <img src="https://picsum.photos/seed/p6/600/400" alt="Fitness Tracker — mobile app project" class="w-full h-52 object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-5" aria-hidden="true">
+          <div><span class="text-xs font-semibold text-primary bg-white/20 px-2 py-0.5 rounded-full">Mobile</span><h3 class="text-white font-black text-lg mt-1">Fitness Tracker</h3></div>
+        </div>
+        <div class="p-4 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800">
+          <span class="text-xs font-semibold text-primary uppercase tracking-wider">Mobile</span>
+          <h3 class="font-bold mt-0.5 dark:text-white">Fitness Tracker</h3>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<div id="footer"></div>
+<script src="../script.js"></script>
+</body>
+</html>

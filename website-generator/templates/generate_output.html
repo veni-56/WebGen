@@ -1,0 +1,387 @@
+{% extends 'base.html' %}
+{% block title %}{{ result.project_name }} — Generated{% endblock %}
+{% block content %}
+<div class="gout-page">
+
+  <!-- Top bar -->
+  <div class="gout-topbar">
+    <div class="gout-topbar-left">
+      <a href="{{ url_for('generate_page') }}" class="gout-back">← New</a>
+      <div class="gout-title">
+        <h2>{{ result.site_name }}</h2>
+        <div class="gout-badges">
+          <span class="gbadge gbadge-{{ result.type }}">{{ result.type }}</span>
+          <span class="gbadge gbadge-type">{{ result.website_type }}</span>
+          <span class="gbadge gbadge-theme">{{ result.theme }}</span>
+          <span class="gbadge gbadge-complexity gbadge-{{ result.intent.complexity }}">{{ result.intent.complexity }}</span>
+          <span class="gbadge gbadge-ui">{{ result.intent.ui_style }}</span>
+        </div>
+      </div>
+    </div>
+    <div class="gout-topbar-right">
+      <span class="gout-meta">{{ result.total_files }} files · {{ result.total_lines }} lines</span>
+      <a href="{{ url_for('download', project_id=result.project_id) }}" class="gout-dl-btn">⬇ ZIP</a>
+      <a href="{{ url_for('editor', project_id=result.project_id) }}" class="gout-edit-btn">✏️ Editor</a>
+    </div>
+  </div>
+
+  <!-- Prompt used -->
+  <div class="gout-prompt-used">
+    <span class="gpu-label">📝 Prompt:</span>
+    <span class="gpu-text">{{ prompt }}</span>
+  </div>
+
+  <!-- Main tabs -->
+  <div class="gout-main-tabs">
+    <button class="gmt active" onclick="switchMainTab('overview',this)">📊 Overview</button>
+    <button class="gmt" onclick="switchMainTab('architecture',this)">🏗 Architecture</button>
+    <button class="gmt" onclick="switchMainTab('files',this)">💻 Files ({{ result.total_files }})</button>
+    {% if result.db_schema %}<button class="gmt" onclick="switchMainTab('database',this)">🗄 Database</button>{% endif %}
+    {% if result.api_routes %}<button class="gmt" onclick="switchMainTab('api',this)">🔌 API Routes</button>{% endif %}
+    <button class="gmt" onclick="switchMainTab('deploy',this)">🚀 Deploy</button>
+  </div>
+
+  <!-- TAB: OVERVIEW -->
+  <div class="gout-tab-content active" id="gtab-overview">
+    <div class="overview-grid">
+      <div class="ov-card ov-card-wide">
+        <div class="ov-card-header"><span>📁</span> project_name</div>
+        <div class="ov-project-name mono">{{ result.project_name }}/</div>
+        <div class="ov-meta-row">
+          <div class="ov-meta-item"><span>Stack</span><strong>{{ result.summary.stack }}</strong></div>
+          <div class="ov-meta-item"><span>Type</span><strong>{{ result.summary.type }}</strong></div>
+          <div class="ov-meta-item"><span>Complexity</span><strong>{{ result.summary.complexity }}</strong></div>
+          <div class="ov-meta-item"><span>UI Style</span><strong>{{ result.summary.ui_style }}</strong></div>
+          <div class="ov-meta-item"><span>Theme</span><strong>{{ result.summary.theme }}</strong></div>
+          <div class="ov-meta-item"><span>Font</span><strong>{{ result.summary.font }}</strong></div>
+          {% if result.summary.has_auth %}<div class="ov-meta-item"><span>Auth</span><strong class="yes">✓ Yes</strong></div>{% endif %}
+          {% if result.summary.has_db %}<div class="ov-meta-item"><span>Database</span><strong class="yes">✓ SQLite</strong></div>{% endif %}
+        </div>
+      </div>
+      <div class="ov-card">
+        <div class="ov-card-header"><span>🌳</span> folder_structure</div>
+        <pre class="ov-tree">{{ result.folder_tree | join('\n') }}</pre>
+      </div>
+      <div class="ov-card">
+        <div class="ov-card-header"><span>✨</span> features</div>
+        <div class="ov-features">
+          {% for f in result.summary.features %}<span class="ov-feat">{{ f }}</span>{% endfor %}
+        </div>
+        {% if result.summary.sections %}
+        <div class="ov-card-header" style="margin-top:1rem"><span>📐</span> sections</div>
+        <div class="ov-features">
+          {% for s in result.summary.sections %}<span class="ov-section-tag">{{ s }}</span>{% endfor %}
+        </div>
+        {% endif %}
+      </div>
+      <div class="ov-card">
+        <div class="ov-card-header"><span>▶</span> run_instructions</div>
+        <ol class="ov-run-list">
+          {% for step in result.run_instructions %}<li>{{ step }}</li>{% endfor %}
+        </ol>
+      </div>
+      <div class="ov-card ov-card-actions">
+        <div class="ov-card-header"><span>⚡</span> actions</div>
+        <div class="ov-actions-grid">
+          <a href="{{ url_for('preview', project_id=result.project_id) }}" target="_blank" class="ov-action-btn"><span>👁</span> Preview</a>
+          <a href="{{ url_for('download', project_id=result.project_id) }}" class="ov-action-btn"><span>⬇</span> Download ZIP</a>
+          <a href="{{ url_for('editor', project_id=result.project_id) }}" class="ov-action-btn ov-action-primary"><span>✏️</span> Open Editor</a>
+          <a href="{{ url_for('dashboard') }}" class="ov-action-btn"><span>📁</span> Dashboard</a>
+          <a href="{{ url_for('generate_page') }}" class="ov-action-btn"><span>⚡</span> Generate Another</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: ARCHITECTURE -->
+  <div class="gout-tab-content" id="gtab-architecture">
+    <div class="arch-grid">
+      <div class="arch-card">
+        <div class="arch-card-title"><span class="arch-step-num">1</span> Intent Analysis</div>
+        <div class="arch-rows">
+          <div class="arch-row"><span>Complexity</span><strong class="complexity-{{ result.intent.complexity }}">{{ result.intent.complexity }}</strong></div>
+          <div class="arch-row"><span>UI Style</span><strong>{{ result.intent.ui_style }}</strong></div>
+          {% if result.intent.platform_ref %}<div class="arch-row"><span>Platform Ref</span><strong>{{ result.intent.platform_ref }}</strong></div>{% endif %}
+          <div class="arch-row"><span>Animations</span><strong class="{{ 'yes' if result.intent.has_animation else 'no' }}">{{ '✓ Yes' if result.intent.has_animation else '— No' }}</strong></div>
+          <div class="arch-row"><span>Pricing</span><strong class="{{ 'yes' if result.intent.has_pricing else 'no' }}">{{ '✓ Yes' if result.intent.has_pricing else '— No' }}</strong></div>
+          <div class="arch-row"><span>Admin Panel</span><strong class="{{ 'yes' if result.intent.has_admin else 'no' }}">{{ '✓ Yes' if result.intent.has_admin else '— No' }}</strong></div>
+          <div class="arch-row"><span>Waitlist</span><strong class="{{ 'yes' if result.intent.has_waitlist else 'no' }}">{{ '✓ Yes' if result.intent.has_waitlist else '— No' }}</strong></div>
+        </div>
+      </div>
+      <div class="arch-card">
+        <div class="arch-card-title"><span class="arch-step-num">2</span> Auto Design Decisions</div>
+        {% set layout = result.architecture_plan.layout %}
+        <div class="arch-rows">
+          <div class="arch-row"><span>Layout</span><strong>{{ layout.get('type','—') }}</strong></div>
+          <div class="arch-row"><span>Navigation</span><strong>{{ layout.get('nav','—') }}</strong></div>
+          <div class="arch-row"><span>Grid</span><strong>{{ layout.get('grid','—') }}</strong></div>
+          <div class="arch-row"><span>Color Mode</span><strong>{{ layout.get('color_mode','—') }}</strong></div>
+        </div>
+        <div class="arch-section-title">Components</div>
+        <ul class="arch-list">{% for c in result.architecture_plan.components %}<li>{{ c }}</li>{% endfor %}</ul>
+      </div>
+      <div class="arch-card">
+        <div class="arch-card-title"><span class="arch-step-num">3</span> Frontend Structure</div>
+        {% set fe = result.architecture_plan.frontend %}
+        <div class="arch-rows">
+          <div class="arch-row"><span>Type</span><strong>{{ fe.type }}</strong></div>
+          <div class="arch-row"><span>Responsive</span><strong>{{ fe.responsive }}</strong></div>
+          <div class="arch-row"><span>Fonts</span><strong>{{ fe.fonts }}</strong></div>
+        </div>
+        {% if fe.templates %}
+        <div class="arch-section-title">Templates</div>
+        <ul class="arch-list">{% for t in fe.templates %}<li>{{ t }}</li>{% endfor %}</ul>
+        {% endif %}
+      </div>
+      <div class="arch-card">
+        <div class="arch-card-title"><span class="arch-step-num">3</span> Backend Structure</div>
+        {% set be = result.architecture_plan.backend %}
+        <div class="arch-rows">
+          <div class="arch-row"><span>Type</span><strong>{{ be.type }}</strong></div>
+          <div class="arch-row"><span>Server</span><strong>{{ be.server }}</strong></div>
+          <div class="arch-row"><span>Database</span><strong>{{ be.database }}</strong></div>
+          {% if be.routes %}<div class="arch-row"><span>Routes</span><strong>{{ be.routes }}</strong></div>{% endif %}
+        </div>
+        {% if be.features %}
+        <div class="arch-section-title">Features</div>
+        <ul class="arch-list">{% for f in be.features %}<li>{{ f }}</li>{% endfor %}</ul>
+        {% endif %}
+      </div>
+      <div class="arch-card arch-card-wide">
+        <div class="arch-card-title"><span class="arch-step-num">✦</span> UX Flow</div>
+        <div class="ux-flow">
+          {% for step in result.architecture_plan.ux_flow %}
+          <div class="ux-step"><span class="ux-num">{{ loop.index }}</span><span>{{ step }}</span></div>
+          {% if not loop.last %}<div class="ux-arrow">↓</div>{% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TAB: FILES -->
+  <div class="gout-tab-content" id="gtab-files">
+    <div class="gout-files-layout">
+      <div class="gof-header">
+        <div class="gof-header-top">
+          <span class="gof-label">files</span>
+          <button class="gof-copy-all-btn" onclick="copyAllFiles()">📋 Copy All</button>
+        </div>
+        <div class="gof-file-tabs" id="fileTabs">
+          {% for f in result.files %}
+          <button class="gof-tab {% if loop.first %}active{% endif %}" onclick="showFile({{ loop.index0 }},this)" data-lang="{{ f.language }}">
+            <span class="gof-tab-icon">{{ {'python':'🐍','html':'📄','css':'🎨','javascript':'⚡','text':'📝'}.get(f.language,'📄') }}</span>
+            {{ f.path.split('/')[-1] }}
+            <span class="gof-tab-lines">{{ f.lines }}L</span>
+          </button>
+          {% endfor %}
+        </div>
+      </div>
+      {% for f in result.files %}
+      <div class="gof-file {% if loop.first %}active{% endif %}" id="file-{{ loop.index0 }}">
+        <div class="gof-file-header">
+          <div class="gof-file-path">
+            <span class="gof-path-icon">{{ {'python':'🐍','html':'📄','css':'🎨','javascript':'⚡','text':'📝'}.get(f.language,'📄') }}</span>
+            <span class="gof-path-text">File: <strong>{{ f.path }}</strong></span>
+            <span class="gof-lang-badge">{{ f.language }}</span>
+            <span class="gof-lines-badge">{{ f.lines }} lines</span>
+          </div>
+          <div class="gof-file-actions">
+            <button class="gof-copy-btn" onclick="copyCode({{ loop.index0 }})" id="copy-{{ loop.index0 }}">📋 Copy</button>
+            <button class="gof-expand-btn" onclick="toggleExpand({{ loop.index0 }})">⤢ Expand</button>
+          </div>
+        </div>
+        <div class="gof-code-wrap" id="codewrap-{{ loop.index0 }}">
+          <pre class="gof-code {{ f.language }}" id="code-{{ loop.index0 }}"><code>{{ f.code | e }}</code></pre>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- TAB: DATABASE -->
+  {% if result.db_schema %}
+  <div class="gout-tab-content" id="gtab-database">
+    <div class="db-page">
+      <div class="db-intro"><span class="db-intro-icon">🗄</span>
+        <div><h3>database_schema</h3><p>SQLite — auto-created as <code>database.db</code></p></div>
+      </div>
+      <div class="db-tables">
+        {% for table in result.db_schema %}
+        <div class="db-table-card">
+          <div class="db-table-header">
+            <span class="db-table-icon">📋</span><strong>{{ table.name }}</strong>
+            <span class="db-col-count">{{ table.columns | length }} columns</span>
+            <button class="db-copy-btn" onclick="copyText({{ table.sql | tojson }})">Copy SQL</button>
+          </div>
+          <div class="db-columns">
+            {% for col in table.columns %}
+            <div class="db-col">
+              <span class="db-col-def">{{ col }}</span>
+              {% if 'PRIMARY KEY' in col %}<span class="db-col-badge db-pk">PK</span>
+              {% elif 'REFERENCES' in col %}<span class="db-col-badge db-fk">FK</span>
+              {% elif 'NOT NULL' in col %}<span class="db-col-badge db-nn">NN</span>
+              {% elif 'DEFAULT' in col %}<span class="db-col-badge db-def">DEF</span>{% endif %}
+            </div>
+            {% endfor %}
+          </div>
+          <pre class="db-sql-block">{{ table.sql }}</pre>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- TAB: API ROUTES -->
+  {% if result.api_routes %}
+  <div class="gout-tab-content" id="gtab-api">
+    <div class="api-page">
+      <div class="api-intro"><span>🔌</span>
+        <div><h3>api_routes</h3><p>{{ result.api_routes | length }} routes defined</p></div>
+      </div>
+      <div class="api-table-wrap">
+        <table class="api-table">
+          <thead><tr><th>Method</th><th>Path</th><th>Description</th></tr></thead>
+          <tbody>
+            {% for route in result.api_routes %}
+            <tr>
+              <td><span class="api-method api-{{ route.method | lower }}">{{ route.method }}</span></td>
+              <td><code class="api-path">{{ route.path }}</code></td>
+              <td class="api-desc">{{ route.desc }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- TAB: DEPLOY -->
+  <div class="gout-tab-content" id="gtab-deploy">
+    <div class="deploy-page">
+      <div class="deploy-intro"><span>🚀</span>
+        <div><h3>deployment_guide</h3><p>Deployment options for your <strong>{{ result.type }}</strong> project</p></div>
+      </div>
+      {% set dg = result.deployment_guide %}
+      <div class="deploy-grid">
+        <div class="deploy-card">
+          <div class="deploy-card-header"><span>💻</span> Run Locally <span class="deploy-badge deploy-free">Free</span></div>
+          <ol class="deploy-steps">{% for step in dg.local %}<li>{{ step }}</li>{% endfor %}</ol>
+        </div>
+        {% if dg.netlify %}
+        <div class="deploy-card">
+          <div class="deploy-card-header"><span>🌐</span> Netlify <span class="deploy-badge deploy-free">Free</span></div>
+          <ol class="deploy-steps">{% for step in dg.netlify %}<li>{{ step }}</li>{% endfor %}</ol>
+        </div>
+        {% endif %}
+        {% if dg.github_pages %}
+        <div class="deploy-card">
+          <div class="deploy-card-header"><span>🐙</span> GitHub Pages <span class="deploy-badge deploy-free">Free</span></div>
+          <ol class="deploy-steps">{% for step in dg.github_pages %}<li>{{ step }}</li>{% endfor %}</ol>
+        </div>
+        {% endif %}
+        {% if dg.render %}
+        <div class="deploy-card">
+          <div class="deploy-card-header"><span>☁️</span> Render <span class="deploy-badge deploy-free">Free Tier</span></div>
+          <ol class="deploy-steps">{% for step in dg.render %}<li>{{ step }}</li>{% endfor %}</ol>
+        </div>
+        {% endif %}
+        {% if dg.railway %}
+        <div class="deploy-card">
+          <div class="deploy-card-header"><span>🚂</span> Railway <span class="deploy-badge deploy-paid">Paid</span></div>
+          <ol class="deploy-steps">{% for step in dg.railway %}<li>{{ step }}</li>{% endfor %}</ol>
+        </div>
+        {% endif %}
+        {% if dg.docker %}
+        <div class="deploy-card deploy-card-wide">
+          <div class="deploy-card-header"><span>🐳</span> Dockerfile
+            <button class="deploy-copy-btn" onclick="copyDockerfile()">Copy</button>
+          </div>
+          <pre class="deploy-dockerfile" id="dockerfileContent">{{ dg.docker | join('\n') }}</pre>
+        </div>
+        {% endif %}
+        {% if dg.env_vars %}
+        <div class="deploy-card">
+          <div class="deploy-card-header"><span>🔑</span> Environment Variables</div>
+          <div class="deploy-env">{% for ev in dg.env_vars %}<div class="deploy-env-row"><code>{{ ev }}</code></div>{% endfor %}</div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom CTA -->
+  <div class="gout-bottom-cta">
+    <div class="gbc-left">
+      <strong>✅ Project generated successfully!</strong>
+      <span>{{ result.total_files }} files · {{ result.total_lines }} lines · {{ result.summary.complexity }} complexity</span>
+    </div>
+    <div class="gbc-right">
+      <a href="{{ url_for('generate_page') }}" class="gbc-btn">⚡ Generate Another</a>
+      <a href="{{ url_for('download', project_id=result.project_id) }}" class="gbc-btn gbc-primary">⬇ Download ZIP</a>
+    </div>
+  </div>
+
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+function switchMainTab(name, btn) {
+  document.querySelectorAll('.gmt').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.gout-tab-content').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  const el = document.getElementById('gtab-' + name);
+  if (el) el.classList.add('active');
+}
+function showFile(idx, btn) {
+  document.querySelectorAll('.gof-file').forEach(f => f.classList.remove('active'));
+  document.querySelectorAll('.gof-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('file-' + idx).classList.add('active');
+  btn.classList.add('active');
+  btn.scrollIntoView({ behavior:'smooth', block:'nearest', inline:'center' });
+}
+async function copyCode(idx) {
+  const code = document.getElementById('code-' + idx).textContent;
+  const btn  = document.getElementById('copy-' + idx);
+  await _copy(code);
+  btn.textContent = '✅ Copied!'; btn.classList.add('copied');
+  setTimeout(() => { btn.textContent = '📋 Copy'; btn.classList.remove('copied'); }, 2000);
+}
+async function copyAllFiles() {
+  const all = [...document.querySelectorAll('.gof-code code')].map((el,i) => {
+    const tab = document.querySelectorAll('.gof-tab')[i];
+    return `// ── ${tab ? tab.textContent.trim() : 'file'} ──\n${el.textContent}`;
+  }).join('\n\n');
+  await _copy(all);
+  const btn = document.querySelector('.gof-copy-all-btn');
+  btn.textContent = '✅ All Copied!';
+  setTimeout(() => { btn.textContent = '📋 Copy All'; }, 2000);
+}
+function toggleExpand(idx) {
+  const wrap = document.getElementById('codewrap-' + idx);
+  const btn  = wrap.previousElementSibling.querySelector('.gof-expand-btn');
+  wrap.classList.toggle('expanded');
+  btn.textContent = wrap.classList.contains('expanded') ? '⤡ Collapse' : '⤢ Expand';
+}
+async function copyText(text) { await _copy(text); }
+async function copyDockerfile() {
+  const c = document.getElementById('dockerfileContent')?.textContent || '';
+  await _copy(c);
+  const btn = document.querySelector('.deploy-copy-btn');
+  if (btn) { btn.textContent = '✅ Copied!'; setTimeout(() => { btn.textContent = 'Copy'; }, 2000); }
+}
+async function _copy(text) {
+  try { await navigator.clipboard.writeText(text); }
+  catch(e) {
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); document.body.removeChild(ta);
+  }
+}
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'k') { e.preventDefault(); document.querySelector('.gof-tab')?.focus(); }
+});
+</script>
+{% endblock %}

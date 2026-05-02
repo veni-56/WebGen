@@ -1,0 +1,149 @@
+{% extends 'base.html' %}
+{% block title %}AI Debugger — {{ project.name }}{% endblock %}
+{% block content %}
+<div class="debug-page">
+  <div class="container">
+    <div class="debug-header">
+      <div>
+        <h2>🔍 AI Debugger</h2>
+        <p class="muted">{{ project.name }} · {{ project.project_type }}</p>
+      </div>
+      <div class="debug-header-actions">
+        <a href="{{ url_for('editor', project_id=project.id) }}" class="billing-btn">← Editor</a>
+        <button class="billing-btn billing-btn-primary" onclick="analyzeProject()" id="analyzeBtn">🔍 Analyze</button>
+        <button class="billing-btn" onclick="fixProject()" id="fixBtn" style="display:none">🔧 Auto-Fix All</button>
+      </div>
+    </div>
+
+    <!-- Score card -->
+    <div class="debug-score-card" id="scoreCard" style="display:none">
+      <div class="dsc-score" id="dscScore">—</div>
+      <div class="dsc-grade" id="dscGrade">—</div>
+      <div class="dsc-label">Health Score</div>
+      <div class="dsc-counts" id="dscCounts"></div>
+    </div>
+
+    <!-- Issues list -->
+    <div id="issuesArea" style="display:none">
+      <h3 style="margin-bottom:1rem">Issues Found</h3>
+      <div id="issuesList"></div>
+    </div>
+
+    <!-- Suggestions -->
+    <div id="suggestionsArea" style="display:none">
+      <h3 style="margin-bottom:1rem">💡 Performance Suggestions</h3>
+      <div id="suggestionsList"></div>
+    </div>
+
+    <!-- Loading -->
+    <div id="debugLoading" style="display:none;text-align:center;padding:3rem">
+      <div class="spin-dot" style="width:32px;height:32px;border-width:3px;margin:0 auto 1rem"></div>
+      <p class="muted" id="debugLoadingMsg">Analyzing your code...</p>
+    </div>
+
+    <!-- Empty state -->
+    <div id="debugEmpty" style="text-align:center;padding:4rem;color:var(--muted)">
+      <div style="font-size:3rem;margin-bottom:1rem">🔍</div>
+      <h3>Click Analyze to scan your project</h3>
+      <p>The AI debugger will check for security issues, performance problems, and code quality.</p>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const PROJECT_ID = "{{ project.id }}";
+
+async function analyzeProject() {
+  showLoading('Analyzing your code...');
+  document.getElementById('fixBtn').style.display = 'none';
+  try {
+    const res  = await fetch(`/api/debug/${PROJECT_ID}`, {method:'POST'});
+    const data = await res.json();
+    hideLoading();
+    if (data.ok) renderResults(data);
+    else alert('Analysis failed: ' + data.error);
+  } catch(e) {
+    hideLoading();
+    alert('Analysis failed: ' + e.message);
+  }
+}
+
+async function fixProject() {
+  if (!confirm('Auto-fix all detected issues? This will modify your project files.')) return;
+  showLoading('Fixing issues...');
+  try {
+    const res  = await fetch(`/api/debug/${PROJECT_ID}/fix`, {method:'POST'});
+    const data = await res.json();
+    hideLoading();
+    if (data.ok) {
+      alert(`Fixed ${data.fixed_files} files! Re-analyzing...`);
+      analyzeProject();
+    }
+  } catch(e) {
+    hideLoading();
+    alert('Fix failed: ' + e.message);
+  }
+}
+
+function renderResults(data) {
+  // Score card
+  const scoreCard = document.getElementById('scoreCard');
+  scoreCard.style.display = 'flex';
+  document.getElementById('dscScore').textContent = data.score;
+  document.getElementById('dscGrade').textContent = data.grade;
+  document.getElementById('dscScore').style.color = data.score >= 80 ? '#4caf50' : data.score >= 60 ? '#ffc107' : '#f44336';
+  document.getElementById('dscCounts').innerHTML =
+    `<span style="color:#f44336">${data.errors} errors</span> · <span style="color:#ffc107">${data.warnings} warnings</span>`;
+
+  // Issues
+  const issuesArea = document.getElementById('issuesArea');
+  const issuesList = document.getElementById('issuesList');
+  if (data.issues.length > 0) {
+    issuesArea.style.display = 'block';
+    issuesList.innerHTML = data.issues.map(issue => `
+      <div class="debug-issue debug-issue-${issue.severity}">
+        <div class="di-header">
+          <span class="di-severity">${issue.severity === 'error' ? '🔴' : '🟡'} ${issue.severity}</span>
+          <span class="di-category">${issue.category}</span>
+          <span class="di-file">${issue.file}</span>
+          ${issue.count > 1 ? `<span class="di-count">${issue.count}x</span>` : ''}
+        </div>
+        <div class="di-message">${issue.message}</div>
+      </div>
+    `).join('');
+    document.getElementById('fixBtn').style.display = 'inline-block';
+  } else {
+    issuesArea.style.display = 'block';
+    issuesList.innerHTML = '<div class="debug-clean">✅ No issues found! Your code looks great.</div>';
+  }
+
+  // Suggestions
+  const suggestionsArea = document.getElementById('suggestionsArea');
+  const suggestionsList = document.getElementById('suggestionsList');
+  if (data.suggestions.length > 0) {
+    suggestionsArea.style.display = 'block';
+    suggestionsList.innerHTML = data.suggestions.map(s =>
+      `<div class="debug-suggestion">💡 ${s}</div>`
+    ).join('');
+  }
+
+  document.getElementById('debugEmpty').style.display = 'none';
+}
+
+function showLoading(msg) {
+  document.getElementById('debugLoading').style.display = 'block';
+  document.getElementById('debugLoadingMsg').textContent = msg;
+  document.getElementById('debugEmpty').style.display = 'none';
+  document.getElementById('issuesArea').style.display = 'none';
+  document.getElementById('suggestionsArea').style.display = 'none';
+  document.getElementById('scoreCard').style.display = 'none';
+  document.getElementById('analyzeBtn').disabled = true;
+}
+function hideLoading() {
+  document.getElementById('debugLoading').style.display = 'none';
+  document.getElementById('analyzeBtn').disabled = false;
+}
+</script>
+{% endblock %}

@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en" x-data="{}" x-init="applyDark()" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Cutting-edge software solutions that help businesses scale, innovate, and lead their industries."/>
+  <meta property="og:title"       content="About — NovaTech"/>
+  <meta property="og:description" content="Cutting-edge software solutions that help businesses scale, innovate, and lead their industries."/>
+  <meta property="og:type"        content="website"/>
+  <title>About — NovaTech</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:'class'}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    body{font-family:'Inter',sans-serif}
+    :root{--primary:#6c63ff;--secondary:#f50057;--primary-rgb:108,99,255;--secondary-rgb:245,0,87}
+  </style>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 antialiased">
+<div id="scrollProgress"></div>
+<nav id="mainNav" role="navigation" aria-label="Main navigation"
+     class="sticky top-0 z-50 bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl
+            border-b border-gray-100 dark:border-gray-800 transition-shadow"
+     x-data="{mobileOpen:false}">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+    <a href="index.html" class="flex items-center gap-2.5 font-black text-xl tracking-tight group" aria-label="NovaTech home">
+      <span class="w-8 h-8 rounded-xl btn-gradient flex items-center justify-center text-white text-sm group-hover:scale-110 transition-transform">N</span>
+      <span class="dark:text-white">NovaTech</span>
+    </a>
+    <div class="hidden md:flex items-center gap-1">
+      <a href="index.html" class="nav-link  px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-all">Home</a>
+      <a href="about.html" class="nav-link active px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-all">About</a>
+      <a href="services.html" class="nav-link  px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-all">Services</a>
+      <a href="portfolio.html" class="nav-link  px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-all">Portfolio</a>
+      <a href="blog.html" class="nav-link  px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-all">Blog</a>
+      <a href="contact.html" class="nav-link  px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-all">Contact</a>
+      <a href="pricing.html" class="btn-gradient ml-2 px-5 py-2 rounded-full text-sm font-bold hover:scale-105 transition-all focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2">Pricing</a>
+      <a href="team.html" class="nav-link  px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-all">Team</a>
+      <a href="faq.html" class="nav-link  px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-all">FAQ</a>
+      <a href="testimonials.html" class="nav-link  px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-all">Testimonials</a>
+      
+    </div>
+    <div class="flex items-center gap-1.5">
+      <button onclick="toggleDark()"
+              class="w-9 h-9 rounded-xl flex items-center justify-center text-gray-500 dark:text-gray-400
+                     hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors
+                     focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-1"
+              aria-label="Toggle dark mode" id="darkToggle">
+          <svg id="iconSun" class="w-5 h-5 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+          <svg id="iconMoon" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        </button>
+      <button @click="mobileOpen=!mobileOpen"
+              class="md:hidden w-9 h-9 rounded-xl flex items-center justify-center text-gray-500
+                     hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors
+                     focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-1"
+              :aria-expanded="mobileOpen.toString()" aria-label="Toggle mobile menu">
+        <svg x-show="!mobileOpen" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <svg x-show="mobileOpen"  class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+  </div>
+  <div x-show="mobileOpen" x-transition x-cloak
+       class="md:hidden border-t border-gray-100 dark:border-gray-800 bg-white/95 dark:bg-gray-950/95 backdrop-blur-xl px-4 py-3 space-y-1">
+    <a href="index.html" class="block px-3 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">Home</a>
+    <a href="about.html" class="block px-3 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">About</a>
+    <a href="services.html" class="block px-3 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">Services</a>
+    <a href="portfolio.html" class="block px-3 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">Portfolio</a>
+    <a href="blog.html" class="block px-3 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">Blog</a>
+    <a href="contact.html" class="block px-3 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">Contact</a>
+    <a href="pricing.html" class="block px-3 py-2.5 rounded-xl text-sm font-bold text-primary">Pricing</a>
+    <a href="team.html" class="block px-3 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">Team</a>
+    <a href="faq.html" class="block px-3 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">FAQ</a>
+    <a href="testimonials.html" class="block px-3 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">Testimonials</a>
+    
+  </div>
+</nav>
+
+
+<section class="py-20 px-4 bg-gradient-to-br from-indigo-50 via-white to-pink-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 text-center border-b border-gray-100 dark:border-gray-800">
+  <div class="max-w-3xl mx-auto reveal">
+    <h1 class="text-4xl md:text-5xl font-black mt-2 mb-4 dark:text-white">About <span class="gradient-text">NovaTech</span></h1>
+    <p class="text-lg text-gray-500 dark:text-gray-400">We're a team of engineers, designers, and dreamers on a mission to make great software accessible to every team.</p>
+  </div>
+</section>
+
+<section class="py-24 px-4">
+  <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-14 items-center">
+    <div class="reveal-left">
+      <span class="text-primary text-sm font-semibold uppercase tracking-wider">Who We Are</span>
+      <h2 class="text-3xl md:text-4xl font-black mt-2 mb-5 dark:text-white">Our <span class="gradient-text">Story</span></h2>
+      <p class="text-gray-500 dark:text-gray-400 leading-relaxed mb-4">NovaTech was founded in 2019 by a group of engineers frustrated with the complexity of modern infrastructure. We believed that deploying and scaling software should be simple, fast, and reliable.</p>
+      <p class="text-gray-500 dark:text-gray-400 leading-relaxed mb-6">Starting from a small apartment in San Francisco, we built the first version of our platform in 3 months. Today, we serve over 10,000 teams across 80 countries.</p>
+      <a href="contact.html" class="btn-gradient px-6 py-3 rounded-full font-bold text-sm inline-block focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2">Work With Us →</a>
+    </div>
+    <div class="reveal-right grid grid-cols-2 gap-4">
+      <div class="bg-primary-10 border border-primary-15 rounded-2xl p-5 text-center card-hover"><div class="text-3xl font-black text-primary mb-1">80+</div><div class="text-sm text-gray-500 dark:text-gray-400">Countries</div></div>
+      <div class="bg-pink-50 dark:bg-pink-900/20 border border-pink-100 dark:border-pink-800 rounded-2xl p-5 text-center card-hover"><div class="text-3xl font-black mb-1" style="color:var(--secondary)">50+</div><div class="text-sm text-gray-500 dark:text-gray-400">Team Members</div></div>
+      <div class="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-800 rounded-2xl p-5 text-center card-hover"><div class="text-3xl font-black text-emerald-600 mb-1">$40M</div><div class="text-sm text-gray-500 dark:text-gray-400">Series B</div></div>
+      <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800 rounded-2xl p-5 text-center card-hover"><div class="text-3xl font-black text-amber-500 mb-1">4.9★</div><div class="text-sm text-gray-500 dark:text-gray-400">G2 Rating</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="py-24 px-4 bg-gray-50 dark:bg-gray-900 border-y border-gray-100 dark:border-gray-800">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <span class="text-primary text-sm font-semibold uppercase tracking-wider">Principles</span>
+      <h2 class="text-4xl font-black mt-2 dark:text-white">Our <span class="gradient-text">Values</span></h2>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"><article class="reveal card-hover card-gradient-border bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700">
+      <div class="text-2xl mb-3" aria-hidden="true">🎯</div>
+      <h3 class="font-bold mb-2 dark:text-white">Customer Obsession</h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">Every feature we build starts with a customer problem. We listen, iterate, and ship fast.</p>
+    </article>
+    <article class="reveal card-hover card-gradient-border bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700">
+      <div class="text-2xl mb-3" aria-hidden="true">🔬</div>
+      <h3 class="font-bold mb-2 dark:text-white">Engineering Excellence</h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">We hold ourselves to the highest technical standards. Clean code, thorough testing.</p>
+    </article>
+    <article class="reveal card-hover card-gradient-border bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700">
+      <div class="text-2xl mb-3" aria-hidden="true">🌍</div>
+      <h3 class="font-bold mb-2 dark:text-white">Radical Transparency</h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">We share our roadmap, our mistakes, and our learnings openly. Trust is built through honesty.</p>
+    </article>
+    <article class="reveal card-hover card-gradient-border bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700">
+      <div class="text-2xl mb-3" aria-hidden="true">⚡</div>
+      <h3 class="font-bold mb-2 dark:text-white">Move Fast</h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">Speed matters. We ship weekly, learn from real users, and iterate quickly.</p>
+    </article>
+    <article class="reveal card-hover card-gradient-border bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700">
+      <div class="text-2xl mb-3" aria-hidden="true">🤝</div>
+      <h3 class="font-bold mb-2 dark:text-white">Inclusive Culture</h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">Great ideas come from diverse perspectives. We actively build a team that reflects the world.</p>
+    </article>
+    <article class="reveal card-hover card-gradient-border bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700">
+      <div class="text-2xl mb-3" aria-hidden="true">🌱</div>
+      <h3 class="font-bold mb-2 dark:text-white">Long-term Thinking</h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">We optimize for decades, not quarters. Sustainable growth and a healthy team.</p>
+    </article>
+    </div>
+  </div>
+</section>
+
+<section class="py-24 px-4">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <span class="text-primary text-sm font-semibold uppercase tracking-wider">People</span>
+      <h2 class="text-4xl font-black mt-2 dark:text-white">Meet the <span class="gradient-text">Team</span></h2>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6"><div class="reveal card-hover card-gradient-border bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-6 text-center">
+      <div class="w-16 h-16 rounded-full btn-gradient flex items-center justify-center text-white font-black text-xl mx-auto mb-3" aria-hidden="true">AK</div>
+      <div class="font-bold text-sm dark:text-white">Alex Kim</div>
+      <div class="text-xs text-primary mt-0.5">CEO & Co-founder</div>
+    </div>
+    <div class="reveal card-hover card-gradient-border bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-6 text-center">
+      <div class="w-16 h-16 rounded-full btn-gradient flex items-center justify-center text-white font-black text-xl mx-auto mb-3" aria-hidden="true">SR</div>
+      <div class="font-bold text-sm dark:text-white">Sofia Rodriguez</div>
+      <div class="text-xs text-primary mt-0.5">CTO & Co-founder</div>
+    </div>
+    <div class="reveal card-hover card-gradient-border bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-6 text-center">
+      <div class="w-16 h-16 rounded-full btn-gradient flex items-center justify-center text-white font-black text-xl mx-auto mb-3" aria-hidden="true">JL</div>
+      <div class="font-bold text-sm dark:text-white">James Liu</div>
+      <div class="text-xs text-primary mt-0.5">Head of Design</div>
+    </div>
+    <div class="reveal card-hover card-gradient-border bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-6 text-center">
+      <div class="w-16 h-16 rounded-full btn-gradient flex items-center justify-center text-white font-black text-xl mx-auto mb-3" aria-hidden="true">MP</div>
+      <div class="font-bold text-sm dark:text-white">Maya Patel</div>
+      <div class="text-xs text-primary mt-0.5">VP Engineering</div>
+    </div>
+    </div>
+    <div class="text-center mt-10 reveal">
+      <a href="team.html" class="btn-outline-primary px-6 py-2.5 rounded-full text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2">Meet the Full Team →</a>
+    </div>
+  </div>
+</section>
+<section class="py-24 px-4 text-center" aria-labelledby="cta-heading">
+  <div class="max-w-2xl mx-auto reveal">
+    <h2 id="cta-heading" class="text-4xl md:text-5xl font-black mb-4 dark:text-white">Ready to <span class="gradient-text">Get Started?</span></h2>
+    <p class="text-gray-500 dark:text-gray-400 mb-10">Join 10,000+ teams already building with NovaTech. Free plan available — no credit card required.</p>
+    <div class="flex flex-wrap gap-4 justify-center">
+      <a href="contact.html" class="btn-gradient px-8 py-3.5 rounded-full font-bold focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2">Start Free Trial</a>
+      <a href="about.html" class="btn-outline-primary px-8 py-3.5 rounded-full font-bold focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2">Meet the Team →</a>
+    </div>
+  </div>
+</section>
+<footer class="bg-gray-900 dark:bg-gray-950 text-gray-400 border-t border-gray-800 mt-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-14">
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-8 mb-10">
+      <div class="col-span-2 md:col-span-1">
+        <a href="index.html" class="flex items-center gap-2.5 font-black text-xl text-white mb-4" aria-label="NovaTech home">
+          <span class="w-8 h-8 rounded-xl btn-gradient flex items-center justify-center text-white text-sm">N</span>
+          NovaTech
+        </a>
+        <p class="text-sm leading-relaxed text-gray-400 max-w-xs">Building the future with cutting-edge technology. Trusted by 10,000+ teams worldwide.</p>
+      </div>
+      <div>
+        <h3 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Pages</h3>
+        <ul class="space-y-2.5 text-sm"><li><a href="home.html" class="hover:text-white hover:translate-x-0.5 transition-all inline-block">Home</a></li>
+<li><a href="about.html" class="hover:text-white hover:translate-x-0.5 transition-all inline-block">About</a></li>
+<li><a href="services.html" class="hover:text-white hover:translate-x-0.5 transition-all inline-block">Services</a></li>
+<li><a href="portfolio.html" class="hover:text-white hover:translate-x-0.5 transition-all inline-block">Portfolio</a></li>
+<li><a href="blog.html" class="hover:text-white hover:translate-x-0.5 transition-all inline-block">Blog</a></li>
+<li><a href="contact.html" class="hover:text-white hover:translate-x-0.5 transition-all inline-block">Contact</a></li>
+<li><a href="pricing.html" class="hover:text-white hover:translate-x-0.5 transition-all inline-block">Pricing</a></li>
+<li><a href="team.html" class="hover:text-white hover:translate-x-0.5 transition-all inline-block">Team</a></li>
+<li><a href="faq.html" class="hover:text-white hover:translate-x-0.5 transition-all inline-block">FAQ</a></li>
+<li><a href="testimonials.html" class="hover:text-white hover:translate-x-0.5 transition-all inline-block">Testimonials</a></li></ul>
+      </div>
+      <div>
+        <h3 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Contact</h3>
+        <ul class="space-y-2 text-sm">
+          <li class="flex items-center gap-2"><span aria-hidden="true">📧</span> hello@novatech.io</li>
+          <li class="flex items-center gap-2"><span aria-hidden="true">📞</span> +1 (555) 000-1234</li>
+          <li class="flex items-center gap-2"><span aria-hidden="true">📍</span> San Francisco, CA</li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-gray-800 pt-8 mb-8">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div><h3 class="text-white font-semibold mb-1">Stay in the loop</h3><p class="text-sm text-gray-400">Get the latest updates delivered to your inbox.</p></div>
+        <form class="flex gap-2 w-full sm:w-auto" onsubmit="event.preventDefault();showToast('Subscribed! 🎉')">
+          <input type="email" placeholder="your@email.com" required class="flex-1 sm:w-56 px-4 py-2.5 rounded-xl bg-gray-800 border border-gray-700 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[var(--primary)] transition-colors" aria-label="Email address"/>
+          <button type="submit" class="btn-gradient px-5 py-2.5 rounded-xl text-sm font-bold whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-gray-900">Subscribe</button>
+        </form>
+      </div>
+    </div>
+    <div class="flex flex-col sm:flex-row justify-between items-center gap-2 text-xs text-gray-500">
+      <span>&copy; 2025 NovaTech. All rights reserved.</span>
+      <span>Built with ❤️ · Website Builder System</span>
+    </div>
+  </div>
+</footer>
+<button id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"
+        class="fixed bottom-6 right-6 z-40 w-11 h-11 rounded-xl btn-gradient
+               flex items-center justify-center text-white shadow-lg
+               hover:scale-110 transition-all focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2"
+        aria-label="Back to top">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg>
+    </button>
+<script src="script.js"></script>
+</body>
+</html>

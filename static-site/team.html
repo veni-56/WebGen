@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en" x-data="{dark:localStorage.getItem('dark')==='true',mobileOpen:false}"
+      :class="dark?'dark':''" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NovaTech — Team</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:'class'}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="stylesheet" href="style.css"/>
+  <style>body{font-family:'Inter',sans-serif}[x-cloak]{display:none!important}</style>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 antialiased">
+
+<nav id="mainNav" class="sticky top-0 z-50 bg-white/90 dark:bg-gray-950/90 backdrop-blur-md border-b border-gray-100 dark:border-gray-800 transition-shadow">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+    <a href="index.html" class="flex items-center gap-2 font-black text-xl"><span class="w-8 h-8 rounded-lg btn-gradient flex items-center justify-center text-white text-sm">N</span><span class="dark:text-white">Nova<span class="text-primary">Tech</span></span></a>
+    <div class="hidden md:flex items-center gap-6">
+      <a href="index.html"     class="nav-link text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">Home</a>
+      <a href="about.html"     class="nav-link text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">About</a>
+      <a href="services.html"  class="nav-link text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">Services</a>
+      <a href="portfolio.html" class="nav-link text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">Portfolio</a>
+      <a href="blog.html"      class="nav-link text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">Blog</a>
+      <a href="contact.html"   class="nav-link text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">Contact</a>
+      <a href="pricing.html"   class="btn-gradient px-4 py-2 rounded-full text-sm font-bold">Pricing</a>
+    </div>
+    <div class="flex items-center gap-2">
+      <button @click="dark=!dark;localStorage.setItem('dark',dark)" class="w-9 h-9 rounded-xl flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+        <svg x-show="!dark" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        <svg x-show="dark"  class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+      </button>
+      <button @click="mobileOpen=!mobileOpen" class="md:hidden w-9 h-9 rounded-xl flex items-center justify-center text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+        <svg x-show="!mobileOpen" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <svg x-show="mobileOpen"  class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+  </div>
+  <div x-show="mobileOpen" x-transition x-cloak class="md:hidden border-t border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-950 px-4 py-3 space-y-1">
+    <a href="index.html"     class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800">Home</a>
+    <a href="about.html"     class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800">About</a>
+    <a href="services.html"  class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800">Services</a>
+    <a href="portfolio.html" class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800">Portfolio</a>
+    <a href="blog.html"      class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800">Blog</a>
+    <a href="contact.html"   class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800">Contact</a>
+    <a href="pricing.html"   class="block px-3 py-2 rounded-lg text-sm font-bold text-primary">Pricing</a>
+  </div>
+</nav>
+
+<section class="py-20 px-4 bg-gradient-to-br from-indigo-50 via-white to-pink-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 text-center border-b border-gray-100 dark:border-gray-800">
+  <div class="max-w-3xl mx-auto reveal">
+    <span class="text-primary text-sm font-semibold uppercase tracking-wider">People</span>
+    <h1 class="text-4xl md:text-5xl font-black mt-2 mb-4 dark:text-white">Meet the <span class="gradient-text">Team</span></h1>
+    <p class="text-lg text-gray-500 dark:text-gray-400">The passionate people behind NovaTech — engineers, designers, and builders who love what they do.</p>
+  </div>
+</section>
+
+<section class="py-20 px-4">
+  <div class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+    <div class="reveal card-hover group bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7 text-center">
+      <div class="w-20 h-20 rounded-full btn-gradient flex items-center justify-center text-white font-black text-2xl mx-auto mb-4 group-hover:scale-110 transition-transform">AK</div>
+      <h3 class="font-black text-base dark:text-white">Alex Kim</h3>
+      <div class="text-xs text-primary font-semibold mt-0.5 mb-3">CEO & Co-founder</div>
+      <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed mb-4">Former Google SWE. Loves distributed systems and strong coffee.</p>
+      <div class="flex gap-2 justify-center">
+        <a href="#" class="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 hover:bg-primary-10 hover:text-primary transition-colors text-xs font-bold">in</a>
+        <a href="#" class="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 hover:bg-primary-10 hover:text-primary transition-colors text-xs font-bold">tw</a>
+      </div>
+    </div>
+
+    <div class="reveal card-hover group bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7 text-center">
+      <div class="w-20 h-20 rounded-full btn-gradient flex items-center justify-center text-white font-black text-2xl mx-auto mb-4 group-hover:scale-110 transition-transform">SR</div>
+      <h3 class="font-black text-base dark:text-white">Sofia Rodriguez</h3>
+      <div class="text-xs text-primary font-semibold mt-0.5 mb-3">CTO & Co-founder</div>
+      <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed mb-4">Ex-Stripe infrastructure lead. Built systems handling $1B+ in payments.</p>
+      <div class="flex gap-2 justify-center">
+        <a href="#" class="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 hover:bg-primary-10 hover:text-primary transition-colors text-xs font-bold">in</a>
+        <a href="#" class="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 hover:bg-primary-10 hover:text-primary transition-colors text-xs font-bold">gh</a>
+      </div>
+    </div>
+
+    <div class="reveal card-hover group bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7 text-center">
+      <div class="w-20 h-20 rounded-full btn-gradient flex items-center justify-center text-white font-black text-2xl mx-auto mb-4 group-hover:scale-110 transition-transform">JL</div>
+      <h3 class="font-black text-base dark:text-white">James Liu</h3>
+      <div class="text-xs text-primary font-semibold mt-0.5 mb-3">Head of Design</div>
+      <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed mb-4">Previously at Figma. Believes great design is invisible.</p>
+      <div class="flex gap-2 justify-center">
+        <a href="#" class="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 hover:bg-primary-10 hover:text-primary transition-colors text-xs font-bold">in</a>
+        <a href="#" class="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 hover:bg-primary-10 hover:text-primary transition-colors text-xs font-bold">tw</a>
+      </div>
+    </div>
+
+    <div class="reveal card-hover group bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7 text-center">
+      <div class="w-20 h-20 rounded-full btn-gradient flex items-center justify-center text-white font-black text-2xl mx-auto mb-4 group-hover:scale-110 transition-transform">MP</div>
+      <h3 class="font-black text-base dark:text-white">Maya Patel</h3>
+      <div class="text-xs text-primary font-semibold mt-0.5 mb-3">VP Engineering</div>
+      <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed mb-4">10+ years scaling teams at Amazon and Airbnb.</p>
+      <div class="flex gap-2 justify-center">
+        <a href="#" class="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 hover:bg-primary-10 hover:text-primary transition-colors text-xs font-bold">in</a>
+        <a href="#" class="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 hover:bg-primary-10 hover:text-primary transition-colors text-xs font-bold">gh</a>
+      </div>
+    </div>
+
+    <div class="reveal card-hover group bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7 text-center">
+      <div class="w-20 h-20 rounded-full btn-gradient flex items-center justify-center text-white font-black text-2xl mx-auto mb-4 group-hover:scale-110 transition-transform">TW</div>
+      <h3 class="font-black text-base dark:text-white">Tom Walker</h3>
+      <div class="text-xs text-primary font-semibold mt-0.5 mb-3">Head of Growth</div>
+      <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed mb-4">Growth hacker with 8 years scaling B2B SaaS companies.</p>
+      <div class="flex gap-2 justify-center">
+        <a href="#" class="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 hover:bg-primary-10 hover:text-primary transition-colors text-xs font-bold">in</a>
+        <a href="#" class="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 hover:bg-primary-10 hover:text-primary transition-colors text-xs font-bold">tw</a>
+      </div>
+    </div>
+
+    <div class="reveal card-hover group bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7 text-center">
+      <div class="w-20 h-20 rounded-full btn-gradient flex items-center justify-center text-white font-black text-2xl mx-auto mb-4 group-hover:scale-110 transition-transform">PP</div>
+      <h3 class="font-black text-base dark:text-white">Priya Patel</h3>
+      <div class="text-xs text-primary font-semibold mt-0.5 mb-3">Lead Engineer</div>
+      <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed mb-4">Open source contributor. Rust and Go enthusiast.</p>
+      <div class="flex gap-2 justify-center">
+        <a href="#" class="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 hover:bg-primary-10 hover:text-primary transition-colors text-xs font-bold">gh</a>
+        <a href="#" class="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 hover:bg-primary-10 hover:text-primary transition-colors text-xs font-bold">tw</a>
+      </div>
+    </div>
+
+    <div class="reveal card-hover group bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7 text-center">
+      <div class="w-20 h-20 rounded-full btn-gradient flex items-center justify-center text-white font-black text-2xl mx-auto mb-4 group-hover:scale-110 transition-transform">LC</div>
+      <h3 class="font-black text-base dark:text-white">Lena Chen</h3>
+      <div class="text-xs text-primary font-semibold mt-0.5 mb-3">Product Manager</div>
+      <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed mb-4">Ex-Notion PM. Obsessed with user research and clean roadmaps.</p>
+      <div class="flex gap-2 justify-center">
+        <a href="#" class="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 hover:bg-primary-10 hover:text-primary transition-colors text-xs font-bold">in</a>
+        <a href="#" class="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 hover:bg-primary-10 hover:text-primary transition-colors text-xs font-bold">tw</a>
+      </div>
+    </div>
+
+    <div class="reveal card-hover group bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7 text-center">
+      <div class="w-20 h-20 rounded-full btn-gradient flex items-center justify-center text-white font-black text-2xl mx-auto mb-4 group-hover:scale-110 transition-transform">RK</div>
+      <h3 class="font-black text-base dark:text-white">Raj Kumar</h3>
+      <div class="text-xs text-primary font-semibold mt-0.5 mb-3">DevOps Lead</div>
+      <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed mb-4">Kubernetes wizard. Keeps our 99.99% uptime promise alive.</p>
+      <div class="flex gap-2 justify-center">
+        <a href="#" class="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 hover:bg-primary-10 hover:text-primary transition-colors text-xs font-bold">gh</a>
+        <a href="#" class="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-500 hover:bg-primary-10 hover:text-primary transition-colors text-xs font-bold">in</a>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="py-16 px-4 bg-gradient-to-r from-indigo-50 to-pink-50 dark:from-gray-900 dark:to-gray-900 border-t border-gray-100 dark:border-gray-800 text-center">
+  <div class="max-w-xl mx-auto reveal">
+    <h2 class="text-2xl font-black mb-3 dark:text-white">Want to <span class="gradient-text">Join Us?</span></h2>
+    <p class="text-gray-500 dark:text-gray-400 mb-6">We're always looking for talented people who share our values.</p>
+    <a href="contact.html" class="btn-gradient px-7 py-3 rounded-full font-bold text-sm inline-block">View Open Roles</a>
+  </div>
+</section>
+
+<footer class="bg-gray-900 dark:bg-gray-950 text-gray-400 border-t border-gray-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10 grid grid-cols-2 md:grid-cols-4 gap-8">
+    <div class="col-span-2 md:col-span-1"><a href="index.html" class="flex items-center gap-2 font-black text-lg text-white mb-3"><span class="w-7 h-7 rounded-lg btn-gradient flex items-center justify-center text-white text-xs">N</span>NovaTech</a><p class="text-sm">Building the future with cutting-edge technology.</p></div>
+    <div><h4 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Product</h4><ul class="space-y-2 text-sm"><li><a href="services.html" class="hover:text-white transition-colors">Services</a></li><li><a href="pricing.html" class="hover:text-white transition-colors">Pricing</a></li><li><a href="portfolio.html" class="hover:text-white transition-colors">Portfolio</a></li></ul></div>
+    <div><h4 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Company</h4><ul class="space-y-2 text-sm"><li><a href="about.html" class="hover:text-white transition-colors">About</a></li><li><a href="team.html" class="hover:text-white transition-colors">Team</a></li><li><a href="blog.html" class="hover:text-white transition-colors">Blog</a></li><li><a href="contact.html" class="hover:text-white transition-colors">Contact</a></li></ul></div>
+    <div><h4 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Support</h4><ul class="space-y-2 text-sm"><li><a href="faq.html" class="hover:text-white transition-colors">FAQ</a></li><li><a href="testimonials.html" class="hover:text-white transition-colors">Testimonials</a></li><li><a href="#" class="hover:text-white transition-colors">Privacy</a></li></ul></div>
+  </div>
+  <div class="border-t border-gray-800"><div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center text-xs text-gray-500"><span>&copy; 2025 NovaTech. All rights reserved.</span><span>Made with ❤️ for developers</span></div></div>
+</footer>
+<script src="script.js"></script>
+</body></html>

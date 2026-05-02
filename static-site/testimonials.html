@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" x-data="{dark:localStorage.getItem('dark')==='true',mobileOpen:false}"
+      :class="dark?'dark':''" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NovaTech — Testimonials</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:'class'}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="stylesheet" href="style.css"/>
+  <style>body{font-family:'Inter',sans-serif}[x-cloak]{display:none!important}</style>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 antialiased">
+
+<nav id="mainNav" class="sticky top-0 z-50 bg-white/90 dark:bg-gray-950/90 backdrop-blur-md border-b border-gray-100 dark:border-gray-800 transition-shadow">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+    <a href="index.html" class="flex items-center gap-2 font-black text-xl"><span class="w-8 h-8 rounded-lg btn-gradient flex items-center justify-center text-white text-sm">N</span><span class="dark:text-white">Nova<span class="text-primary">Tech</span></span></a>
+    <div class="hidden md:flex items-center gap-6">
+      <a href="index.html"     class="nav-link text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">Home</a>
+      <a href="about.html"     class="nav-link text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">About</a>
+      <a href="services.html"  class="nav-link text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">Services</a>
+      <a href="portfolio.html" class="nav-link text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">Portfolio</a>
+      <a href="blog.html"      class="nav-link text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">Blog</a>
+      <a href="contact.html"   class="nav-link text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">Contact</a>
+      <a href="pricing.html"   class="btn-gradient px-4 py-2 rounded-full text-sm font-bold">Pricing</a>
+    </div>
+    <div class="flex items-center gap-2">
+      <button @click="dark=!dark;localStorage.setItem('dark',dark)" class="w-9 h-9 rounded-xl flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+        <svg x-show="!dark" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        <svg x-show="dark"  class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+      </button>
+      <button @click="mobileOpen=!mobileOpen" class="md:hidden w-9 h-9 rounded-xl flex items-center justify-center text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+        <svg x-show="!mobileOpen" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <svg x-show="mobileOpen"  class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+  </div>
+  <div x-show="mobileOpen" x-transition x-cloak class="md:hidden border-t border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-950 px-4 py-3 space-y-1">
+    <a href="index.html"     class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800">Home</a>
+    <a href="about.html"     class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800">About</a>
+    <a href="services.html"  class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800">Services</a>
+    <a href="portfolio.html" class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800">Portfolio</a>
+    <a href="blog.html"      class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800">Blog</a>
+    <a href="contact.html"   class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800">Contact</a>
+    <a href="pricing.html"   class="block px-3 py-2 rounded-lg text-sm font-bold text-primary">Pricing</a>
+  </div>
+</nav>
+
+<section class="py-20 px-4 bg-gradient-to-br from-indigo-50 via-white to-pink-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 text-center border-b border-gray-100 dark:border-gray-800">
+  <div class="max-w-3xl mx-auto reveal">
+    <span class="text-primary text-sm font-semibold uppercase tracking-wider">Social Proof</span>
+    <h1 class="text-4xl md:text-5xl font-black mt-2 mb-4 dark:text-white">What Our <span class="gradient-text">Customers Say</span></h1>
+    <p class="text-lg text-gray-500 dark:text-gray-400">Don't take our word for it — hear from the teams building with NovaTech every day.</p>
+  </div>
+</section>
+
+<!-- RATING SUMMARY -->
+<section class="py-12 px-4 bg-gray-50 dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800">
+  <div class="max-w-4xl mx-auto flex flex-wrap items-center justify-center gap-8 reveal">
+    <div class="text-center">
+      <div class="text-6xl font-black gradient-text">4.9</div>
+      <div class="text-amber-400 text-xl mt-1">⭐⭐⭐⭐⭐</div>
+      <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">Average Rating</div>
+    </div>
+    <div class="w-px h-16 bg-gray-200 dark:bg-gray-700 hidden sm:block"></div>
+    <div class="text-center">
+      <div class="text-4xl font-black text-primary">2,400+</div>
+      <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">Reviews</div>
+    </div>
+    <div class="w-px h-16 bg-gray-200 dark:bg-gray-700 hidden sm:block"></div>
+    <div class="text-center">
+      <div class="text-4xl font-black text-primary">98%</div>
+      <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">Would Recommend</div>
+    </div>
+    <div class="w-px h-16 bg-gray-200 dark:bg-gray-700 hidden sm:block"></div>
+    <div class="text-center">
+      <div class="text-4xl font-black text-primary">G2</div>
+      <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">Leader 2025</div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIAL CARDS -->
+<section class="py-20 px-4">
+  <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+    <div class="reveal card-hover relative bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7">
+      <div class="absolute top-5 right-6 text-5xl text-primary opacity-20 font-black leading-none">"</div>
+      <div class="flex gap-0.5 mb-4 text-amber-400">⭐⭐⭐⭐⭐</div>
+      <blockquote class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed italic mb-5">"NovaTech cut our deployment time by 80%. The auto-scaling alone saved us thousands in infrastructure costs. Absolutely game-changing."</blockquote>
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full btn-gradient flex items-center justify-center text-white font-bold text-sm flex-shrink-0">SC</div>
+        <div><div class="font-semibold text-sm dark:text-white">Sarah Chen</div><div class="text-xs text-gray-400">CTO, TechFlow Inc.</div></div>
+      </div>
+    </div>
+
+    <div class="reveal card-hover relative bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7">
+      <div class="absolute top-5 right-6 text-5xl text-primary opacity-20 font-black leading-none">"</div>
+      <div class="flex gap-0.5 mb-4 text-amber-400">⭐⭐⭐⭐⭐</div>
+      <blockquote class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed italic mb-5">"The best developer experience I've had in 10 years. The documentation is excellent and support is incredibly fast. Highly recommend."</blockquote>
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full btn-gradient flex items-center justify-center text-white font-bold text-sm flex-shrink-0">MJ</div>
+        <div><div class="font-semibold text-sm dark:text-white">Marcus Johnson</div><div class="text-xs text-gray-400">Lead Engineer, StartupX</div></div>
+      </div>
+    </div>
+
+    <div class="reveal card-hover relative bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7">
+      <div class="absolute top-5 right-6 text-5xl text-primary opacity-20 font-black leading-none">"</div>
+      <div class="flex gap-0.5 mb-4 text-amber-400">⭐⭐⭐⭐⭐</div>
+      <blockquote class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed italic mb-5">"We migrated 50+ microservices to NovaTech in a weekend. Zero downtime, zero issues. The team support was outstanding throughout."</blockquote>
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full btn-gradient flex items-center justify-center text-white font-bold text-sm flex-shrink-0">AP</div>
+        <div><div class="font-semibold text-sm dark:text-white">Aisha Patel</div><div class="text-xs text-gray-400">VP Engineering, ScaleUp</div></div>
+      </div>
+    </div>
+
+    <div class="reveal card-hover relative bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7">
+      <div class="absolute top-5 right-6 text-5xl text-primary opacity-20 font-black leading-none">"</div>
+      <div class="flex gap-0.5 mb-4 text-amber-400">⭐⭐⭐⭐⭐</div>
+      <blockquote class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed italic mb-5">"Our infrastructure costs dropped by 60% after switching to NovaTech. The ROI was immediate and the performance improvements were dramatic."</blockquote>
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full btn-gradient flex items-center justify-center text-white font-bold text-sm flex-shrink-0">DL</div>
+        <div><div class="font-semibold text-sm dark:text-white">David Lee</div><div class="text-xs text-gray-400">CTO, FinanceApp</div></div>
+      </div>
+    </div>
+
+    <div class="reveal card-hover relative bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7">
+      <div class="absolute top-5 right-6 text-5xl text-primary opacity-20 font-black leading-none">"</div>
+      <div class="flex gap-0.5 mb-4 text-amber-400">⭐⭐⭐⭐⭐</div>
+      <blockquote class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed italic mb-5">"The AI-powered insights have transformed how we understand our users. We've increased conversion by 35% in just two months."</blockquote>
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full btn-gradient flex items-center justify-center text-white font-bold text-sm flex-shrink-0">RN</div>
+        <div><div class="font-semibold text-sm dark:text-white">Rachel Nguyen</div><div class="text-xs text-gray-400">Product Lead, GrowthCo</div></div>
+      </div>
+    </div>
+
+    <div class="reveal card-hover relative bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7">
+      <div class="absolute top-5 right-6 text-5xl text-primary opacity-20 font-black leading-none">"</div>
+      <div class="flex gap-0.5 mb-4 text-amber-400">⭐⭐⭐⭐⭐</div>
+      <blockquote class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed italic mb-5">"I've tried every major cloud platform. NovaTech is the only one that actually delivers on its promises. The uptime is real, the support is real."</blockquote>
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full btn-gradient flex items-center justify-center text-white font-bold text-sm flex-shrink-0">TM</div>
+        <div><div class="font-semibold text-sm dark:text-white">Tom Martinez</div><div class="text-xs text-gray-400">Founder, DevStudio</div></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="py-16 px-4 bg-gradient-to-r from-indigo-50 to-pink-50 dark:from-gray-900 dark:to-gray-900 border-t border-gray-100 dark:border-gray-800 text-center">
+  <div class="max-w-xl mx-auto reveal">
+    <h2 class="text-2xl font-black mb-3 dark:text-white">Ready to join them?</h2>
+    <p class="text-gray-500 dark:text-gray-400 mb-6">Start your free trial today. No credit card required.</p>
+    <div class="flex flex-wrap gap-4 justify-center">
+      <a href="contact.html" class="btn-gradient px-7 py-3 rounded-full font-bold text-sm">Start Free Trial</a>
+      <a href="pricing.html" class="btn-outline-primary px-7 py-3 rounded-full font-bold text-sm">View Pricing →</a>
+    </div>
+  </div>
+</section>
+
+<footer class="bg-gray-900 dark:bg-gray-950 text-gray-400 border-t border-gray-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10 grid grid-cols-2 md:grid-cols-4 gap-8">
+    <div class="col-span-2 md:col-span-1"><a href="index.html" class="flex items-center gap-2 font-black text-lg text-white mb-3"><span class="w-7 h-7 rounded-lg btn-gradient flex items-center justify-center text-white text-xs">N</span>NovaTech</a><p class="text-sm">Building the future with cutting-edge technology.</p></div>
+    <div><h4 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Product</h4><ul class="space-y-2 text-sm"><li><a href="services.html" class="hover:text-white transition-colors">Services</a></li><li><a href="pricing.html" class="hover:text-white transition-colors">Pricing</a></li><li><a href="portfolio.html" class="hover:text-white transition-colors">Portfolio</a></li></ul></div>
+    <div><h4 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Company</h4><ul class="space-y-2 text-sm"><li><a href="about.html" class="hover:text-white transition-colors">About</a></li><li><a href="team.html" class="hover:text-white transition-colors">Team</a></li><li><a href="blog.html" class="hover:text-white transition-colors">Blog</a></li><li><a href="contact.html" class="hover:text-white transition-colors">Contact</a></li></ul></div>
+    <div><h4 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Support</h4><ul class="space-y-2 text-sm"><li><a href="faq.html" class="hover:text-white transition-colors">FAQ</a></li><li><a href="testimonials.html" class="hover:text-white transition-colors">Testimonials</a></li><li><a href="#" class="hover:text-white transition-colors">Privacy</a></li></ul></div>
+  </div>
+  <div class="border-t border-gray-800"><div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center text-xs text-gray-500"><span>&copy; 2025 NovaTech. All rights reserved.</span><span>Made with ❤️ for developers</span></div></div>
+</footer>
+<script src="script.js"></script>
+</body></html>

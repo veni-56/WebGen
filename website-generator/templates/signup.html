@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Sign Up — WebGen{% endblock %}
+{% block content %}
+<div class="auth-page">
+  <div class="auth-card">
+    <div class="auth-logo">⚡ WebGen</div>
+    <h2>Create your account</h2>
+    <p class="auth-sub">Start building websites for free</p>
+    <form method="POST" novalidate>
+      <div class="field">
+        <label for="username">Username</label>
+        <input id="username" name="username" type="text" placeholder="Choose a username" required autofocus/>
+      </div>
+      <div class="field">
+        <label for="email">Email</label>
+        <input id="email" name="email" type="email" placeholder="your@email.com" required/>
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" placeholder="Choose a strong password" required/>
+      </div>
+      <button type="submit" class="btn-submit">Create Account</button>
+    </form>
+    <p class="auth-switch">Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
+  </div>
+</div>
+{% endblock %}

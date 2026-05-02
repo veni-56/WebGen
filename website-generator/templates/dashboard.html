@@ -1,0 +1,127 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard — WebGen{% endblock %}
+{% block content %}
+<div class="dash-page">
+  <div class="container">
+
+    <!-- Top bar -->
+    <div class="dash-top">
+      <div>
+        <h2>My Projects</h2>
+        <p class="sub">{{ projects|length }} project{{ 's' if projects|length != 1 }}</p>
+      </div>
+      <div class="dash-actions">
+        <a href="{{ url_for('quick_generate') }}" class="btn-ai">✨ AI Generate</a>
+        <a href="{{ url_for('wizard_step1') }}" class="btn-submit" style="width:auto;padding:.65rem 1.5rem">+ New Project</a>
+      </div>
+    </div>
+
+    <!-- Quick prompt bar -->
+    <div class="quick-prompt-bar">
+      <form method="POST" action="{{ url_for('quick_generate') }}" class="qp-form">
+        <span class="qp-icon">✨</span>
+        <input name="prompt" type="text" placeholder='Describe your website... e.g. "Create a dark portfolio with gallery and contact form"' autocomplete="off"/>
+        <button type="submit">Generate</button>
+      </form>
+    </div>
+
+    {% if projects %}
+    <div class="projects-grid">
+      {% for p in projects %}
+      <div class="project-card" id="pc-{{ p.id }}">
+        <div class="project-header">
+          <span class="type-badge type-{{ p.project_type }}">{{ p.project_type }}</span>
+          <span class="wtype-badge">{{ p.website_type }}</span>
+          <div class="project-menu">
+            <button class="menu-btn" onclick="toggleMenu('{{ p.id }}')">⋯</button>
+            <div class="menu-dropdown" id="menu-{{ p.id }}">
+              <button onclick="startRename('{{ p.id }}', '{{ p.name }}')">✏️ Rename</button>
+              <form method="POST" action="{{ url_for('duplicate_project', project_id=p.id) }}" style="margin:0">
+                <button type="submit">📋 Duplicate</button>
+              </form>
+              <a href="{{ url_for('project_versions', project_id=p.id) }}">🕐 History</a>
+              <form method="POST" action="{{ url_for('delete_project', project_id=p.id) }}"
+                    onsubmit="return confirm('Delete {{ p.name }}?')" style="margin:0">
+                <button type="submit" class="menu-danger">🗑 Delete</button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- Inline rename -->
+        <div id="rename-{{ p.id }}" style="display:none" class="rename-row">
+          <input type="text" id="rename-input-{{ p.id }}" value="{{ p.name }}" class="rename-input"/>
+          <button onclick="submitRename('{{ p.id }}')" class="rename-save">Save</button>
+          <button onclick="cancelRename('{{ p.id }}')" class="rename-cancel">✕</button>
+        </div>
+
+        <h3 id="pname-{{ p.id }}">{{ p.name }}</h3>
+        <p class="project-date">{{ p.updated_at[:16] if p.updated_at else p.created_at[:16] }}</p>
+
+        <div class="project-actions">
+          <a href="{{ url_for('editor', project_id=p.id) }}" class="pact-btn pact-primary">✏️ Edit</a>
+          <a href="{{ url_for('preview', project_id=p.id) }}" target="_blank" class="pact-btn">👁 Preview</a>
+          <a href="{{ url_for('download', project_id=p.id) }}" class="pact-btn">⬇ ZIP</a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    {% else %}
+    <div class="empty-dash">
+      <div class="empty-icon">🚀</div>
+      <h3>No projects yet</h3>
+      <p>Generate your first website in seconds — no coding needed.</p>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+        <a href="{{ url_for('quick_generate') }}" class="btn-ai">✨ AI Generate</a>
+        <a href="{{ url_for('wizard_step1') }}" class="btn-submit" style="width:auto;padding:.75rem 2rem">Use Wizard</a>
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Dropdown menus
+function toggleMenu(id) {
+  document.querySelectorAll('.menu-dropdown').forEach(d => {
+    if (d.id !== 'menu-' + id) d.classList.remove('open');
+  });
+  document.getElementById('menu-' + id).classList.toggle('open');
+}
+document.addEventListener('click', e => {
+  if (!e.target.closest('.project-menu')) {
+    document.querySelectorAll('.menu-dropdown').forEach(d => d.classList.remove('open'));
+  }
+});
+
+// Inline rename
+function startRename(id, current) {
+  document.getElementById('pname-' + id).style.display = 'none';
+  document.getElementById('rename-' + id).style.display = 'flex';
+  document.getElementById('rename-input-' + id).focus();
+  document.getElementById('menu-' + id).classList.remove('open');
+}
+function cancelRename(id) {
+  document.getElementById('pname-' + id).style.display = '';
+  document.getElementById('rename-' + id).style.display = 'none';
+}
+async function submitRename(id) {
+  const name = document.getElementById('rename-input-' + id).value.trim();
+  if (!name) return;
+  const res = await fetch('/project/rename/' + id, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    body: 'name=' + encodeURIComponent(name)
+  });
+  const data = await res.json();
+  if (data.ok) {
+    document.getElementById('pname-' + id).textContent = name;
+    cancelRename(id);
+  }
+}
+</script>
+{% endblock %}

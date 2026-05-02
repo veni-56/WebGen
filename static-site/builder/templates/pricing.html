@@ -1,0 +1,28 @@
+<section class="py-20 px-4 bg-gradient-to-br from-indigo-50 via-white to-pink-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 text-center border-b border-gray-100 dark:border-gray-800" {{pricing_x_data}}>
+  <div class="max-w-3xl mx-auto {{reveal_class}}">
+    <span class="text-primary text-sm font-semibold uppercase tracking-wider">Simple Pricing</span>
+    <h1 class="text-4xl md:text-5xl font-black mt-2 mb-4 dark:text-white"><span class="gradient-text">Transparent</span> Pricing</h1>
+    <p class="text-lg text-gray-500 dark:text-gray-400 mb-8">No hidden fees. Scale up or down at any time. Cancel whenever you want.</p>
+    {{pricing_toggle_html}}
+  </div>
+
+  <div class="max-w-5xl mx-auto mt-14 grid grid-cols-1 md:grid-cols-3 gap-6 items-start px-4">
+    {{#each pricing}}
+    <div class="{{reveal_class}} card-hover relative bg-white dark:bg-gray-900 {{pricing_card_class}} rounded-2xl p-8 flex flex-col text-left">
+      {{pricing_badge}}
+      <div class="text-sm font-semibold {{pricing_tier_class}} uppercase tracking-wider mb-3">{{tier}}</div>
+      <div class="text-5xl font-black dark:text-white mb-1">{{pricing_price_html}}</div>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mb-6">{{desc}}</p>
+      <ul class="space-y-3 mb-8 flex-1" role="list">
+        {{#each features}}
+        <li class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300"><span class="text-primary font-bold" aria-hidden="true">✓</span>{{this}}</li>
+        {{/each}}
+        {{#each missing}}
+        <li class="flex items-center gap-2 text-sm text-gray-400 line-through" aria-label="Not included: {{this}}">{{this}}</li>
+        {{/each}}
+      </ul>
+      <a href="contact.html" class="{{pricing_btn_class}} py-3 rounded-full font-bold text-sm text-center block focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2">{{pricing_cta}}</a>
+    </div>
+    {{/each}}
+  </div>
+</section>

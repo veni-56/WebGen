@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+{% block title %}AI Chat Builder — WebGen{% endblock %}
+{% block content %}
+<div class="chat-page">
+  <div class="chat-sidebar">
+    <div class="chat-sidebar-header">
+      <h3>🤖 AI Chat Builder</h3>
+      <p>Describe your website in plain English</p>
+    </div>
+    <div class="chat-capabilities">
+      <div class="cap-item"><span>🎯</span> Detects website type</div>
+      <div class="cap-item"><span>🎨</span> Chooses colors & fonts</div>
+      <div class="cap-item"><span>📐</span> Selects sections</div>
+      <div class="cap-item"><span>⚙️</span> Picks tech stack</div>
+      <div class="cap-item"><span>⚡</span> Generates full code</div>
+    </div>
+    {% if defaults.suggested_industry %}
+    <div class="chat-personalized">
+      <div class="cp-label">🧠 Based on your history</div>
+      <div class="cp-value">Industry: {{ defaults.suggested_industry }}</div>
+      {% if defaults.preferred_type %}
+      <div class="cp-value">Preferred: {{ defaults.preferred_type }}</div>
+      {% endif %}
+    </div>
+    {% endif %}
+    <div class="chat-examples">
+      <div class="ce-label">Try saying:</div>
+      <button class="ce-chip" onclick="sendExample(this)">I want a gym website with pricing section</button>
+      <button class="ce-chip" onclick="sendExample(this)">Build me a fintech app like Stripe</button>
+      <button class="ce-chip" onclick="sendExample(this)">Create a portfolio with dark theme and animations</button>
+      <button class="ce-chip" onclick="sendExample(this)">Make an ecommerce store like Meesho</button>
+    </div>
+  </div>
+
+  <div class="chat-main">
+    <div class="chat-messages" id="chatMessages">
+      <div class="chat-msg chat-msg-ai">
+        <div class="chat-avatar">🤖</div>
+        <div class="chat-bubble">
+          <p>Hi! I'm your AI website builder. Tell me what kind of website you want to build, and I'll ask a few quick questions to create the perfect site for you.</p>
+          <p style="margin-top:.5rem;opacity:.7;font-size:.85rem">Try: <em>"I want a gym website with pricing"</em></p>
+        </div>
+      </div>
+    </div>
+
+    <div class="chat-input-area">
+      <div class="chat-input-wrap">
+        <input type="text" id="chatInput" placeholder="Describe your website..." autocomplete="off"
+               onkeydown="if(event.key==='Enter')sendMessage()"/>
+        <button class="chat-send-btn" onclick="sendMessage()" id="sendBtn">
+          <span id="sendIcon">➤</span>
+          <span id="sendSpinner" style="display:none">⏳</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Generate panel (shown when ready) -->
+    <div class="chat-generate-panel" id="generatePanel" style="display:none">
+      <div class="cgp-content">
+        <div class="cgp-title">✅ Ready to generate!</div>
+        <div class="cgp-config" id="cgpConfig"></div>
+        <button class="cgp-btn" onclick="generateFromChat()" id="cgpBtn">
+          ⚡ Generate Website
+        </button>
+        <a href="{{ url_for('dashboard') }}" class="cgp-link">← Back to Dashboard</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+let chatState = {};
+let finalConfig = null;
+
+async function sendMessage() {
+  const input = document.getElementById('chatInput');
+  const msg   = input.value.trim();
+  if (!msg) return;
+  input.value = '';
+  appendMessage(msg, 'user');
+  setLoading(true);
+  try {
+    const res  = await fetch('/api/chat', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({message: msg, state: chatState})
+    });
+    const data = await res.json();
+    chatState  = data.state || {};
+    appendMessage(data.reply, 'ai');
+    if (data.ready && data.config) {
+      finalConfig = data.config;
+      showGeneratePanel(data.config);
+    }
+  } catch(e) {
+    appendMessage('Sorry, something went wrong. Please try again.', 'ai');
+  }
+  setLoading(false);
+}
+
+function sendExample(btn) {
+  document.getElementById('chatInput').value = btn.textContent.trim();
+  sendMessage();
+}
+
+function appendMessage(text, role) {
+  const msgs = document.getElementById('chatMessages');
+  const div  = document.createElement('div');
+  div.className = `chat-msg chat-msg-${role}`;
+  const avatar = role === 'ai' ? '🤖' : '👤';
+  // Convert **bold** markdown
+  const formatted = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+  div.innerHTML = `<div class="chat-avatar">${avatar}</div><div class="chat-bubble">${formatted}</div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function showGeneratePanel(config) {
+  const panel = document.getElementById('generatePanel');
+  const cfg   = document.getElementById('cgpConfig');
+  cfg.innerHTML = `
+    <span class="cgp-tag">Type: ${config.website_type}</span>
+    <span class="cgp-tag">Stack: ${config.project_type}</span>
+    <span class="cgp-tag" style="background:${config.primary_color}20;color:${config.primary_color}">Color: ${config.primary_color}</span>
+    <span class="cgp-tag">Font: ${config.font || 'Poppins'}</span>
+  `;
+  panel.style.display = 'block';
+}
+
+async function generateFromChat() {
+  if (!finalConfig) return;
+  const btn = document.getElementById('cgpBtn');
+  btn.textContent = '⏳ Generating...';
+  btn.disabled = true;
+  try {
+    const res  = await fetch('/api/chat/generate', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({config: finalConfig})
+    });
+    const data = await res.json();
+    if (data.ok) {
+      appendMessage(`✅ Generated! ${data.total_files} files created. <a href="/editor/${data.project_id}" style="color:#6c63ff">Open Editor →</a>`, 'ai');
+      btn.textContent = '✅ Generated!';
+      setTimeout(() => { window.location.href = `/editor/${data.project_id}`; }, 1500);
+    } else {
+      appendMessage('Generation failed: ' + (data.error || 'Unknown error'), 'ai');
+      btn.textContent = '⚡ Try Again';
+      btn.disabled = false;
+    }
+  } catch(e) {
+    btn.textContent = '⚡ Try Again';
+    btn.disabled = false;
+  }
+}
+
+function setLoading(loading) {
+  document.getElementById('sendIcon').style.display    = loading ? 'none' : 'inline';
+  document.getElementById('sendSpinner').style.display = loading ? 'inline' : 'none';
+  document.getElementById('sendBtn').disabled = loading;
+  document.getElementById('chatInput').disabled = loading;
+}
+</script>
+{% endblock %}

@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% block title %}Pricing — WebGen{% endblock %}
+{% block content %}
+<div class="pricing-page">
+  <div class="container">
+
+    <div class="pricing-hero">
+      <h1>Simple, Transparent Pricing</h1>
+      <p>Start free. Upgrade when you need more power.</p>
+    </div>
+
+    <div class="pricing-grid">
+      {% for plan_key, plan in plans.items() %}
+      <div class="pricing-card {% if plan_key == user_plan %}pricing-current{% endif %} {% if plan_key == 'pro' %}pricing-featured{% endif %}">
+        {% if plan_key == 'pro' %}<div class="pricing-popular-badge">Most Popular</div>{% endif %}
+        {% if plan_key == user_plan %}<div class="pricing-current-badge">Current Plan</div>{% endif %}
+
+        <div class="pricing-header">
+          <h2>{{ plan.name }}</h2>
+          <div class="pricing-price">
+            {% if plan.price_monthly == 0 %}
+              <span class="price-amount">Free</span>
+            {% else %}
+              <span class="price-amount">${{ "%.0f"|format(plan.price_monthly) }}</span>
+              <span class="price-period">/month</span>
+            {% endif %}
+          </div>
+        </div>
+
+        <ul class="pricing-features">
+          {% for feature in plan.features %}
+          <li><span class="pf-check">✓</span> {{ feature }}</li>
+          {% endfor %}
+        </ul>
+
+        <div class="pricing-action">
+          {% if plan_key == user_plan %}
+            <button class="pricing-btn pricing-btn-current" disabled>Current Plan</button>
+          {% elif plan_key == 'free' %}
+            {% if session.user_id %}
+            <form method="POST" action="{{ url_for('billing_downgrade') }}">
+              <button type="submit" class="pricing-btn pricing-btn-outline">Downgrade to Free</button>
+            </form>
+            {% else %}
+            <a href="{{ url_for('signup') }}" class="pricing-btn pricing-btn-outline">Get Started Free</a>
+            {% endif %}
+          {% else %}
+            {% if session.user_id %}
+            <form method="POST" action="{{ url_for('billing_checkout', plan=plan_key) }}">
+              <button type="submit" class="pricing-btn {% if plan_key == 'pro' %}pricing-btn-primary{% else %}pricing-btn-outline{% endif %}">
+                Upgrade to {{ plan.name }}
+              </button>
+            </form>
+            {% else %}
+            <a href="{{ url_for('signup') }}" class="pricing-btn pricing-btn-primary">Get Started</a>
+            {% endif %}
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <!-- FAQ -->
+    <div class="pricing-faq">
+      <h3>Frequently Asked Questions</h3>
+      <div class="faq-grid">
+        <div class="faq-item">
+          <h4>Is the free plan really free?</h4>
+          <p>Yes — no credit card required. You get 5 AI generations per hour and up to 3 projects.</p>
+        </div>
+        <div class="faq-item">
+          <h4>Can I cancel anytime?</h4>
+          <p>Yes. Cancel anytime from your billing portal. You keep access until the end of your billing period.</p>
+        </div>
+        <div class="faq-item">
+          <h4>What payment methods are accepted?</h4>
+          <p>All major credit/debit cards via Stripe. Secure, encrypted payments.</p>
+        </div>
+        <div class="faq-item">
+          <h4>Do I own the generated code?</h4>
+          <p>Yes — all generated code is yours to use, modify, and deploy commercially.</p>
+        </div>
+        <div class="faq-item">
+          <h4>Is there a dev/test mode?</h4>
+          <p>Yes — without Stripe keys configured, upgrades work instantly in dev mode for testing.</p>
+        </div>
+        <div class="faq-item">
+          <h4>What's the API access?</h4>
+          <p>Business plan users get API keys to integrate WebGen into their own apps via REST API.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endblock %}

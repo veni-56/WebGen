@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard — ShopWave{% endblock %}
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+{% endblock %}
+{% block content %}
+<div class="container-fluid px-3 px-md-4 py-4">
+
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="fw-bold mb-0"><i class="bi bi-speedometer2 me-2 text-primary"></i>Admin Dashboard</h4>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-xl-3">
+      <div class="admin-stat-card">
+        <div class="stat-icon" style="background:#1a73e815;"><i class="bi bi-people" style="color:#1a73e8;"></i></div>
+        <div>
+          <div class="fw-bold fs-4 mb-0">{{ stats.users }}</div>
+          <div class="fw-semibold small">Total Users</div>
+          <div class="text-muted" style="font-size:.72rem;">{{ stats.sellers }} sellers · {{ stats.customers }} customers</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-xl-3">
+      <div class="admin-stat-card">
+        <div class="stat-icon" style="background:#00a65115;"><i class="bi bi-box-seam" style="color:#00a651;"></i></div>
+        <div>
+          <div class="fw-bold fs-4 mb-0">{{ stats.products }}</div>
+          <div class="fw-semibold small">Products</div>
+          <div class="text-muted" style="font-size:.72rem;">Active listings</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-xl-3">
+      <div class="admin-stat-card">
+        <div class="stat-icon" style="background:#ff6b3515;"><i class="bi bi-receipt" style="color:#ff6b35;"></i></div>
+        <div>
+          <div class="fw-bold fs-4 mb-0">{{ stats.orders }}</div>
+          <div class="fw-semibold small">Orders</div>
+          <div class="text-muted" style="font-size:.72rem;">{{ stats.pending_orders }} pending</div>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 col-xl-3">
+      <div class="admin-stat-card">
+        <div class="stat-icon" style="background:#f4339715;"><i class="bi bi-currency-rupee" style="color:#f43397;"></i></div>
+        <div>
+          <div class="fw-bold fs-4 mb-0">&#8377;{{ '%.0f' % stats.total_revenue }}</div>
+          <div class="fw-semibold small">Gross Revenue</div>
+          <div class="text-muted" style="font-size:.72rem;">All time</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-4">
+    <div class="col-md-6">
+      <div class="bg-white rounded-3 shadow-sm p-4 d-flex align-items-center gap-3 border-start border-4 border-success">
+        <div style="width:52px;height:52px;border-radius:12px;background:#00a65115;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <i class="bi bi-shop fs-4 text-success"></i>
+        </div>
+        <div>
+          <div class="fw-bold fs-4 text-success">&#8377;{{ '%.0f' % stats.seller_payouts }}</div>
+          <div class="fw-semibold small">Seller Payouts (90%)</div>
+        </div>
+        <a href="{{ url_for('admin.earnings') }}" class="btn btn-sm btn-outline-success rounded-pill ms-auto px-3">View</a>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="bg-white rounded-3 shadow-sm p-4 d-flex align-items-center gap-3 border-start border-4 border-primary">
+        <div style="width:52px;height:52px;border-radius:12px;background:#1a73e815;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+          <i class="bi bi-building fs-4 text-primary"></i>
+        </div>
+        <div>
+          <div class="fw-bold fs-4 text-primary">&#8377;{{ '%.0f' % stats.platform_income }}</div>
+          <div class="fw-semibold small">Platform Commission (10%)</div>
+        </div>
+        {% if stats.pending_withdrawals > 0 %}
+        <a href="{{ url_for('admin.withdrawals') }}" class="btn btn-sm btn-warning rounded-pill ms-auto px-3">{{ stats.pending_withdrawals }} pending</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="row g-3 mb-4">
+    {% for href, icon, label, color, badge in [
+      (url_for('admin.users'), 'bi-people-fill', 'Users', '#1a73e8', none),
+      (url_for('admin.products'), 'bi-box-seam-fill', 'Products', '#00a651', none),
+      (url_for('admin.orders'), 'bi-receipt-cutoff', 'Orders', '#ff6b35', stats.pending_orders if stats.pending_orders > 0 else none),
+      (url_for('admin.sellers'), 'bi-shop', 'Sellers', '#7c3aed', none),
+      (url_for('admin.kyc_queue'), 'bi-person-check-fill', 'KYC', '#0891b2', pending_kyc if pending_kyc > 0 else none),
+      (url_for('admin.coupons'), 'bi-tag-fill', 'Coupons', '#f43397', none),
+      (url_for('admin.withdrawals'), 'bi-wallet2', 'Withdrawals', '#856404', stats.pending_withdrawals if stats.pending_withdrawals > 0 else none),
+      (url_for('admin.earnings'), 'bi-graph-up-arrow', 'Earnings', '#00a651', none)
+    ] %}
+    <div class="col-6 col-sm-4 col-md-3 col-xl-3">
+      <a href="{{ href }}" class="admin-quick-link d-flex flex-column align-items-center gap-2 p-3 text-center position-relative">
+        {% if badge %}<span class="position-absolute top-0 end-0 translate-middle badge rounded-pill bg-danger" style="font-size:.65rem;margin:.5rem;">{{ badge }}</span>{% endif %}
+        <div style="width:48px;height:48px;border-radius:12px;background:{{ color }}15;display:flex;align-items:center;justify-content:center;">
+          <i class="bi {{ icon }}" style="color:{{ color }};font-size:1.3rem;"></i>
+        </div>
+        <span class="small fw-semibold">{{ label }}</span>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="row g-4">
+    <div class="col-lg-7">
+      <div class="card shadow-sm">
+        <div class="card-header"><i class="bi bi-bar-chart me-2 text-primary"></i>Revenue — Last 7 Days</div>
+        <div class="card-body"><canvas id="revenueChart" height="180"></canvas></div>
+      </div>
+    </div>
+    <div class="col-lg-5">
+      <div class="card shadow-sm mb-3">
+        <div class="card-header"><i class="bi bi-trophy me-2 text-warning"></i>Top Products</div>
+        <div class="card-body p-0">
+          {% for name, units in top_products %}
+          <div class="d-flex justify-content-between align-items-center px-3 py-2 {% if not loop.last %}border-bottom{% endif %}">
+            <span class="small text-truncate me-2" style="max-width:180px;">{{ name }}</span>
+            <span class="badge bg-primary-subtle text-primary border border-primary-subtle">{{ units }} sold</span>
+          </div>
+          {% else %}<p class="text-muted text-center py-3 small mb-0">No data yet.</p>{% endfor %}
+        </div>
+      </div>
+      <div class="card shadow-sm">
+        <div class="card-header"><i class="bi bi-shop me-2 text-success"></i>Top Sellers</div>
+        <div class="card-body p-0">
+          {% for name, earned in top_sellers %}
+          <div class="d-flex justify-content-between align-items-center px-3 py-2 {% if not loop.last %}border-bottom{% endif %}">
+            <span class="small text-truncate me-2" style="max-width:160px;">{{ name }}</span>
+            <span class="badge bg-success-subtle text-success border border-success-subtle">&#8377;{{ '%.0f' % earned }}</span>
+          </div>
+          {% else %}<p class="text-muted text-center py-3 small mb-0">No data yet.</p>{% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm mt-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <span><i class="bi bi-clock-history me-2 text-primary"></i>Recent Orders</span>
+      <a href="{{ url_for('admin.orders') }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">View All</a>
+    </div>
+    <div class="card-body p-0">
+      {% if recent %}
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead><tr><th>Order #</th><th>Customer</th><th>Total</th><th>Status</th><th>Ref</th><th>Date</th></tr></thead>
+          <tbody>
+            {% for o in recent %}
+            {% set sc = {'pending':'warning','paid':'info','confirmed':'primary','shipped':'secondary','delivered':'success','cancelled':'danger'} %}
+            <tr>
+              <td class="fw-semibold">#{{ o.id }}</td>
+              <td>{{ o.customer.name }}</td>
+              <td class="fw-bold text-primary">&#8377;{{ '%.0f' % o.total_price }}</td>
+              <td><span class="badge bg-{{ sc.get(o.status,'secondary') }}">{{ o.status|capitalize }}</span></td>
+              <td class="font-mono text-muted small">{{ o.payment_ref }}</td>
+              <td class="text-muted small">{{ o.created_at.strftime('%b %d, %Y') }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="text-center py-4"><p class="text-muted mb-0">No orders yet.</p></div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+const ctx = document.getElementById('revenueChart');
+if (ctx) {
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: {{ daily_revenue | map(attribute='day') | list | tojson }},
+      datasets: [{
+        label: 'Revenue',
+        data: {{ daily_revenue | map(attribute='revenue') | list | tojson }},
+        backgroundColor: 'rgba(244,51,151,0.15)',
+        borderColor: '#f43397',
+        borderWidth: 2,
+        borderRadius: 8,
+        borderSkipped: false,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { display: false } },
+      scales: {
+        y: { beginAtZero: true, ticks: { callback: v => '\u20B9' + v }, grid: { color: '#f0f0f0' } },
+        x: { grid: { display: false } }
+      }
+    }
+  });
+}
+</script>
+{% endblock %}

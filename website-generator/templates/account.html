@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Account — WebGen{% endblock %}
+{% block content %}
+<div class="account-page">
+  <div class="container">
+    <h2>Account Settings</h2>
+
+    <div class="account-grid">
+      <!-- Profile info -->
+      <div class="account-card">
+        <h3>Profile</h3>
+        <div class="profile-row">
+          <div class="profile-avatar">{{ user.username[0]|upper }}</div>
+          <div>
+            <strong>{{ user.username }}</strong>
+            <p>{{ user.email }}</p>
+            <p class="muted">Member since {{ user.created_at[:10] }}</p>
+          </div>
+        </div>
+        <div class="stat-row">
+          <div class="mini-stat"><span>{{ project_count }}</span><p>Projects</p></div>
+        </div>
+      </div>
+
+      <!-- Change password -->
+      <div class="account-card">
+        <h3>Change Password</h3>
+        <form method="POST">
+          <div class="field">
+            <label>Current Password</label>
+            <input type="password" name="current_password" required/>
+          </div>
+          <div class="field">
+            <label>New Password</label>
+            <input type="password" name="new_password" minlength="6" required/>
+          </div>
+          <button type="submit" class="btn-submit" style="margin-top:.5rem">Update Password</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

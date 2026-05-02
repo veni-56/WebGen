@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Products — Admin{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="fw-bold mb-0"><i class="bi bi-box-seam"></i> All Products</h4>
+    <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-secondary btn-sm rounded-pill">← Dashboard</a>
+  </div>
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead class="table-light">
+        <tr><th>Image</th><th>Name</th><th>Seller</th><th>Category</th><th>Price</th><th>Stock</th><th>Action</th></tr>
+      </thead>
+      <tbody>
+        {% for p in products %}
+        <tr>
+          <td>
+            <img src="{{ url_for('static', filename='uploads/' + p.image) }}"
+                 style="width:44px;height:44px;object-fit:cover;border-radius:8px"
+                 onerror="this.src='https://placehold.co/44x44?text=?'"/>
+          </td>
+          <td>{{ p.name }}</td>
+          <td>{{ p.seller.username }}</td>
+          <td><span class="badge bg-secondary">{{ p.category }}</span></td>
+          <td>₹{{ "%.0f"|format(p.price) }}</td>
+          <td>{{ p.stock }}</td>
+          <td>
+            <form method="POST" action="{{ url_for('admin.delete_product', pid=p.id) }}"
+                  onsubmit="return confirm('Delete this product?')">
+              <button class="btn btn-sm btn-outline-danger rounded-pill">
+                <i class="bi bi-trash"></i>
+              </button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

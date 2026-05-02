@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+{% block title %}Meesho — Shop Online{% endblock %}
+{% block content %}
+
+<!-- Hero banner -->
+<div class="hero-banner">
+  <div class="container">
+    <h1 class="fw-bold mb-2">Shop the Best Deals</h1>
+    <p class="mb-3 opacity-75">Millions of products. Unbeatable prices. Free delivery.</p>
+    <a href="#products" class="btn btn-warning fw-semibold rounded-pill px-4">Shop Now</a>
+  </div>
+</div>
+
+<div class="container py-4" id="products">
+  <div class="row g-3">
+
+    <!-- Sidebar filters -->
+    <div class="col-lg-2 d-none d-lg-block">
+      <div class="filter-sidebar">
+        <h6 class="fw-bold mb-3"><i class="bi bi-funnel"></i> Filters</h6>
+        <form method="get" action="{{ url_for('customer.index') }}">
+          {% if q %}<input type="hidden" name="q" value="{{ q }}"/>{% endif %}
+
+          <div class="mb-3">
+            <label class="filter-label">Category</label>
+            {% for cat in categories %}
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="category"
+                     id="cat_{{ loop.index }}" value="{{ cat }}"
+                     {% if selected_cat == cat %}checked{% endif %}
+                     onchange="this.form.submit()"/>
+              <label class="form-check-label small" for="cat_{{ loop.index }}">{{ cat }}</label>
+            </div>
+            {% endfor %}
+            {% if selected_cat %}
+            <a href="{{ url_for('customer.index', q=q) }}" class="small text-primary d-block mt-1">Clear</a>
+            {% endif %}
+          </div>
+
+          <div class="mb-3">
+            <label class="filter-label">Price Range</label>
+            <input type="number" name="min_price" class="form-control form-control-sm mb-1"
+                   placeholder="Min ₹" value="{{ min_price }}"/>
+            <input type="number" name="max_price" class="form-control form-control-sm"
+                   placeholder="Max ₹" value="{{ max_price }}"/>
+          </div>
+
+          <div class="mb-3">
+            <label class="filter-label">Sort By</label>
+            <select name="sort" class="form-select form-select-sm" onchange="this.form.submit()">
+              <option value="newest"     {% if sort=='newest'     %}selected{% endif %}>Newest</option>
+              <option value="price_asc"  {% if sort=='price_asc'  %}selected{% endif %}>Price: Low → High</option>
+              <option value="price_desc" {% if sort=='price_desc' %}selected{% endif %}>Price: High → Low</option>
+            </select>
+          </div>
+
+          <button class="btn btn-primary btn-sm w-100 rounded-pill">Apply</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Product grid -->
+    <div class="col-lg-10">
+
+      <!-- Mobile filter bar -->
+      <div class="d-flex d-lg-none gap-2 mb-3 overflow-auto pb-1">
+        <a href="{{ url_for('customer.index', q=q) }}"
+           class="btn btn-sm rounded-pill flex-shrink-0 {% if not selected_cat %}btn-primary{% else %}btn-outline-secondary{% endif %}">All</a>
+        {% for cat in categories %}
+        <a href="{{ url_for('customer.index', q=q, category=cat) }}"
+           class="btn btn-sm rounded-pill flex-shrink-0 {% if selected_cat==cat %}btn-primary{% else %}btn-outline-secondary{% endif %}">{{ cat }}</a>
+        {% endfor %}
+      </div>
+
+      <!-- Result count + sort (desktop) -->
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <span class="text-muted small">
+          <strong>{{ products|length }}</strong> products
+          {% if q %}for "<strong>{{ q }}</strong>"{% endif %}
+          {% if selected_cat %}in <strong>{{ selected_cat }}</strong>{% endif %}
+        </span>
+        <form method="get" action="{{ url_for('customer.index') }}" class="d-none d-lg-block">
+          {% if q %}<input type="hidden" name="q" value="{{ q }}"/>{% endif %}
+          {% if selected_cat %}<input type="hidden" name="category" value="{{ selected_cat }}"/>{% endif %}
+          {% if min_price %}<input type="hidden" name="min_price" value="{{ min_price }}"/>{% endif %}
+          {% if max_price %}<input type="hidden" name="max_price" value="{{ max_price }}"/>{% endif %}
+          <select name="sort" class="form-select form-select-sm" style="width:180px" onchange="this.form.submit()">
+            <option value="newest"     {% if sort=='newest'     %}selected{% endif %}>Newest First</option>
+            <option value="price_asc"  {% if sort=='price_asc'  %}selected{% endif %}>Price: Low → High</option>
+            <option value="price_desc" {% if sort=='price_desc' %}selected{% endif %}>Price: High → Low</option>
+          </select>
+        </form>
+      </div>
+
+      {% if products %}
+      <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 g-3">
+        {% for p in products %}
+        <div class="col">
+          <div class="card product-card h-100 border-0 shadow-sm">
+            <a href="{{ url_for('customer.product_detail', pid=p.id) }}" class="product-img-wrap">
+              <img src="{{ url_for('static', filename='uploads/' + p.image) }}"
+                   class="product-thumb" alt="{{ p.name }}"
+                   onerror="this.src='https://placehold.co/300x300/f8f9fa/adb5bd?text=No+Image'"/>
+            </a>
+            <div class="card-body p-2 pb-0">
+              <p class="product-name mb-1">{{ p.name }}</p>
+              <p class="product-price mb-0">₹{{ "%.0f"|format(p.price) }}</p>
+              <p class="product-cat">{{ p.category }}</p>
+            </div>
+            <div class="card-footer bg-transparent border-0 p-2">
+              {% if current_user.is_authenticated and current_user.role == 'customer' %}
+              <form method="POST" action="{{ url_for('customer.add_to_cart', pid=p.id) }}">
+                <input type="hidden" name="quantity" value="1"/>
+                <button class="btn btn-primary btn-sm w-100 rounded-pill">
+                  <i class="bi bi-cart-plus"></i> Add to Cart
+                </button>
+              </form>
+              {% else %}
+              <a href="{{ url_for('customer.product_detail', pid=p.id) }}"
+                 class="btn btn-outline-primary btn-sm w-100 rounded-pill">View</a>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <div class="empty-state text-center py-5">
+        <i class="bi bi-search display-2 text-muted"></i>
+        <h5 class="mt-3 text-muted">No products found</h5>
+        <a href="{{ url_for('customer.index') }}" class="btn btn-primary rounded-pill mt-2">Browse All</a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

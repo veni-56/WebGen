@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+{% block title %}Analytics — Admin{% endblock %}
+{% block content %}
+<div class="admin-page">
+  <div class="container">
+
+    <div class="admin-header">
+      <h2>📊 Analytics Dashboard</h2>
+      <span class="admin-badge">Administrator</span>
+      <a href="{{ url_for('admin') }}" class="billing-btn" style="margin-left:auto">← Admin Panel</a>
+    </div>
+
+    <!-- KPI cards -->
+    <div class="analytics-kpis">
+      <div class="kpi-card">
+        <div class="kpi-icon">👥</div>
+        <div class="kpi-value">{{ stats.total_users }}</div>
+        <div class="kpi-label">Total Users</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon">📁</div>
+        <div class="kpi-value">{{ stats.total_projects }}</div>
+        <div class="kpi-label">Total Projects</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon">⚡</div>
+        <div class="kpi-value">{{ analytics.total_gens }}</div>
+        <div class="kpi-label">AI Generations</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon">🟢</div>
+        <div class="kpi-value">{{ analytics.active_users }}</div>
+        <div class="kpi-label">Active (7d)</div>
+      </div>
+      <div class="kpi-card kpi-revenue">
+        <div class="kpi-icon">💰</div>
+        <div class="kpi-value">${{ "%.2f"|format(analytics.revenue_est) }}</div>
+        <div class="kpi-label">Est. MRR</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon">🗄️</div>
+        <div class="kpi-value">{{ cache.total_cached }}</div>
+        <div class="kpi-label">Cached Prompts</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon">⚡</div>
+        <div class="kpi-value">{{ cache.total_hits }}</div>
+        <div class="kpi-label">Cache Hits</div>
+      </div>
+    </div>
+
+    <div class="analytics-grid">
+
+      <!-- Plan distribution -->
+      <div class="analytics-card">
+        <h3>Plan Distribution</h3>
+        {% set total_u = stats.total_users or 1 %}
+        {% for plan_name, count in analytics.plan_dist.items() %}
+        <div class="plan-bar-row">
+          <span class="plan-bar-label">{{ plan_name|capitalize }}</span>
+          <div class="plan-bar-track">
+            <div class="plan-bar-fill plan-{{ plan_name }}"
+                 style="width:{{ [(count / total_u * 100)|int, 100]|min }}%"></div>
+          </div>
+          <span class="plan-bar-count">{{ count }}</span>
+        </div>
+        {% else %}
+        <p class="analytics-empty">No data yet.</p>
+        {% endfor %}
+      </div>
+
+      <!-- Project types -->
+      <div class="analytics-card">
+        <h3>Projects by Type</h3>
+        {% for row in analytics.top_types %}
+        <div class="plan-bar-row">
+          <span class="plan-bar-label">{{ row.project_type }}</span>
+          <div class="plan-bar-track">
+            <div class="plan-bar-fill" style="width:{{ [(row.count / (stats.total_projects or 1) * 100)|int, 100]|min }}%;background:var(--primary)"></div>
+          </div>
+          <span class="plan-bar-count">{{ row.count }}</span>
+        </div>
+        {% else %}
+        <p class="analytics-empty">No projects yet.</p>
+        {% endfor %}
+      </div>
+
+      <!-- Daily signups chart (text-based) -->
+      <div class="analytics-card analytics-card-wide">
+        <h3>Daily Signups (last 30 days)</h3>
+        {% if analytics.daily_signups %}
+        <div class="mini-chart">
+          {% set max_s = analytics.daily_signups | map(attribute='count') | max %}
+          {% for row in analytics.daily_signups[-14:] %}
+          <div class="mc-bar-wrap" title="{{ row.day }}: {{ row.count }} signups">
+            <div class="mc-bar" style="height:{{ [(row.count / (max_s or 1) * 80)|int, 80]|min }}px"></div>
+            <span class="mc-label">{{ row.day[-5:] }}</span>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="analytics-empty">No signup data yet.</p>
+        {% endif %}
+      </div>
+
+      <!-- Daily generations chart -->
+      <div class="analytics-card analytics-card-wide">
+        <h3>Daily AI Generations (last 30 days)</h3>
+        {% if analytics.daily_gens %}
+        <div class="mini-chart">
+          {% set max_g = analytics.daily_gens | map(attribute='count') | max %}
+          {% for row in analytics.daily_gens[-14:] %}
+          <div class="mc-bar-wrap" title="{{ row.day }}: {{ row.count }} generations">
+            <div class="mc-bar mc-bar-gen" style="height:{{ [(row.count / (max_g or 1) * 80)|int, 80]|min }}px"></div>
+            <span class="mc-label">{{ row.day[-5:] }}</span>
+          </div>
+          {% endfor %}
+        </div>
+        {% else %}
+        <p class="analytics-empty">No generation data yet.</p>
+        {% endif %}
+      </div>
+
+      <!-- Recent users -->
+      <div class="analytics-card">
+        <h3>Recent Users</h3>
+        <table class="admin-table">
+          <thead><tr><th>Username</th><th>Email</th><th>Joined</th></tr></thead>
+          <tbody>
+          {% for u in stats.recent_users %}
+          <tr><td>{{ u.username }}</td><td>{{ u.email }}</td><td>{{ u.created_at[:10] }}</td></tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Recent projects -->
+      <div class="analytics-card">
+        <h3>Recent Projects</h3>
+        <table class="admin-table">
+          <thead><tr><th>Name</th><th>Type</th><th>User</th><th>Date</th></tr></thead>
+          <tbody>
+          {% for p in stats.recent_projects %}
+          <tr>
+            <td>{{ p.name }}</td>
+            <td><span class="type-badge type-{{ p.project_type }}">{{ p.project_type }}</span></td>
+            <td>{{ p.username }}</td>
+            <td>{{ p.created_at[:10] }}</td>
+          </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Cache stats -->
+      <div class="analytics-card">
+        <h3>Cache Performance</h3>
+        <div class="usage-rows">
+          <div class="usage-row"><span>Cached Prompts</span><strong>{{ cache.total_cached }}</strong></div>
+          <div class="usage-row"><span>Total Cache Hits</span><strong>{{ cache.total_hits }}</strong></div>
+          <div class="usage-row">
+            <span>Hit Rate</span>
+            <strong>{{ "%.1f"|format(cache.total_hits / (analytics.total_gens or 1) * 100) }}%</strong>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

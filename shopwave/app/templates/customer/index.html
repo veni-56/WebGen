@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% block title %}ShopWave — Discover Products{% endblock %}
+{% block content %}
+
+<!-- Hero -->
+<div class="hero-banner rounded-3 mb-4 p-5 text-white text-center">
+  <h1 class="display-5 fw-bold mb-2"><i class="bi bi-bag-heart-fill me-2"></i>ShopWave</h1>
+  <p class="lead mb-3">Discover thousands of products from trusted sellers</p>
+  <form class="d-flex justify-content-center" action="{{ url_for('customer.index') }}" method="get">
+    <div class="input-group" style="max-width:500px;">
+      <input type="text" name="q" class="form-control form-control-lg" placeholder="Search products…" value="{{ q }}" />
+      <button class="btn btn-warning fw-semibold" type="submit"><i class="bi bi-search me-1"></i>Search</button>
+    </div>
+  </form>
+</div>
+
+<div class="row g-4">
+  <!-- Filters sidebar -->
+  <div class="col-lg-3">
+    <div class="card border-0 shadow-sm sticky-top" style="top:80px;">
+      <div class="card-header bg-white fw-bold border-0 pb-0">
+        <i class="bi bi-funnel me-1 text-primary"></i>Filters
+      </div>
+      <div class="card-body">
+        <form method="get" action="{{ url_for('customer.index') }}">
+          {% if q %}<input type="hidden" name="q" value="{{ q }}" />{% endif %}
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold small text-uppercase text-muted">Category</label>
+            <select name="category" class="form-select form-select-sm" onchange="this.form.submit()">
+              <option value="">All Categories</option>
+              {% for c in categories %}
+              <option value="{{ c }}" {% if c == selected_cat %}selected{% endif %}>{{ c }}</option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold small text-uppercase text-muted">Price Range</label>
+            <div class="input-group input-group-sm mb-2">
+              <span class="input-group-text">$</span>
+              <input type="number" name="min_price" class="form-control" placeholder="Min" value="{{ min_price }}" min="0" step="0.01" />
+            </div>
+            <div class="input-group input-group-sm">
+              <span class="input-group-text">$</span>
+              <input type="number" name="max_price" class="form-control" placeholder="Max" value="{{ max_price }}" min="0" step="0.01" />
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label fw-semibold small text-uppercase text-muted">Sort By</label>
+            <select name="sort" class="form-select form-select-sm">
+              <option value="newest" {% if sort == 'newest' %}selected{% endif %}>Newest First</option>
+              <option value="price_asc" {% if sort == 'price_asc' %}selected{% endif %}>Price: Low to High</option>
+              <option value="price_desc" {% if sort == 'price_desc' %}selected{% endif %}>Price: High to Low</option>
+            </select>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-sm w-100">Apply Filters</button>
+          <a href="{{ url_for('customer.index') }}" class="btn btn-outline-secondary btn-sm w-100 mt-2">Clear All</a>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product grid -->
+  <div class="col-lg-9">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <p class="text-muted mb-0">
+        {% if q %}Results for "<strong>{{ q }}</strong>" — {% endif %}
+        <strong>{{ products | length }}</strong> product{{ 's' if products | length != 1 }}
+      </p>
+    </div>
+
+    {% if products %}
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-xl-3 g-4">
+      {% for p in products %}
+      <div class="col">
+        <div class="card h-100 product-card border-0 shadow-sm">
+          <a href="{{ url_for('customer.product_detail', pid=p.id) }}" class="text-decoration-none">
+            <div class="product-img-wrap">
+              <img src="{{ url_for('static', filename='uploads/' + p.image) }}"
+                   class="card-img-top product-img"
+                   alt="{{ p.name }}"
+                   onerror="this.src='https://placehold.co/300x300/eee/999?text=No+Image'" />
+            </div>
+          </a>
+          <div class="card-body d-flex flex-column">
+            <span class="badge bg-light text-secondary border mb-2 align-self-start">{{ p.category }}</span>
+            <h6 class="card-title fw-semibold mb-1">
+              <a href="{{ url_for('customer.product_detail', pid=p.id) }}" class="text-dark text-decoration-none stretched-link-title">
+                {{ p.name }}
+              </a>
+            </h6>
+            <p class="text-muted small mb-2 flex-grow-1">{{ p.description[:80] ~ '…' if p.description and p.description|length > 80 else p.description }}</p>
+            <div class="d-flex justify-content-between align-items-center mt-auto">
+              <span class="fs-5 fw-bold text-primary">${{ '%.2f' % p.price }}</span>
+              <span class="text-muted small"><i class="bi bi-box me-1"></i>{{ p.stock }} left</span>
+            </div>
+          </div>
+          <div class="card-footer bg-white border-0 pt-0 pb-3 px-3">
+            {% if current_user.is_authenticated and current_user.role == 'customer' %}
+            <form method="POST" action="{{ url_for('customer.add_to_cart', pid=p.id) }}">
+              <input type="hidden" name="quantity" value="1" />
+              <button class="btn btn-primary btn-sm w-100">
+                <i class="bi bi-cart-plus me-1"></i>Add to Cart
+              </button>
+            </form>
+            {% else %}
+            <a href="{{ url_for('customer.product_detail', pid=p.id) }}" class="btn btn-outline-primary btn-sm w-100">
+              <i class="bi bi-eye me-1"></i>View Details
+            </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+      <i class="bi bi-search display-1 text-muted"></i>
+      <h4 class="mt-3 text-muted">No products found</h4>
+      <p class="text-muted">Try adjusting your filters or search term.</p>
+      <a href="{{ url_for('customer.index') }}" class="btn btn-primary">Browse All Products</a>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

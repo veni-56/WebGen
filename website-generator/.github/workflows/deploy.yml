@@ -1,0 +1,115 @@
+name: CI/CD — WebGen SaaS
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  # ── Test ────────────────────────────────────────────────────────────────────
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Verify imports
+        run: |
+          python -c "
+          import sys
+          sys.path.insert(0, '.')
+          import db, nlp, generator, codegen, planner
+          import billing, rate_limiter, cache, config
+          from utils.logger import setup_logging
+          from utils.security import sanitize, validate_email
+          from utils.health import health_bp
+          from ai_engine.optimizer import PromptOptimizer
+          from ai_engine.validator import ResponseValidator
+          print('All imports OK')
+          "
+
+      - name: Test NLP pipeline
+        run: |
+          python -c "
+          import sys; sys.path.insert(0, '.')
+          from nlp import parse_prompt
+          from codegen import generate_structured
+          import uuid
+          prompts = [
+            'Create a portfolio website with dark theme',
+            'Build an ecommerce site like Meesho',
+            'Make a startup landing page with pricing',
+          ]
+          for p in prompts:
+              r = generate_structured(p, str(uuid.uuid4())[:8])
+              assert r['total_files'] > 0, f'No files for: {p}'
+              print(f'  OK [{r[\"type\"]}] {p[:50]}')
+          print('Pipeline tests passed')
+          "
+
+      - name: Test AI engine
+        run: |
+          python -c "
+          import sys; sys.path.insert(0, '.')
+          from ai_engine.optimizer import PromptOptimizer
+          from ai_engine.validator import ResponseValidator
+          opt = PromptOptimizer()
+          val = ResponseValidator()
+          result = opt.optimize('please create me a dark portfolio website')
+          assert 'portfolio' in result
+          ok, err = val.validate_config({'project_type': 'static', 'website_type': 'business'})
+          assert ok, err
+          print('AI engine tests passed')
+          "
+
+  # ── Docker build ─────────────────────────────────────────────────────────────
+  docker:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t webgen-saas:${{ github.sha }} .
+
+      - name: Test container health
+        run: |
+          docker run -d --name webgen-test \
+            -e SECRET_KEY=test-secret \
+            -e FLASK_ENV=production \
+            -p 5001:5000 \
+            webgen-saas:${{ github.sha }}
+          sleep 5
+          curl -f http://localhost:5001/health || exit 1
+          docker stop webgen-test
+
+  # ── Deploy to Render ──────────────────────────────────────────────────────────
+  deploy:
+    name: Deploy to Render
+    runs-on: ubuntu-latest
+    needs: [test, docker]
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Trigger Render Deploy
+        run: |
+          if [ -n "${{ secrets.RENDER_DEPLOY_HOOK }}" ]; then
+            curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK }}"
+            echo "Render deploy triggered"
+          else
+            echo "RENDER_DEPLOY_HOOK not set — skipping deploy"
+          fi

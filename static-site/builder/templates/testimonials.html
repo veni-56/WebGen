@@ -1,0 +1,28 @@
+<section class="py-24 px-4 bg-gray-50 dark:bg-gray-900 border-y border-gray-100 dark:border-gray-800" aria-labelledby="testimonials-heading">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16 {{reveal_class}}">
+      <span class="text-primary text-sm font-semibold uppercase tracking-wider">Testimonials</span>
+      <h2 id="testimonials-heading" class="text-4xl md:text-5xl font-black mt-2 dark:text-white">
+        Loved by <span class="gradient-text">Thousands</span>
+      </h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {{#each testimonials}}
+      <blockquote class="{{reveal_class}} card-hover glass rounded-2xl p-7 border border-gray-100 dark:border-gray-700">
+        <div class="flex gap-0.5 mb-4 text-amber-400" aria-label="5 stars">⭐⭐⭐⭐⭐</div>
+        <p class="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-5 italic">"{{quote}}"</p>
+        <footer class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full btn-gradient flex items-center justify-center text-white font-bold text-sm" aria-hidden="true">{{initials}}</div>
+          <div>
+            <cite class="font-semibold text-sm dark:text-white not-italic">{{name}}</cite>
+            <div class="text-xs text-gray-400">{{role}}</div>
+          </div>
+        </footer>
+      </blockquote>
+      {{/each}}
+    </div>
+    <div class="text-center mt-10 {{reveal_class}}">
+      <a href="testimonials.html" class="btn-outline-primary px-6 py-2.5 rounded-full text-sm font-bold focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2">Read All Reviews →</a>
+    </div>
+  </div>
+</section>

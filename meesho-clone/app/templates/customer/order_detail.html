@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% block title %}Order #{{ order.id }} — Meesho{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8">
+
+      <!-- Status banner -->
+      <div class="card border-0 shadow-sm rounded-4 p-4 text-center mb-4
+        {% if order.status == 'delivered' %}bg-success-subtle
+        {% elif order.status == 'cancelled' %}bg-danger-subtle
+        {% else %}bg-primary-subtle{% endif %}">
+        <i class="bi bi-{% if order.status == 'delivered' %}check-circle-fill text-success{% elif order.status == 'cancelled' %}x-circle-fill text-danger{% else %}clock-history text-primary{% endif %} display-4"></i>
+        <h4 class="fw-bold mt-2">Order #{{ order.id }}</h4>
+        <p class="text-muted mb-2">{{ order.created_at.strftime('%d %b %Y, %H:%M') }}</p>
+        <span class="badge rounded-pill status-{{ order.status }} fs-6 px-3 py-2">
+          {{ order.status|capitalize }}
+        </span>
+      </div>
+
+      <!-- Progress tracker -->
+      <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+        <h6 class="fw-bold mb-3">Order Progress</h6>
+        <div class="order-tracker">
+          {% set step_map = {'pending':0,'confirmed':1,'shipped':2,'delivered':3} %}
+          {% set current_step = step_map.get(order.status, 0) %}
+          {% for label, icon in [('Pending','hourglass'),('Confirmed','check-circle'),('Shipped','truck'),('Delivered','house-check')] %}
+          <div class="tracker-step {% if loop.index0 <= current_step and order.status != 'cancelled' %}active{% endif %}">
+            <div class="tracker-icon"><i class="bi bi-{{ icon }}"></i></div>
+            <span class="tracker-label">{{ label }}</span>
+          </div>
+          {% if not loop.last %}<div class="tracker-line {% if loop.index0 < current_step and order.status != 'cancelled' %}active{% endif %}"></div>{% endif %}
+          {% endfor %}
+        </div>
+        {% if order.status == 'cancelled' %}
+        <p class="text-danger text-center mt-2 small"><i class="bi bi-x-circle"></i> This order was cancelled.</p>
+        {% endif %}
+      </div>
+
+      <!-- Items -->
+      <div class="card border-0 shadow-sm rounded-4 p-4 mb-4">
+        <h6 class="fw-bold mb-3">Items Ordered</h6>
+        {% for item in order.items %}
+        <div class="d-flex align-items-center gap-3 mb-3">
+          <img src="{{ url_for('static', filename='uploads/' + item.product.image) }}"
+               style="width:60px;height:60px;object-fit:cover;border-radius:10px"
+               onerror="this.src='https://placehold.co/60x60/f8f9fa/adb5bd?text=?'"/>
+          <div class="flex-grow-1">
+            <p class="fw-semibold mb-0">{{ item.product.name }}</p>
+            <p class="text-muted small mb-0">Qty: {{ item.quantity }} × ₹{{ "%.0f"|format(item.price) }}</p>
+          </div>
+          <span class="fw-bold">₹{{ "%.0f"|format(item.price * item.quantity) }}</span>
+        </div>
+        {% endfor %}
+        <hr/>
+        <div class="d-flex justify-content-between fw-bold fs-5">
+          <span>Total Paid</span>
+          <span class="text-primary">₹{{ "%.0f"|format(order.total) }}</span>
+        </div>
+      </div>
+
+      <!-- Details -->
+      <div class="card border-0 shadow-sm rounded-4 p-4">
+        <h6 class="fw-bold mb-3">Order Details</h6>
+        <div class="row g-2 small">
+          <div class="col-5 text-muted">Payment Ref</div>
+          <div class="col-7 fw-semibold">{{ order.payment_ref or '—' }}</div>
+          <div class="col-5 text-muted">Payment Status</div>
+          <div class="col-7">
+            <span class="badge {% if order.payment_status == 'paid' %}bg-success{% else %}bg-warning text-dark{% endif %}">
+              {{ order.payment_status|capitalize }}
+            </span>
+          </div>
+          <div class="col-5 text-muted">Delivery Address</div>
+          <div class="col-7">{{ order.address }}</div>
+        </div>
+      </div>
+
+      <div class="text-center mt-4">
+        <a href="{{ url_for('customer.my_orders') }}" class="btn btn-outline-secondary rounded-pill me-2">← My Orders</a>
+        <a href="{{ url_for('customer.index') }}" class="btn btn-primary rounded-pill">Continue Shopping</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

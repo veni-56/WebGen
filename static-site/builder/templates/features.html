@@ -1,0 +1,22 @@
+<section class="py-24 px-4" aria-labelledby="features-heading">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16 {{reveal_class}}">
+      <span class="text-primary text-sm font-semibold uppercase tracking-wider">Platform</span>
+      <h2 id="features-heading" class="text-4xl md:text-5xl font-black mt-2 mb-4 dark:text-white">
+        Everything You Need to <span class="gradient-text">Scale</span>
+      </h2>
+      <p class="text-gray-500 dark:text-gray-400 max-w-xl mx-auto">
+        A complete platform built for modern teams who demand performance, reliability, and developer experience.
+      </p>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {{#each features}}
+      <article class="{{reveal_class}} card-hover card-gradient-border bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7">
+        <div class="text-3xl mb-4" aria-hidden="true">{{icon}}</div>
+        <h3 class="font-bold text-lg mb-2 dark:text-white">{{title}}</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{{desc}}</p>
+      </article>
+      {{/each}}
+    </div>
+  </div>
+</section>

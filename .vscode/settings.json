@@ -1,0 +1,5 @@
+{
+  "css.validate": true,
+  "html.validate.styles": false,
+  "html.autoClosingTags": false
+}

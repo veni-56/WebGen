@@ -1,0 +1,27 @@
+<section class="py-20 px-4 bg-gradient-to-br from-indigo-50 via-white to-pink-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 text-center border-b border-gray-100 dark:border-gray-800">
+  <div class="max-w-3xl mx-auto {{reveal_class}}">
+    <span class="text-primary text-sm font-semibold uppercase tracking-wider">Our Work</span>
+    <h1 class="text-4xl md:text-5xl font-black mt-2 mb-4 dark:text-white"><span class="gradient-text">Portfolio</span></h1>
+    <p class="text-lg text-gray-500 dark:text-gray-400">A selection of our best work across design, development, and strategy.</p>
+  </div>
+</section>
+
+<section class="py-24 px-4" {{portfolio_x_data}}>
+  <div class="max-w-6xl mx-auto">
+    {{portfolio_filter_buttons}}
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {{#each portfolio_items}}
+      <article {{portfolio_item_show}} x-transition class="group relative overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all cursor-pointer card-hover">
+        <img src="https://picsum.photos/seed/{{seed}}/600/400" alt="{{title}} — {{cat_label}} project" class="w-full h-52 object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-5" aria-hidden="true">
+          <div><span class="text-xs font-semibold text-primary bg-white/20 px-2 py-0.5 rounded-full">{{cat_label}}</span><h3 class="text-white font-black text-lg mt-1">{{title}}</h3></div>
+        </div>
+        <div class="p-4 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800">
+          <span class="text-xs font-semibold text-primary uppercase tracking-wider">{{cat_label}}</span>
+          <h3 class="font-bold mt-0.5 dark:text-white">{{title}}</h3>
+        </div>
+      </article>
+      {{/each}}
+    </div>
+  </div>
+</section>

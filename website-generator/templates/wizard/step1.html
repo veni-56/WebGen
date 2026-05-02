@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% block title %}Step 1 — Choose Type{% endblock %}
+{% block content %}
+<div class="wizard-page">
+  <div class="wizard-progress">
+    <div class="wp-step active"><span>1</span> Type</div>
+    <div class="wp-line"></div>
+    <div class="wp-step"><span>2</span> Customise</div>
+    <div class="wp-line"></div>
+    <div class="wp-step"><span>3</span> Generate</div>
+  </div>
+
+  <div class="wizard-card">
+    <h2>What kind of website do you want?</h2>
+    <p class="wizard-sub">Choose a type and technology stack.</p>
+
+    <form method="POST" action="{{ url_for('wizard_step2') }}">
+
+      <!-- Website type -->
+      <div class="wiz-section">
+        <label class="wiz-label">Website Type</label>
+        <div class="type-grid">
+          <label class="type-option">
+            <input type="radio" name="website_type" value="portfolio" required/>
+            <div class="type-card">
+              <span class="type-emoji">🎨</span>
+              <strong>Portfolio</strong>
+              <p>Showcase your work, skills, and experience.</p>
+            </div>
+          </label>
+          <label class="type-option">
+            <input type="radio" name="website_type" value="business"/>
+            <div class="type-card">
+              <span class="type-emoji">🏢</span>
+              <strong>Business</strong>
+              <p>Professional site for your company or service.</p>
+            </div>
+          </label>
+          <label class="type-option">
+            <input type="radio" name="website_type" value="ecommerce"/>
+            <div class="type-card">
+              <span class="type-emoji">🛍️</span>
+              <strong>E-commerce</strong>
+              <p>Seller dashboard with product & order management.</p>
+            </div>
+          </label>
+          <label class="type-option">
+            <input type="radio" name="website_type" value="blog"/>
+            <div class="type-card">
+              <span class="type-emoji">✍️</span>
+              <strong>Blog</strong>
+              <p>Share articles, stories, and ideas.</p>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <!-- Stack -->
+      <div class="wiz-section">
+        <label class="wiz-label">Technology Stack</label>
+        <div class="stack-grid">
+          <label class="stack-option">
+            <input type="radio" name="stack" value="static" checked/>
+            <div class="stack-card">
+              <strong>HTML / CSS / JS</strong>
+              <p>Pure frontend. Open in any browser, no server needed.</p>
+            </div>
+          </label>
+          <label class="stack-option">
+            <input type="radio" name="stack" value="flask"/>
+            <div class="stack-card">
+              <strong>Python + Flask</strong>
+              <p>Full-stack with routes, forms, and SQLite database.</p>
+            </div>
+          </label>
+          <label class="stack-option">
+            <input type="radio" name="stack" value="fullstack"/>
+            <div class="stack-card">
+              <strong>Flask + Auth + DB</strong>
+              <p>Everything above plus login/signup system.</p>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div class="wiz-footer">
+        <button type="submit" class="btn-submit">Next: Customise →</button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

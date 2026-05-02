@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en" x-data="{dark:localStorage.getItem('dark')==='true',mobileOpen:false,filter:'all'}"
+      :class="dark?'dark':''" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>NovaTech — Portfolio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:'class'}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="stylesheet" href="style.css"/>
+  <style>body{font-family:'Inter',sans-serif}[x-cloak]{display:none!important}</style>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 antialiased">
+
+<nav id="mainNav" class="sticky top-0 z-50 bg-white/90 dark:bg-gray-950/90 backdrop-blur-md border-b border-gray-100 dark:border-gray-800 transition-shadow">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+    <a href="index.html" class="flex items-center gap-2 font-black text-xl"><span class="w-8 h-8 rounded-lg btn-gradient flex items-center justify-center text-white text-sm">N</span><span class="dark:text-white">Nova<span class="text-primary">Tech</span></span></a>
+    <div class="hidden md:flex items-center gap-6">
+      <a href="index.html"     class="nav-link text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">Home</a>
+      <a href="about.html"     class="nav-link text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">About</a>
+      <a href="services.html"  class="nav-link text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">Services</a>
+      <a href="portfolio.html" class="nav-link text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">Portfolio</a>
+      <a href="blog.html"      class="nav-link text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">Blog</a>
+      <a href="contact.html"   class="nav-link text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary transition-colors">Contact</a>
+      <a href="pricing.html"   class="btn-gradient px-4 py-2 rounded-full text-sm font-bold">Pricing</a>
+    </div>
+    <div class="flex items-center gap-2">
+      <button @click="dark=!dark;localStorage.setItem('dark',dark)" class="w-9 h-9 rounded-xl flex items-center justify-center text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+        <svg x-show="!dark" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        <svg x-show="dark"  class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+      </button>
+      <button @click="mobileOpen=!mobileOpen" class="md:hidden w-9 h-9 rounded-xl flex items-center justify-center text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+        <svg x-show="!mobileOpen" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <svg x-show="mobileOpen"  class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+  </div>
+  <div x-show="mobileOpen" x-transition x-cloak class="md:hidden border-t border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-950 px-4 py-3 space-y-1">
+    <a href="index.html"     class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800">Home</a>
+    <a href="about.html"     class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800">About</a>
+    <a href="services.html"  class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800">Services</a>
+    <a href="portfolio.html" class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800">Portfolio</a>
+    <a href="blog.html"      class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800">Blog</a>
+    <a href="contact.html"   class="block px-3 py-2 rounded-lg text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800">Contact</a>
+    <a href="pricing.html"   class="block px-3 py-2 rounded-lg text-sm font-bold text-primary">Pricing</a>
+  </div>
+</nav>
+
+<section class="py-20 px-4 bg-gradient-to-br from-indigo-50 via-white to-pink-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 text-center border-b border-gray-100 dark:border-gray-800">
+  <div class="max-w-3xl mx-auto reveal">
+    <span class="text-primary text-sm font-semibold uppercase tracking-wider">Our Work</span>
+    <h1 class="text-4xl md:text-5xl font-black mt-2 mb-4 dark:text-white"><span class="gradient-text">Portfolio</span></h1>
+    <p class="text-lg text-gray-500 dark:text-gray-400">A selection of our best work across design, development, and strategy.</p>
+  </div>
+</section>
+
+<!-- FILTERABLE GRID -->
+<section class="py-20 px-4">
+  <div class="max-w-6xl mx-auto">
+    <!-- Filter buttons -->
+    <div class="flex flex-wrap gap-3 justify-center mb-12 reveal">
+      <button @click="filter='all'"     :class="filter==='all'     ? 'btn-gradient' : 'btn-outline-primary'" class="px-5 py-2 rounded-full text-sm font-semibold transition-all">All</button>
+      <button @click="filter='web'"     :class="filter==='web'     ? 'btn-gradient' : 'btn-outline-primary'" class="px-5 py-2 rounded-full text-sm font-semibold transition-all">Web Design</button>
+      <button @click="filter='mobile'"  :class="filter==='mobile'  ? 'btn-gradient' : 'btn-outline-primary'" class="px-5 py-2 rounded-full text-sm font-semibold transition-all">Mobile</button>
+      <button @click="filter='brand'"   :class="filter==='brand'   ? 'btn-gradient' : 'btn-outline-primary'" class="px-5 py-2 rounded-full text-sm font-semibold transition-all">Branding</button>
+      <button @click="filter='saas'"    :class="filter==='saas'    ? 'btn-gradient' : 'btn-outline-primary'" class="px-5 py-2 rounded-full text-sm font-semibold transition-all">SaaS</button>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div x-show="filter==='all'||filter==='web'" x-transition class="group relative overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all cursor-pointer">
+        <img src="https://picsum.photos/seed/p1/600/400" alt="E-Commerce Platform" class="w-full h-52 object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-5">
+          <div><span class="text-xs font-semibold text-primary bg-white/20 px-2 py-0.5 rounded-full">Web Design</span><h3 class="text-white font-black text-lg mt-1">E-Commerce Platform</h3></div>
+        </div>
+        <div class="p-4 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800">
+          <span class="text-xs font-semibold text-primary uppercase tracking-wider">Web Design</span>
+          <h3 class="font-bold mt-0.5 dark:text-white">E-Commerce Platform</h3>
+        </div>
+      </div>
+      <div x-show="filter==='all'||filter==='brand'" x-transition class="group relative overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all cursor-pointer">
+        <img src="https://picsum.photos/seed/p2/600/400" alt="Brand Identity" class="w-full h-52 object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-5">
+          <div><span class="text-xs font-semibold text-primary bg-white/20 px-2 py-0.5 rounded-full">Branding</span><h3 class="text-white font-black text-lg mt-1">Brand Identity</h3></div>
+        </div>
+        <div class="p-4 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800">
+          <span class="text-xs font-semibold text-primary uppercase tracking-wider">Branding</span>
+          <h3 class="font-bold mt-0.5 dark:text-white">Brand Identity</h3>
+        </div>
+      </div>
+      <div x-show="filter==='all'||filter==='mobile'" x-transition class="group relative overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all cursor-pointer">
+        <img src="https://picsum.photos/seed/p3/600/400" alt="Mobile Banking App" class="w-full h-52 object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-5">
+          <div><span class="text-xs font-semibold text-primary bg-white/20 px-2 py-0.5 rounded-full">Mobile</span><h3 class="text-white font-black text-lg mt-1">Mobile Banking App</h3></div>
+        </div>
+        <div class="p-4 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800">
+          <span class="text-xs font-semibold text-primary uppercase tracking-wider">Mobile</span>
+          <h3 class="font-bold mt-0.5 dark:text-white">Mobile Banking App</h3>
+        </div>
+      </div>
+      <div x-show="filter==='all'||filter==='saas'" x-transition class="group relative overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all cursor-pointer">
+        <img src="https://picsum.photos/seed/p4/600/400" alt="SaaS Dashboard" class="w-full h-52 object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-5">
+          <div><span class="text-xs font-semibold text-primary bg-white/20 px-2 py-0.5 rounded-full">SaaS</span><h3 class="text-white font-black text-lg mt-1">SaaS Dashboard</h3></div>
+        </div>
+        <div class="p-4 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800">
+          <span class="text-xs font-semibold text-primary uppercase tracking-wider">SaaS</span>
+          <h3 class="font-bold mt-0.5 dark:text-white">SaaS Dashboard</h3>
+        </div>
+      </div>
+      <div x-show="filter==='all'||filter==='web'" x-transition class="group relative overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all cursor-pointer">
+        <img src="https://picsum.photos/seed/p5/600/400" alt="Restaurant Website" class="w-full h-52 object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-5">
+          <div><span class="text-xs font-semibold text-primary bg-white/20 px-2 py-0.5 rounded-full">Web Design</span><h3 class="text-white font-black text-lg mt-1">Restaurant Website</h3></div>
+        </div>
+        <div class="p-4 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800">
+          <span class="text-xs font-semibold text-primary uppercase tracking-wider">Web Design</span>
+          <h3 class="font-bold mt-0.5 dark:text-white">Restaurant Website</h3>
+        </div>
+      </div>
+      <div x-show="filter==='all'||filter==='mobile'" x-transition class="group relative overflow-hidden rounded-2xl shadow-sm hover:shadow-xl transition-all cursor-pointer">
+        <img src="https://picsum.photos/seed/p6/600/400" alt="Fitness Tracker" class="w-full h-52 object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-5">
+          <div><span class="text-xs font-semibold text-primary bg-white/20 px-2 py-0.5 rounded-full">Mobile</span><h3 class="text-white font-black text-lg mt-1">Fitness Tracker</h3></div>
+        </div>
+        <div class="p-4 bg-white dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800">
+          <span class="text-xs font-semibold text-primary uppercase tracking-wider">Mobile</span>
+          <h3 class="font-bold mt-0.5 dark:text-white">Fitness Tracker</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-16 px-4 bg-gray-50 dark:bg-gray-900 border-t border-gray-100 dark:border-gray-800 text-center">
+  <div class="max-w-xl mx-auto reveal">
+    <h2 class="text-2xl font-black mb-3 dark:text-white">Have a project in mind?</h2>
+    <p class="text-gray-500 dark:text-gray-400 mb-6">Let's create something great together.</p>
+    <a href="contact.html" class="btn-gradient px-7 py-3 rounded-full font-bold text-sm inline-block">Start a Project</a>
+  </div>
+</section>
+
+<footer class="bg-gray-900 dark:bg-gray-950 text-gray-400 border-t border-gray-800">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-10 grid grid-cols-2 md:grid-cols-4 gap-8">
+    <div class="col-span-2 md:col-span-1"><a href="index.html" class="flex items-center gap-2 font-black text-lg text-white mb-3"><span class="w-7 h-7 rounded-lg btn-gradient flex items-center justify-center text-white text-xs">N</span>NovaTech</a><p class="text-sm">Building the future with cutting-edge technology.</p></div>
+    <div><h4 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Product</h4><ul class="space-y-2 text-sm"><li><a href="services.html" class="hover:text-white transition-colors">Services</a></li><li><a href="pricing.html" class="hover:text-white transition-colors">Pricing</a></li><li><a href="portfolio.html" class="hover:text-white transition-colors">Portfolio</a></li></ul></div>
+    <div><h4 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Company</h4><ul class="space-y-2 text-sm"><li><a href="about.html" class="hover:text-white transition-colors">About</a></li><li><a href="team.html" class="hover:text-white transition-colors">Team</a></li><li><a href="blog.html" class="hover:text-white transition-colors">Blog</a></li><li><a href="contact.html" class="hover:text-white transition-colors">Contact</a></li></ul></div>
+    <div><h4 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Support</h4><ul class="space-y-2 text-sm"><li><a href="faq.html" class="hover:text-white transition-colors">FAQ</a></li><li><a href="testimonials.html" class="hover:text-white transition-colors">Testimonials</a></li><li><a href="#" class="hover:text-white transition-colors">Privacy</a></li></ul></div>
+  </div>
+  <div class="border-t border-gray-800"><div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center text-xs text-gray-500"><span>&copy; 2025 NovaTech. All rights reserved.</span><span>Made with ❤️ for developers</span></div></div>
+</footer>
+<script src="script.js"></script>
+</body></html>

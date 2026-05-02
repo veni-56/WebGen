@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+{% block title %}Checkout — Meesho{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <h4 class="fw-bold mb-4"><i class="bi bi-credit-card"></i> Checkout</h4>
+  <div class="row g-4">
+
+    <!-- Left: address + payment -->
+    <div class="col-lg-7">
+      <form method="POST" id="checkoutForm">
+
+        <!-- Address -->
+        <div class="card border-0 shadow-sm rounded-4 p-4 mb-3">
+          <h5 class="fw-bold mb-3"><i class="bi bi-geo-alt text-primary"></i> Delivery Address</h5>
+          <div class="mb-3">
+            <label class="form-label">Full Address *</label>
+            <textarea name="address" class="form-control" rows="3"
+                      placeholder="House no, Street, City, State, PIN" required></textarea>
+          </div>
+        </div>
+
+        <!-- Payment -->
+        <div class="card border-0 shadow-sm rounded-4 p-4">
+          <h5 class="fw-bold mb-3"><i class="bi bi-shield-lock text-success"></i> Payment Method</h5>
+
+          {% if use_stripe %}
+          <div class="mb-3">
+            <div class="form-check payment-option mb-2">
+              <input class="form-check-input" type="radio" name="pay_method" id="pay_stripe" value="stripe" checked/>
+              <label class="form-check-label fw-semibold" for="pay_stripe">
+                <i class="bi bi-stripe text-primary"></i> Pay with Stripe (Card / UPI)
+              </label>
+            </div>
+            <div class="form-check payment-option">
+              <input class="form-check-input" type="radio" name="pay_method" id="pay_dummy" value="dummy"/>
+              <label class="form-check-label" for="pay_dummy">
+                <i class="bi bi-cash-coin text-success"></i> Demo Payment (no real charge)
+              </label>
+            </div>
+          </div>
+          {% else %}
+          <input type="hidden" name="pay_method" value="dummy"/>
+          <div class="alert alert-info d-flex gap-2 align-items-center">
+            <i class="bi bi-info-circle-fill fs-5"></i>
+            <div>
+              <strong>Demo Mode</strong> — payment is simulated. No real charges.
+              <br/><small class="text-muted">Set STRIPE_PUBLIC_KEY env var to enable real payments.</small>
+            </div>
+          </div>
+          <!-- Demo card UI -->
+          <div class="mb-3">
+            <label class="form-label text-muted small">Card Number (demo)</label>
+            <input type="text" class="form-control" placeholder="4242 4242 4242 4242" disabled/>
+          </div>
+          <div class="row g-2 mb-3">
+            <div class="col"><input type="text" class="form-control" placeholder="MM/YY" disabled/></div>
+            <div class="col"><input type="text" class="form-control" placeholder="CVV" disabled/></div>
+          </div>
+          {% endif %}
+
+          <button class="btn btn-success w-100 rounded-pill fw-bold py-2 mt-2">
+            <i class="bi bi-lock-fill"></i> Place Order — ₹{{ "%.0f"|format(total) }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Right: summary -->
+    <div class="col-lg-5">
+      <div class="card border-0 shadow-sm rounded-4 p-4 sticky-top" style="top:80px">
+        <h5 class="fw-bold mb-3">Order Summary</h5>
+        {% for item in items %}
+        <div class="d-flex justify-content-between align-items-center mb-2">
+          <div class="d-flex align-items-center gap-2">
+            <img src="{{ url_for('static', filename='uploads/' + item.product.image) }}"
+                 style="width:40px;height:40px;object-fit:cover;border-radius:8px"
+                 onerror="this.src='https://placehold.co/40x40/f8f9fa/adb5bd?text=?'"/>
+            <span class="small">{{ item.product.name }} × {{ item.quantity }}</span>
+          </div>
+          <span class="fw-semibold small">₹{{ "%.0f"|format(item.product.price * item.quantity) }}</span>
+        </div>
+        {% endfor %}
+        <hr/>
+        <div class="d-flex justify-content-between text-success small mb-1">
+          <span>Delivery</span><span>FREE</span>
+        </div>
+        <div class="d-flex justify-content-between fw-bold fs-5">
+          <span>Total</span>
+          <span class="text-primary">₹{{ "%.0f"|format(total) }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

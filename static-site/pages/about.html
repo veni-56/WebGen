@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="{{site_name}} — Our story, values, and the team behind the platform."/>
+  <meta property="og:title"       content="About {{site_name}}"/>
+  <meta property="og:description" content="Learn about our mission, team, and values."/>
+  <title>About — {{site_name}}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:'class'}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="stylesheet" href="../style.css"/>
+  <style>:root{--primary:{{primary_color}};--secondary:{{secondary_color}};--primary-rgb:{{primary_rgb}};--secondary-rgb:{{secondary_rgb}}}</style>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 antialiased">
+<div id="scrollProgress"></div>
+<div id="navbar"></div>
+
+<!-- PAGE HERO -->
+<section class="py-20 px-4 bg-gradient-to-br from-indigo-50 via-white to-pink-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 text-center border-b border-gray-100 dark:border-gray-800" aria-labelledby="page-heading">
+  <div class="max-w-3xl mx-auto reveal">
+    <span class="text-primary text-sm font-semibold uppercase tracking-wider">Our Story</span>
+    <h1 id="page-heading" class="text-4xl md:text-5xl font-black mt-2 mb-4 dark:text-white">
+      About <span class="gradient-text">{{site_name}}</span>
+    </h1>
+    <p class="text-lg text-gray-500 dark:text-gray-400">We're a team of engineers, designers, and dreamers on a mission to make great software accessible to every team on the planet.</p>
+  </div>
+</section>
+
+<!-- STORY -->
+<section class="py-24 px-4">
+  <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-14 items-center">
+    <div class="reveal-left">
+      <span class="text-primary text-sm font-semibold uppercase tracking-wider">Who We Are</span>
+      <h2 class="text-3xl md:text-4xl font-black mt-2 mb-5 dark:text-white">Our <span class="gradient-text">Story</span></h2>
+      <p class="text-gray-500 dark:text-gray-400 leading-relaxed mb-4">{{site_name}} was founded in 2019 by a group of engineers frustrated with the complexity of modern infrastructure. We believed that deploying and scaling software should be simple, fast, and reliable.</p>
+      <p class="text-gray-500 dark:text-gray-400 leading-relaxed mb-6">Starting from a small apartment in San Francisco, we built the first version of our platform in 3 months. Today, we serve over 10,000 teams across 80 countries.</p>
+      <a href="contact.html" class="btn-gradient px-6 py-3 rounded-full font-bold text-sm inline-block
+               focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2">
+        Work With Us →
+      </a>
+    </div>
+    <div class="reveal-right grid grid-cols-2 gap-4">
+      <div class="bg-primary-10 border border-primary-15 rounded-2xl p-5 text-center card-hover">
+        <div class="text-3xl font-black text-primary mb-1">80+</div>
+        <div class="text-sm text-gray-500 dark:text-gray-400">Countries</div>
+      </div>
+      <div class="bg-pink-50 dark:bg-pink-900/20 border border-pink-100 dark:border-pink-800 rounded-2xl p-5 text-center card-hover">
+        <div class="text-3xl font-black mb-1" style="color:var(--secondary)">50+</div>
+        <div class="text-sm text-gray-500 dark:text-gray-400">Team Members</div>
+      </div>
+      <div class="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-800 rounded-2xl p-5 text-center card-hover">
+        <div class="text-3xl font-black text-emerald-600 mb-1">$40M</div>
+        <div class="text-sm text-gray-500 dark:text-gray-400">Series B</div>
+      </div>
+      <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-100 dark:border-amber-800 rounded-2xl p-5 text-center card-hover">
+        <div class="text-3xl font-black text-amber-500 mb-1">4.9★</div>
+        <div class="text-sm text-gray-500 dark:text-gray-400">G2 Rating</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- VALUES -->
+<section class="py-24 px-4 bg-gray-50 dark:bg-gray-900 border-y border-gray-100 dark:border-gray-800" aria-labelledby="values-heading">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <span class="text-primary text-sm font-semibold uppercase tracking-wider">Principles</span>
+      <h2 id="values-heading" class="text-4xl font-black mt-2 dark:text-white">Our <span class="gradient-text">Values</span></h2>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <article class="reveal card-hover card-gradient-border bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700">
+        <div class="text-2xl mb-3" aria-hidden="true">🎯</div>
+        <h3 class="font-bold mb-2 dark:text-white">Customer Obsession</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">Every feature we build starts with a customer problem. We listen, iterate, and ship fast.</p>
+      </article>
+      <article class="reveal card-hover card-gradient-border bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700">
+        <div class="text-2xl mb-3" aria-hidden="true">🔬</div>
+        <h3 class="font-bold mb-2 dark:text-white">Engineering Excellence</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">We hold ourselves to the highest technical standards. Clean code, thorough testing.</p>
+      </article>
+      <article class="reveal card-hover card-gradient-border bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700">
+        <div class="text-2xl mb-3" aria-hidden="true">🌍</div>
+        <h3 class="font-bold mb-2 dark:text-white">Radical Transparency</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">We share our roadmap, our mistakes, and our learnings openly. Trust is built through honesty.</p>
+      </article>
+      <article class="reveal card-hover card-gradient-border bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700">
+        <div class="text-2xl mb-3" aria-hidden="true">⚡</div>
+        <h3 class="font-bold mb-2 dark:text-white">Move Fast</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">Speed matters. We ship weekly, learn from real users, and iterate quickly.</p>
+      </article>
+      <article class="reveal card-hover card-gradient-border bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700">
+        <div class="text-2xl mb-3" aria-hidden="true">🤝</div>
+        <h3 class="font-bold mb-2 dark:text-white">Inclusive Culture</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">Great ideas come from diverse perspectives. We actively build a team that reflects the world.</p>
+      </article>
+      <article class="reveal card-hover card-gradient-border bg-white dark:bg-gray-800 rounded-2xl p-6 border border-gray-100 dark:border-gray-700">
+        <div class="text-2xl mb-3" aria-hidden="true">🌱</div>
+        <h3 class="font-bold mb-2 dark:text-white">Long-term Thinking</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">We optimize for decades, not quarters. Sustainable growth and a healthy team.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- TEAM PREVIEW -->
+<section class="py-24 px-4" aria-labelledby="team-heading">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <span class="text-primary text-sm font-semibold uppercase tracking-wider">People</span>
+      <h2 id="team-heading" class="text-4xl font-black mt-2 dark:text-white">Meet the <span class="gradient-text">Team</span></h2>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+      <div class="reveal card-hover card-gradient-border bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-6 text-center">
+        <div class="w-16 h-16 rounded-full btn-gradient flex items-center justify-center text-white font-black text-xl mx-auto mb-3" aria-hidden="true">AK</div>
+        <div class="font-bold text-sm dark:text-white">Alex Kim</div>
+        <div class="text-xs text-primary mt-0.5">CEO & Co-founder</div>
+      </div>
+      <div class="reveal card-hover card-gradient-border bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-6 text-center">
+        <div class="w-16 h-16 rounded-full btn-gradient flex items-center justify-center text-white font-black text-xl mx-auto mb-3" aria-hidden="true">SR</div>
+        <div class="font-bold text-sm dark:text-white">Sofia Rodriguez</div>
+        <div class="text-xs text-primary mt-0.5">CTO & Co-founder</div>
+      </div>
+      <div class="reveal card-hover card-gradient-border bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-6 text-center">
+        <div class="w-16 h-16 rounded-full btn-gradient flex items-center justify-center text-white font-black text-xl mx-auto mb-3" aria-hidden="true">JL</div>
+        <div class="font-bold text-sm dark:text-white">James Liu</div>
+        <div class="text-xs text-primary mt-0.5">Head of Design</div>
+      </div>
+      <div class="reveal card-hover card-gradient-border bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-6 text-center">
+        <div class="w-16 h-16 rounded-full btn-gradient flex items-center justify-center text-white font-black text-xl mx-auto mb-3" aria-hidden="true">MP</div>
+        <div class="font-bold text-sm dark:text-white">Maya Patel</div>
+        <div class="text-xs text-primary mt-0.5">VP Engineering</div>
+      </div>
+    </div>
+    <div class="text-center mt-10 reveal">
+      <a href="team.html" class="btn-outline-primary px-6 py-2.5 rounded-full text-sm font-bold
+               focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2">
+        Meet the Full Team →
+      </a>
+    </div>
+  </div>
+</section>
+
+<div id="footer"></div>
+<script src="../script.js"></script>
+</body>
+</html>

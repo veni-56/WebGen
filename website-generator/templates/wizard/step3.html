@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+{% block title %}Step 3 — Generate{% endblock %}
+{% block content %}
+<div class="wizard-page">
+  <div class="wizard-progress">
+    <div class="wp-step done"><span>✓</span> Type</div>
+    <div class="wp-line active"></div>
+    <div class="wp-step done"><span>✓</span> Customise</div>
+    <div class="wp-line active"></div>
+    <div class="wp-step active"><span>3</span> Generate</div>
+  </div>
+
+  <div class="wizard-card">
+    <h2>Generate your website</h2>
+    <p class="wizard-sub">Review your settings, then click Generate.</p>
+
+    <!-- Config summary -->
+    <div class="config-summary">
+      <div class="cs-row"><span>Site Name</span><strong>{{ config.get('site_name','—') }}</strong></div>
+      <div class="cs-row"><span>Type</span><strong>{{ config.get('website_type','—') }}</strong></div>
+      <div class="cs-row"><span>Stack</span><strong>{{ config.get('project_type','—') }}</strong></div>
+      <div class="cs-row">
+        <span>Colors</span>
+        <strong>
+          <span class="color-dot" style="background:{{ config.get('primary_color','#6c63ff') }}"></span>
+          {{ config.get('primary_color','—') }}
+          &nbsp;
+          <span class="color-dot" style="background:{{ config.get('secondary_color','#f50057') }}"></span>
+          {{ config.get('secondary_color','—') }}
+        </strong>
+      </div>
+      <div class="cs-row"><span>Font</span><strong>{{ config.get('font','Poppins') }}</strong></div>
+      {% if config.get('sections') %}
+      <div class="cs-row"><span>Sections</span><strong>{{ config.get('sections',[])|join(', ') }}</strong></div>
+      {% endif %}
+    </div>
+
+    <!-- Generate button -->
+    <div id="gen-area">
+      <button class="btn-submit btn-generate-big" onclick="startGenerate()" id="genBtn">
+        ⚡ Generate Website
+      </button>
+    </div>
+
+    <!-- Output -->
+    <div id="output-area" style="display:none">
+      <div class="output-tabs">
+        <button class="otab active" onclick="switchOTab('files', this)">📁 Files</button>
+        <button class="otab" onclick="switchOTab('code', this)">💻 Code</button>
+        <button class="otab" onclick="switchOTab('preview', this)">👁 Preview</button>
+      </div>
+
+      <!-- Files tab -->
+      <div id="otab-files" class="otab-content active">
+        <div class="file-tree" id="fileTree"></div>
+        <div class="output-actions">
+          <button class="btn-action" onclick="downloadProject()">⬇ Download ZIP</button>
+          <button class="btn-action btn-preview-btn" onclick="openPreview()">🚀 Open Preview</button>
+          <a href="{{ url_for('dashboard') }}" class="btn-action">📂 My Projects</a>
+        </div>
+        <div class="run-box" id="runBox"></div>
+      </div>
+
+      <!-- Code tab -->
+      <div id="otab-code" class="otab-content">
+        <div class="code-viewer">
+          <div class="code-file-list" id="codeFileList"></div>
+          <pre class="code-display" id="codeDisplay"><code>← Select a file</code></pre>
+        </div>
+      </div>
+
+      <!-- Preview tab -->
+      <div id="otab-preview" class="otab-content">
+        <div class="preview-toolbar">
+          <span id="previewNote"></span>
+        </div>
+        <iframe id="previewFrame" src="" style="width:100%;height:620px;border:none;border-radius:10px;background:#fff"></iframe>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% block scripts %}
+<script>
+let _projectId = null;
+let _projectType = null;
+
+async function startGenerate() {
+  const btn = document.getElementById('genBtn');
+  btn.textContent = '⏳ Generating...';
+  btn.disabled = true;
+
+  try {
+    const res = await fetch('/api/generate', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ config: null }),  // server reads from session
+    });
+    const data = await res.json();
+    if (data.error) { alert('Error: ' + data.error); btn.textContent = '⚡ Generate Website'; btn.disabled = false; return; }
+
+    _projectId   = data.project_id;
+    _projectType = data.type;
+
+    renderFiles(data.files);
+    renderCodeList(data.files);
+    renderRunBox(data.type);
+
+    document.getElementById('output-area').style.display = 'block';
+    btn.textContent = '✅ Generated! Generate Again';
+    btn.disabled = false;
+
+    if (data.type === 'static') {
+      document.getElementById('previewFrame').src = '/preview/' + _projectId;
+      document.getElementById('previewNote').textContent = 'Live preview of your static site';
+    } else {
+      document.getElementById('previewNote').textContent = 'Flask projects must be run locally. See the Files tab for instructions.';
+    }
+  } catch(e) {
+    alert('Generation failed: ' + e.message);
+    btn.textContent = '⚡ Generate Website';
+    btn.disabled = false;
+  }
+}
+
+function renderFiles(files) {
+  const icons = { html:'📄', css:'🎨', js:'⚡', py:'🐍', txt:'📝', db:'🗄️', '':'📄' };
+  document.getElementById('fileTree').innerHTML = files.map(f => {
+    const ext = f.split('.').pop();
+    return `<div class="file-item"><span>${icons[ext]||'📄'}</span><span>${f}</span></div>`;
+  }).join('');
+}
+
+function renderCodeList(files) {
+  document.getElementById('codeFileList').innerHTML = files.map(f =>
+    `<button class="cfile-btn" onclick="loadCode('${f}',this)">${f}</button>`
+  ).join('');
+}
+
+async function loadCode(filepath, btn) {
+  document.querySelectorAll('.cfile-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const res = await fetch(`/file/${_projectId}/${filepath}`);
+  document.getElementById('codeDisplay').textContent = await res.text();
+}
+
+function renderRunBox(type) {
+  const el = document.getElementById('runBox');
+  if (type === 'static') {
+    el.innerHTML = '<strong>To run:</strong> Download ZIP → Extract → Open <code>index.html</code> in your browser.';
+  } else {
+    el.innerHTML = '<strong>To run locally:</strong><br>1. Download ZIP and extract<br>2. <code>pip install -r requirements.txt</code><br>3. <code>python app.py</code><br>4. Open <code>http://localhost:5000</code>';
+  }
+}
+
+function switchOTab(name, btn) {
+  document.querySelectorAll('.otab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.otab-content').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('otab-' + name).classList.add('active');
+}
+
+function downloadProject() {
+  if (_projectId) window.location.href = '/download/' + _projectId;
+}
+function openPreview() {
+  if (_projectId) window.open('/preview/' + _projectId, '_blank');
+}
+</script>
+{% endblock %}
+{% endblock %}

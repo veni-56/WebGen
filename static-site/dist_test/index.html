@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en" x-data="{}" x-init="applyDark()" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Cutting-edge software solutions that help businesses scale, innovate, and lead their industries."/>
+  <meta property="og:title"       content="Home — NovaTech"/>
+  <meta property="og:description" content="Cutting-edge software solutions that help businesses scale, innovate, and lead their industries."/>
+  <meta property="og:type"        content="website"/>
+  <title>Home — NovaTech</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:'class'}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    body{font-family:'Inter',sans-serif}
+    :root{--primary:#6c63ff;--secondary:#f50057;--primary-rgb:108,99,255;--secondary-rgb:245,0,87}
+  </style>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 antialiased">
+<div id="scrollProgress"></div>
+<nav id="mainNav" role="navigation" aria-label="Main navigation"
+     class="sticky top-0 z-50 bg-white/80 dark:bg-gray-950/80 backdrop-blur-xl
+            border-b border-gray-100 dark:border-gray-800 transition-shadow"
+     x-data="{mobileOpen:false}">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 flex items-center justify-between h-16">
+    <a href="index.html" class="flex items-center gap-2.5 font-black text-xl tracking-tight group" aria-label="NovaTech home">
+      <span class="w-8 h-8 rounded-xl btn-gradient flex items-center justify-center text-white text-sm group-hover:scale-110 transition-transform">N</span>
+      <span class="dark:text-white">NovaTech</span>
+    </a>
+    <div class="hidden md:flex items-center gap-1">
+      <a href="index.html" class="nav-link active px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-all">Home</a>
+      <a href="about.html" class="nav-link  px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-all">About</a>
+      <a href="services.html" class="nav-link  px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-all">Services</a>
+      <a href="portfolio.html" class="nav-link  px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-all">Portfolio</a>
+      <a href="blog.html" class="nav-link  px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-all">Blog</a>
+      <a href="contact.html" class="nav-link  px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-all">Contact</a>
+      <a href="pricing.html" class="btn-gradient ml-2 px-5 py-2 rounded-full text-sm font-bold hover:scale-105 transition-all focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2">Pricing</a>
+      <a href="team.html" class="nav-link  px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-all">Team</a>
+      <a href="faq.html" class="nav-link  px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-all">FAQ</a>
+      <a href="testimonials.html" class="nav-link  px-3 py-2 rounded-lg text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-primary hover:bg-gray-50 dark:hover:bg-gray-800/60 transition-all">Testimonials</a>
+      
+    </div>
+    <div class="flex items-center gap-1.5">
+      <button onclick="toggleDark()"
+              class="w-9 h-9 rounded-xl flex items-center justify-center text-gray-500 dark:text-gray-400
+                     hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors
+                     focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-1"
+              aria-label="Toggle dark mode" id="darkToggle">
+          <svg id="iconSun" class="w-5 h-5 hidden" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/></svg>
+          <svg id="iconMoon" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/></svg>
+        </button>
+      <button @click="mobileOpen=!mobileOpen"
+              class="md:hidden w-9 h-9 rounded-xl flex items-center justify-center text-gray-500
+                     hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors
+                     focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-1"
+              :aria-expanded="mobileOpen.toString()" aria-label="Toggle mobile menu">
+        <svg x-show="!mobileOpen" class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        <svg x-show="mobileOpen"  class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+  </div>
+  <div x-show="mobileOpen" x-transition x-cloak
+       class="md:hidden border-t border-gray-100 dark:border-gray-800 bg-white/95 dark:bg-gray-950/95 backdrop-blur-xl px-4 py-3 space-y-1">
+    <a href="index.html" class="block px-3 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">Home</a>
+    <a href="about.html" class="block px-3 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">About</a>
+    <a href="services.html" class="block px-3 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">Services</a>
+    <a href="portfolio.html" class="block px-3 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">Portfolio</a>
+    <a href="blog.html" class="block px-3 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">Blog</a>
+    <a href="contact.html" class="block px-3 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">Contact</a>
+    <a href="pricing.html" class="block px-3 py-2.5 rounded-xl text-sm font-bold text-primary">Pricing</a>
+    <a href="team.html" class="block px-3 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">Team</a>
+    <a href="faq.html" class="block px-3 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">FAQ</a>
+    <a href="testimonials.html" class="block px-3 py-2.5 rounded-xl text-sm font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">Testimonials</a>
+    
+  </div>
+</nav>
+
+<section class="relative overflow-hidden py-24 md:py-36 px-4" aria-labelledby="hero-heading">
+  <div class="absolute inset-0 bg-gradient-to-br from-indigo-50 via-white to-pink-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900"></div>
+  <div class="absolute top-20 left-1/4 w-80 h-80 rounded-full opacity-20 blur-3xl pointer-events-none" style="background:var(--primary)"></div>
+  <div class="absolute bottom-10 right-1/4 w-60 h-60 rounded-full opacity-15 blur-3xl pointer-events-none" style="background:var(--secondary)"></div>
+  <div class="relative max-w-5xl mx-auto text-center">
+    <span class="reveal inline-block bg-primary-10 border border-primary-15 text-primary text-xs font-semibold px-4 py-1.5 rounded-full mb-5 tracking-wide uppercase">✨ Trusted by 10,000+ teams worldwide</span>
+    <h1 id="hero-heading" class="reveal text-5xl md:text-7xl font-black leading-tight mb-6 dark:text-white">
+      Build the<br>
+      <span class="gradient-text">Future Faster Than Ever</span>
+    </h1>
+    <p class="reveal text-lg md:text-xl text-gray-500 dark:text-gray-400 max-w-2xl mx-auto mb-10">Cutting-edge software solutions that help businesses scale, innovate, and lead their industries.</p>
+    <div class="reveal flex flex-wrap gap-4 justify-center">
+      <a href="contact.html" class="btn-gradient px-8 py-3.5 rounded-full font-bold text-base focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2">Start Free Trial</a>
+      <a href="about.html" class="btn-outline-primary px-8 py-3.5 rounded-full font-bold text-base focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2">Learn More →</a>
+    </div>
+  </div>
+</section>
+<section class="py-14 bg-gray-50 dark:bg-gray-900 border-y border-gray-100 dark:border-gray-800" aria-label="Statistics">
+  <div class="max-w-5xl mx-auto px-4 stats-row grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+    <div class="reveal "><div class="text-4xl font-black text-primary counter-val" data-target="10000" data-suffix="+">10000+</div><div class="text-sm text-gray-500 dark:text-gray-400 mt-1">Happy Clients</div></div>
+    <div class="reveal "><div class="text-4xl font-black text-primary counter-val" data-target="500" data-suffix="+">500+</div><div class="text-sm text-gray-500 dark:text-gray-400 mt-1">Projects Shipped</div></div>
+    <div class="reveal "><div class="text-4xl font-black text-primary counter-val" data-target="99" data-suffix=".9%">99.9%</div><div class="text-sm text-gray-500 dark:text-gray-400 mt-1">Uptime SLA</div></div>
+    <div class="reveal "><div class="text-4xl font-black text-primary counter-val" data-target="24" data-suffix="/7">24/7</div><div class="text-sm text-gray-500 dark:text-gray-400 mt-1">Support</div></div>
+    
+  </div>
+</section>
+<section class="py-24 px-4" aria-labelledby="features-heading">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <span class="text-primary text-sm font-semibold uppercase tracking-wider">Platform</span>
+      <h2 id="features-heading" class="text-4xl md:text-5xl font-black mt-2 mb-4 dark:text-white">Everything You Need to <span class="gradient-text">Scale</span></h2>
+      <p class="text-gray-500 dark:text-gray-400 max-w-xl mx-auto">A complete platform built for modern teams who demand performance, reliability, and developer experience.</p>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <article class="reveal card-hover card-gradient-border bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7">
+      <div class="text-3xl mb-4" aria-hidden="true">⚡</div>
+      <h3 class="font-bold text-lg mb-2 dark:text-white">Lightning Performance</h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">Sub-100ms response times globally. Our edge network ensures your users always get the fastest experience.</p>
+    </article>
+    <article class="reveal card-hover card-gradient-border bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7">
+      <div class="text-3xl mb-4" aria-hidden="true">🔒</div>
+      <h3 class="font-bold text-lg mb-2 dark:text-white">Enterprise Security</h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">SOC 2 Type II certified. End-to-end encryption, zero-trust architecture, and automated threat detection.</p>
+    </article>
+    <article class="reveal card-hover card-gradient-border bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7">
+      <div class="text-3xl mb-4" aria-hidden="true">📈</div>
+      <h3 class="font-bold text-lg mb-2 dark:text-white">Auto Scaling</h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">Handle traffic spikes effortlessly. Our infrastructure scales from 1 to 1 million users without configuration.</p>
+    </article>
+    <article class="reveal card-hover card-gradient-border bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7">
+      <div class="text-3xl mb-4" aria-hidden="true">🤖</div>
+      <h3 class="font-bold text-lg mb-2 dark:text-white">AI-Powered Insights</h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">Real-time analytics with AI recommendations. Understand your users and optimize performance automatically.</p>
+    </article>
+    <article class="reveal card-hover card-gradient-border bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7">
+      <div class="text-3xl mb-4" aria-hidden="true">🔗</div>
+      <h3 class="font-bold text-lg mb-2 dark:text-white">200+ Integrations</h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">Connect with Slack, GitHub, Stripe, and 200+ tools your team already uses. One-click setup.</p>
+    </article>
+    <article class="reveal card-hover card-gradient-border bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7">
+      <div class="text-3xl mb-4" aria-hidden="true">🌍</div>
+      <h3 class="font-bold text-lg mb-2 dark:text-white">Global CDN</h3>
+      <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">Deploy to 50+ edge locations worldwide. Your content is always close to your users, wherever they are.</p>
+    </article>
+    
+    </div>
+  </div>
+</section>
+<section class="py-24 px-4 bg-gray-50 dark:bg-gray-900 border-y border-gray-100 dark:border-gray-800" aria-labelledby="testimonials-heading">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <span class="text-primary text-sm font-semibold uppercase tracking-wider">Testimonials</span>
+      <h2 id="testimonials-heading" class="text-4xl md:text-5xl font-black mt-2 dark:text-white">Loved by <span class="gradient-text">Thousands</span></h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <blockquote class="reveal card-hover glass rounded-2xl p-7 border border-gray-100 dark:border-gray-700">
+      <div class="flex gap-0.5 mb-4 text-amber-400" aria-label="5 stars">⭐⭐⭐⭐⭐</div>
+      <p class="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-5 italic">"NovaTech cut our deployment time by 80%. The auto-scaling alone saved us thousands in infrastructure costs."</p>
+      <footer class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full btn-gradient flex items-center justify-center text-white font-bold text-sm" aria-hidden="true">SC</div>
+        <div><cite class="font-semibold text-sm dark:text-white not-italic">Sarah Chen</cite><div class="text-xs text-gray-400">CTO, TechFlow Inc.</div></div>
+      </footer>
+    </blockquote>
+    <blockquote class="reveal card-hover glass rounded-2xl p-7 border border-gray-100 dark:border-gray-700">
+      <div class="flex gap-0.5 mb-4 text-amber-400" aria-label="5 stars">⭐⭐⭐⭐⭐</div>
+      <p class="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-5 italic">"The best developer experience I've had in 10 years. Documentation is excellent and support is incredibly fast."</p>
+      <footer class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full btn-gradient flex items-center justify-center text-white font-bold text-sm" aria-hidden="true">MJ</div>
+        <div><cite class="font-semibold text-sm dark:text-white not-italic">Marcus Johnson</cite><div class="text-xs text-gray-400">Lead Engineer, StartupX</div></div>
+      </footer>
+    </blockquote>
+    <blockquote class="reveal card-hover glass rounded-2xl p-7 border border-gray-100 dark:border-gray-700">
+      <div class="flex gap-0.5 mb-4 text-amber-400" aria-label="5 stars">⭐⭐⭐⭐⭐</div>
+      <p class="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-5 italic">"We migrated 50+ microservices in a weekend. Zero downtime, zero issues. Absolutely incredible."</p>
+      <footer class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full btn-gradient flex items-center justify-center text-white font-bold text-sm" aria-hidden="true">AP</div>
+        <div><cite class="font-semibold text-sm dark:text-white not-italic">Aisha Patel</cite><div class="text-xs text-gray-400">VP Engineering, ScaleUp</div></div>
+      </footer>
+    </blockquote>
+    
+    </div>
+  </div>
+</section>
+<section class="py-24 px-4 text-center" aria-labelledby="cta-heading">
+  <div class="max-w-2xl mx-auto reveal">
+    <h2 id="cta-heading" class="text-4xl md:text-5xl font-black mb-4 dark:text-white">Ready to <span class="gradient-text">Get Started?</span></h2>
+    <p class="text-gray-500 dark:text-gray-400 mb-10">Join 10,000+ teams already building with NovaTech. Free plan available — no credit card required.</p>
+    <div class="flex flex-wrap gap-4 justify-center">
+      <a href="contact.html" class="btn-gradient px-8 py-3.5 rounded-full font-bold focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2">Start Free Trial</a>
+      <a href="about.html" class="btn-outline-primary px-8 py-3.5 rounded-full font-bold focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2">Meet the Team →</a>
+    </div>
+  </div>
+</section>
+<footer class="bg-gray-900 dark:bg-gray-950 text-gray-400 border-t border-gray-800 mt-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-14">
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-8 mb-10">
+      <div class="col-span-2 md:col-span-1">
+        <a href="index.html" class="flex items-center gap-2.5 font-black text-xl text-white mb-4" aria-label="NovaTech home">
+          <span class="w-8 h-8 rounded-xl btn-gradient flex items-center justify-center text-white text-sm">N</span>
+          NovaTech
+        </a>
+        <p class="text-sm leading-relaxed text-gray-400 max-w-xs">Building the future with cutting-edge technology. Trusted by 10,000+ teams worldwide.</p>
+      </div>
+      <div>
+        <h3 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Pages</h3>
+        <ul class="space-y-2.5 text-sm"><li><a href="home.html" class="hover:text-white hover:translate-x-0.5 transition-all inline-block">Home</a></li>
+<li><a href="about.html" class="hover:text-white hover:translate-x-0.5 transition-all inline-block">About</a></li>
+<li><a href="services.html" class="hover:text-white hover:translate-x-0.5 transition-all inline-block">Services</a></li>
+<li><a href="portfolio.html" class="hover:text-white hover:translate-x-0.5 transition-all inline-block">Portfolio</a></li>
+<li><a href="blog.html" class="hover:text-white hover:translate-x-0.5 transition-all inline-block">Blog</a></li>
+<li><a href="contact.html" class="hover:text-white hover:translate-x-0.5 transition-all inline-block">Contact</a></li>
+<li><a href="pricing.html" class="hover:text-white hover:translate-x-0.5 transition-all inline-block">Pricing</a></li>
+<li><a href="team.html" class="hover:text-white hover:translate-x-0.5 transition-all inline-block">Team</a></li>
+<li><a href="faq.html" class="hover:text-white hover:translate-x-0.5 transition-all inline-block">FAQ</a></li>
+<li><a href="testimonials.html" class="hover:text-white hover:translate-x-0.5 transition-all inline-block">Testimonials</a></li></ul>
+      </div>
+      <div>
+        <h3 class="text-white font-semibold text-sm uppercase tracking-wider mb-4">Contact</h3>
+        <ul class="space-y-2 text-sm">
+          <li class="flex items-center gap-2"><span aria-hidden="true">📧</span> hello@novatech.io</li>
+          <li class="flex items-center gap-2"><span aria-hidden="true">📞</span> +1 (555) 000-1234</li>
+          <li class="flex items-center gap-2"><span aria-hidden="true">📍</span> San Francisco, CA</li>
+        </ul>
+      </div>
+    </div>
+    <div class="border-t border-gray-800 pt-8 mb-8">
+      <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div><h3 class="text-white font-semibold mb-1">Stay in the loop</h3><p class="text-sm text-gray-400">Get the latest updates delivered to your inbox.</p></div>
+        <form class="flex gap-2 w-full sm:w-auto" onsubmit="event.preventDefault();showToast('Subscribed! 🎉')">
+          <input type="email" placeholder="your@email.com" required class="flex-1 sm:w-56 px-4 py-2.5 rounded-xl bg-gray-800 border border-gray-700 text-sm text-white placeholder-gray-500 focus:outline-none focus:border-[var(--primary)] transition-colors" aria-label="Email address"/>
+          <button type="submit" class="btn-gradient px-5 py-2.5 rounded-xl text-sm font-bold whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2 focus:ring-offset-gray-900">Subscribe</button>
+        </form>
+      </div>
+    </div>
+    <div class="flex flex-col sm:flex-row justify-between items-center gap-2 text-xs text-gray-500">
+      <span>&copy; 2025 NovaTech. All rights reserved.</span>
+      <span>Built with ❤️ · Website Builder System</span>
+    </div>
+  </div>
+</footer>
+<button id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})"
+        class="fixed bottom-6 right-6 z-40 w-11 h-11 rounded-xl btn-gradient
+               flex items-center justify-center text-white shadow-lg
+               hover:scale-110 transition-all focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2"
+        aria-label="Back to top">
+      <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7"/></svg>
+    </button>
+<script src="script.js"></script>
+</body>
+</html>

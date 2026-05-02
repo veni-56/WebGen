@@ -1,0 +1,186 @@
+{% extends 'base.html' %}
+{% block title %}Seller Dashboard — ShopWave{% endblock %}
+{% block content %}
+<div class="container-fluid px-3 px-md-4 py-4">
+
+  {# ── Header ─────────────────────────────────────── #}
+  <div class="d-flex justify-content-between align-items-start mb-4 flex-wrap gap-3">
+    <div>
+      <h4 class="fw-bold mb-1">
+        {% if profile %}{{ profile.shop_name }}{% else %}Seller Dashboard{% endif %}
+      </h4>
+      {% if profile %}
+      <a href="{{ url_for('customer.seller_store', shop_slug=profile.shop_slug) }}"
+         class="text-muted small text-decoration-none" target="_blank">
+        <i class="bi bi-box-arrow-up-right me-1"></i>shopwave.com/store/{{ profile.shop_slug }}
+      </a>
+      {% endif %}
+    </div>
+    <div class="d-flex gap-2 flex-wrap">
+      {% if profile %}
+      <a href="{{ url_for('seller.shop_profile') }}" class="btn btn-outline-secondary btn-sm rounded-pill">
+        <i class="bi bi-shop me-1"></i>Edit Shop
+      </a>
+      {% endif %}
+      <a href="{{ url_for('seller.add_product') }}" class="btn btn-primary btn-sm rounded-pill px-3">
+        <i class="bi bi-plus-circle me-1"></i>Add Product
+      </a>
+    </div>
+  </div>
+
+  {# ── Stats ──────────────────────────────────────── #}
+  <div class="row g-3 mb-4">
+    {% for val, label, icon, color in [
+      (products|length, 'Products', 'bi-box-seam', '#f43397'),
+      (total_orders, 'Total Orders', 'bi-receipt', '#1a73e8'),
+      (total_units, 'Units Sold', 'bi-bag-check', '#00a651'),
+      ('₹' ~ '%.0f'|format(total_earned), 'Net Earnings', 'bi-wallet2', '#ff6b35')
+    ] %}
+    <div class="col-6 col-md-3">
+      <div class="seller-stat-card">
+        <div class="d-flex align-items-center gap-3">
+          <div class="stat-icon" style="background:{{ color }}15;">
+            <i class="bi {{ icon }}" style="color:{{ color }};"></i>
+          </div>
+          <div>
+            <div class="stat-val" style="color:{{ color }};">{{ val }}</div>
+            <div class="stat-label">{{ label }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  {# ── Quick Actions ──────────────────────────────── #}
+  <div class="row g-3 mb-4">
+    {% for href, icon, label, color in [
+      (url_for('seller.orders'), 'bi-receipt', 'Orders', '#1a73e8'),
+      (url_for('seller.inventory'), 'bi-boxes', 'Inventory', '#00a651'),
+      (url_for('seller.shipments'), 'bi-truck', 'Shipments', '#ff6b35'),
+      (url_for('seller.earnings'), 'bi-graph-up', 'Earnings', '#f43397'),
+      (url_for('seller.seller_returns'), 'bi-arrow-return-left', 'Returns', '#7c3aed'),
+      (url_for('seller.support_tickets'), 'bi-headset', 'Support', '#0891b2')
+    ] %}
+    <div class="col-4 col-md-2">
+      <a href="{{ href }}" class="d-flex flex-column align-items-center gap-2 p-3 bg-white rounded-3 shadow-sm text-decoration-none text-dark h-100 text-center" style="transition:transform .2s,box-shadow .2s;" onmouseover="this.style.transform='translateY(-3px)';this.style.boxShadow='0 6px 20px rgba(0,0,0,.12)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+        <div style="width:44px;height:44px;border-radius:12px;background:{{ color }}15;display:flex;align-items:center;justify-content:center;">
+          <i class="bi {{ icon }}" style="color:{{ color }};font-size:1.2rem;"></i>
+        </div>
+        <span class="small fw-semibold">{{ label }}</span>
+      </a>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div class="row g-4">
+    {# ── Products Table ─────────────────────────────── #}
+    <div class="col-lg-8">
+      <div class="card shadow-sm">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <span><i class="bi bi-box-seam me-2 text-primary"></i>My Products</span>
+          <a href="{{ url_for('seller.add_product') }}" class="btn btn-sm btn-primary rounded-pill px-3">
+            <i class="bi bi-plus me-1"></i>Add New
+          </a>
+        </div>
+        <div class="card-body p-0">
+          {% if products %}
+          <div class="table-responsive">
+            <table class="table table-hover mb-0">
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Price</th>
+                  <th>Stock</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for p in products %}
+                <tr>
+                  <td>
+                    <div class="d-flex align-items-center gap-2">
+                      <img src="{{ url_for('static', filename='uploads/' + p.image) }}"
+                           style="width:44px;height:44px;object-fit:cover;border-radius:8px;"
+                           onerror="this.src='https://placehold.co/44x44/fce4f3/f43397?text=?'"/>
+                      <div>
+                        <div class="fw-semibold small">{{ p.name }}</div>
+                        <div class="text-muted" style="font-size:.72rem;">{{ p.category }}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="fw-bold text-primary">₹{{ '%.0f' % p.price }}</td>
+                  <td>
+                    {% if p.stock == 0 %}
+                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle">Out of Stock</span>
+                    {% elif p.stock < 5 %}
+                    <span class="badge bg-warning-subtle text-warning border border-warning-subtle">{{ p.stock }} left</span>
+                    {% else %}
+                    <span class="badge bg-success-subtle text-success border border-success-subtle">{{ p.stock }}</span>
+                    {% endif %}
+                  </td>
+                  <td>
+                    <span class="badge {% if p.status == 'active' %}bg-success{% elif p.status == 'draft' %}bg-secondary{% else %}bg-warning text-dark{% endif %}">
+                      {{ p.status|capitalize }}
+                    </span>
+                  </td>
+                  <td>
+                    <div class="d-flex gap-1">
+                      <a href="{{ url_for('seller.edit_product', pid=p.id) }}" class="btn btn-sm btn-outline-secondary rounded-pill px-2">
+                        <i class="bi bi-pencil"></i>
+                      </a>
+                      <form method="POST" action="{{ url_for('seller.delete_product', pid=p.id) }}" onsubmit="return confirm('Delete this product?')">
+                        <button class="btn btn-sm btn-outline-danger rounded-pill px-2"><i class="bi bi-trash"></i></button>
+                      </form>
+                    </div>
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <div class="text-center py-5">
+            <i class="bi bi-box display-3 text-muted"></i>
+            <p class="text-muted mt-3 mb-3">No products yet.</p>
+            <a href="{{ url_for('seller.add_product') }}" class="btn btn-primary rounded-pill px-4">Add Your First Product</a>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    {# ── Recent Orders ──────────────────────────────── #}
+    <div class="col-lg-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <span><i class="bi bi-receipt me-2 text-primary"></i>Recent Orders</span>
+          <a href="{{ url_for('seller.orders') }}" class="btn btn-sm btn-outline-primary rounded-pill px-3">View All</a>
+        </div>
+        <div class="card-body p-0">
+          {% if recent_orders %}
+          {% for o in recent_orders %}
+          {% set sc = {'pending':'warning','paid':'info','confirmed':'primary','shipped':'secondary','delivered':'success','cancelled':'danger'} %}
+          <div class="d-flex justify-content-between align-items-center p-3 {% if not loop.last %}border-bottom{% endif %}">
+            <div>
+              <div class="fw-semibold small">#{{ o.id }}</div>
+              <div class="text-muted" style="font-size:.72rem;">{{ o.customer.name }} · {{ o.created_at.strftime('%b %d') }}</div>
+            </div>
+            <div class="text-end">
+              <div class="fw-bold text-primary small">₹{{ '%.0f' % o.total_price }}</div>
+              <span class="badge bg-{{ sc.get(o.status, 'secondary') }}" style="font-size:.65rem;">{{ o.status|capitalize }}</span>
+            </div>
+          </div>
+          {% endfor %}
+          {% else %}
+          <div class="text-center py-4">
+            <p class="text-muted small mb-0">No orders yet.</p>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

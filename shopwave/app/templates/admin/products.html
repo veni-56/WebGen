@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% block title %}Manage Products — Admin — ShopWave{% endblock %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h3 class="fw-bold mb-0"><i class="bi bi-box-seam me-2 text-primary"></i>Manage Products</h3>
+  <span class="badge bg-primary fs-6">{{ products | length }} total</span>
+</div>
+
+<div class="card border-0 shadow-sm">
+  <div class="card-body p-0">
+    {% if products %}
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Stock</th>
+            <th>Seller</th>
+            <th>Added</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in products %}
+          <tr>
+            <td>
+              <img src="{{ url_for('static', filename='uploads/' + p.image) }}"
+                   class="rounded-2"
+                   style="width:50px;height:50px;object-fit:cover;"
+                   alt="{{ p.name }}"
+                   onerror="this.src='https://placehold.co/50x50/eee/999?text=?'" />
+            </td>
+            <td class="fw-semibold">{{ p.name }}</td>
+            <td><span class="badge bg-light text-secondary border">{{ p.category }}</span></td>
+            <td class="text-primary fw-bold">${{ '%.2f' % p.price }}</td>
+            <td>
+              {% if p.stock > 10 %}
+                <span class="badge bg-success-subtle text-success border border-success-subtle">{{ p.stock }}</span>
+              {% elif p.stock > 0 %}
+                <span class="badge bg-warning-subtle text-warning border border-warning-subtle">{{ p.stock }}</span>
+              {% else %}
+                <span class="badge bg-danger-subtle text-danger border border-danger-subtle">0</span>
+              {% endif %}
+            </td>
+            <td class="text-muted small">{{ p.seller.name }}</td>
+            <td class="text-muted small">{{ p.created_at.strftime('%b %d, %Y') }}</td>
+            <td>
+              <form method="POST" action="{{ url_for('admin.delete_product', pid=p.id) }}"
+                    onsubmit="return confirm('Delete product {{ p.name }}?')">
+                <button class="btn btn-sm btn-outline-danger">
+                  <i class="bi bi-trash me-1"></i>Delete
+                </button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="text-center py-5">
+      <i class="bi bi-box display-3 text-muted"></i>
+      <p class="text-muted mt-2">No products in the system yet.</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,136 @@
+{% extends 'base.html' %}
+{% block title %}Checkout — ShopWave{% endblock %}
+{% block content %}
+
+<div class="row justify-content-center">
+  <div class="col-lg-10">
+    <h3 class="fw-bold mb-4"><i class="bi bi-credit-card me-2 text-primary"></i>Checkout</h3>
+    <div class="row g-4">
+
+      <!-- Order form -->
+      <div class="col-md-7">
+        <div class="card border-0 shadow-sm mb-4">
+          <div class="card-header bg-white fw-bold border-0">
+            <i class="bi bi-geo-alt me-1 text-primary"></i>Delivery Address
+          </div>
+          <div class="card-body">
+            <form method="POST" action="{{ url_for('customer.checkout') }}" id="checkoutForm">
+              <div class="mb-3">
+                <label class="form-label fw-semibold">Full Delivery Address</label>
+                <textarea name="address" class="form-control" rows="4"
+                          placeholder="Enter your full delivery address including street, city, state, and ZIP code"
+                          required></textarea>
+              </div>
+
+              <!-- Coupon code -->
+              <div class="mb-3">
+                <label class="form-label fw-semibold"><i class="bi bi-tag me-1 text-success"></i>Coupon Code</label>
+                <div class="input-group">
+                  <input type="text" id="couponInput" name="coupon_code" class="form-control text-uppercase"
+                         placeholder="Enter coupon code (optional)"/>
+                  <button type="button" class="btn btn-outline-success" onclick="applyCoupon()">Apply</button>
+                </div>
+                <div id="couponMsg" class="form-text"></div>
+                <input type="hidden" id="discountAmount" name="_discount_display" value="0"/>
+              </div>
+
+              <div class="card bg-light border-0 mb-3">
+                <div class="card-body">
+                  <h6 class="fw-bold mb-3"><i class="bi bi-credit-card me-1 text-primary"></i>Payment</h6>
+                  <div class="form-check mb-2">
+                    <input class="form-check-input" type="radio" name="payment" id="payCard" value="card" checked />
+                    <label class="form-check-label" for="payCard">
+                      <i class="bi bi-credit-card-2-front me-1"></i>Credit / Debit Card
+                    </label>
+                  </div>
+                  <div class="form-check">
+                    <input class="form-check-input" type="radio" name="payment" id="payCod" value="cod" />
+                    <label class="form-check-label" for="payCod">
+                      <i class="bi bi-cash-coin me-1"></i>Cash on Delivery
+                    </label>
+                  </div>
+                  <p class="text-muted small mt-2 mb-0">
+                    <i class="bi bi-info-circle me-1"></i>
+                    Payment is simulated. A reference code will be generated automatically.
+                  </p>
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-success w-100 fw-semibold py-2">
+                <i class="bi bi-bag-check me-1"></i>Place Order — ${{ '%.2f' % total }}
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Order summary -->
+      <div class="col-md-5">
+        <div class="card border-0 shadow-sm">
+          <div class="card-header bg-white fw-bold border-0">
+            <i class="bi bi-receipt me-1 text-primary"></i>Order Summary
+          </div>
+          <div class="card-body p-0">
+            {% for item in items %}
+            <div class="d-flex align-items-center gap-3 p-3 {% if not loop.last %}border-bottom{% endif %}">
+              <img src="{{ url_for('static', filename='uploads/' + item.product.image) }}"
+                   class="rounded-2"
+                   style="width:55px;height:55px;object-fit:cover;"
+                   alt="{{ item.product.name }}"
+                   onerror="this.src='https://placehold.co/55x55/eee/999?text=?'" />
+              <div class="flex-grow-1">
+                <div class="fw-semibold small">{{ item.product.name }}</div>
+                <div class="text-muted small">Qty: {{ item.quantity }}</div>
+              </div>
+              <div class="fw-bold text-primary">${{ '%.2f' % (item.product.price * item.quantity) }}</div>
+            </div>
+            {% endfor %}
+            <div class="p-3 border-top">
+              <div class="d-flex justify-content-between mb-1">
+                <span>Subtotal</span><span>${{ '%.2f' % total }}</span>
+              </div>
+              <div class="d-flex justify-content-between text-success mb-1" id="discountRow" style="display:none!important">
+                <span>Discount</span><span id="discountDisplay">-$0.00</span>
+              </div>
+              <div class="d-flex justify-content-between fw-bold fs-5" id="totalRow">
+                <span>Total</span>
+                <span class="text-primary" id="finalTotal">${{ '%.2f' % total }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+const rawTotal = {{ total }};
+function applyCoupon() {
+  const code = document.getElementById('couponInput').value.trim();
+  if (!code) return;
+  fetch('{{ url_for("customer.validate_coupon") }}', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+    body: `code=${encodeURIComponent(code)}&total=${rawTotal}`
+  }).then(r => r.json()).then(data => {
+    const msg = document.getElementById('couponMsg');
+    if (data.ok) {
+      msg.className = 'form-text text-success fw-semibold';
+      msg.textContent = `✓ ${data.label} applied! You save $${data.discount.toFixed(2)}`;
+      document.getElementById('discountRow').style.removeProperty('display');
+      document.getElementById('discountDisplay').textContent = `-$${data.discount.toFixed(2)}`;
+      document.getElementById('finalTotal').textContent = `$${data.new_total.toFixed(2)}`;
+      document.querySelector('button[type=submit]').textContent = `Place Order — $${data.new_total.toFixed(2)}`;
+    } else {
+      msg.className = 'form-text text-danger';
+      msg.textContent = '✗ ' + data.message;
+    }
+  });
+}
+</script>
+{% endblock %}

@@ -1,0 +1,90 @@
+﻿<section class="py-20 px-4 sm:px-6 text-center bg-gradient-to-br from-primary-500/10 to-secondary-500/5 border-b border-gray-200 dark:border-gray-700">
+  <div class="max-w-3xl mx-auto">
+    <h1 class="text-4xl sm:text-5xl font-extrabold mb-4">Simple, Transparent <span class="bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent">Pricing</span></h1>
+    <p class="text-gray-500 dark:text-gray-400 text-lg">No hidden fees. No surprises. Cancel anytime.</p>
+  </div>
+</section>
+<section class="py-20 px-4 sm:px-6" x-data="{ yearly: false }">
+  <div class="max-w-6xl mx-auto">
+    <div class="flex items-center justify-center gap-4 mb-12">
+      <span class="text-sm font-medium" :class="!yearly ? 'text-primary-500' : 'text-gray-500 dark:text-gray-400'">Monthly</span>
+      <button @click="yearly=!yearly" class="relative w-12 h-6 rounded-full transition-colors" :class="yearly ? 'bg-primary-500' : 'bg-gray-300 dark:bg-gray-600'">
+        <span class="absolute top-0.5 left-0.5 w-5 h-5 bg-white rounded-full shadow transition-transform" :class="yearly ? 'translate-x-6' : 'translate-x-0'"></span>
+      </button>
+      <span class="text-sm font-medium" :class="yearly ? 'text-primary-500' : 'text-gray-500 dark:text-gray-400'">Yearly <span class="text-xs bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300 px-1.5 py-0.5 rounded-full font-semibold">Save 20%</span></span>
+    </div>
+    <div class="grid sm:grid-cols-3 gap-6 mb-20">
+      <div class="reveal bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-6 flex flex-col gap-3">
+        <div class="text-xs font-bold uppercase tracking-widest text-gray-500">Starter</div>
+        <div class="text-4xl font-extrabold">
+          <span x-text="yearly ? '$0' : '$0'">$0</span><span class="text-base font-normal text-gray-500">/mo</span>
+        </div>
+        <p class="text-sm text-gray-500 dark:text-gray-400">Perfect for side projects and early-stage startups.</p>
+        <ul class="space-y-2 text-sm flex-1">
+          <li class="flex items-center gap-2 text-gray-700 dark:text-gray-300"><span class="text-primary-500">&#10003;</span> 3 projects</li>
+          <li class="flex items-center gap-2 text-gray-700 dark:text-gray-300"><span class="text-primary-500">&#10003;</span> 10GB storage</li>
+          <li class="flex items-center gap-2 text-gray-700 dark:text-gray-300"><span class="text-primary-500">&#10003;</span> Community support</li>
+          <li class="flex items-center gap-2 text-gray-700 dark:text-gray-300"><span class="text-primary-500">&#10003;</span> Basic analytics</li>
+          <li class="flex items-center gap-2 text-gray-400"><span>&#8212;</span> Custom domains</li>
+          <li class="flex items-center gap-2 text-gray-400"><span>&#8212;</span> Priority support</li>
+          <li class="flex items-center gap-2 text-gray-400"><span>&#8212;</span> Team collaboration</li>
+        </ul>
+        <a href="contact.html" class="block text-center py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl text-sm font-semibold hover:border-primary-500 hover:text-primary-500 transition-colors">Get Started Free</a>
+      </div>
+      <div class="reveal relative bg-gradient-to-br from-primary-500/10 to-secondary-500/5 border-2 border-primary-500 rounded-2xl p-6 flex flex-col gap-3">
+        <div class="absolute -top-3 left-1/2 -translate-x-1/2 bg-gradient-to-r from-primary-500 to-secondary-500 text-white text-xs font-bold px-4 py-1 rounded-full">Most Popular</div>
+        <div class="text-xs font-bold uppercase tracking-widest text-primary-500">Pro</div>
+        <div class="text-4xl font-extrabold">
+          <span x-text="yearly ? '$39' : '$49'">$49</span><span class="text-base font-normal text-gray-500">/mo</span>
+        </div>
+        <p class="text-sm text-gray-500 dark:text-gray-400">For growing teams that need more power and flexibility.</p>
+        <ul class="space-y-2 text-sm flex-1">
+          <li class="flex items-center gap-2 text-gray-700 dark:text-gray-300"><span class="text-primary-500">&#10003;</span> Unlimited projects</li>
+          <li class="flex items-center gap-2 text-gray-700 dark:text-gray-300"><span class="text-primary-500">&#10003;</span> 100GB storage</li>
+          <li class="flex items-center gap-2 text-gray-700 dark:text-gray-300"><span class="text-primary-500">&#10003;</span> Priority support</li>
+          <li class="flex items-center gap-2 text-gray-700 dark:text-gray-300"><span class="text-primary-500">&#10003;</span> Advanced analytics</li>
+          <li class="flex items-center gap-2 text-gray-700 dark:text-gray-300"><span class="text-primary-500">&#10003;</span> Custom domains</li>
+          <li class="flex items-center gap-2 text-gray-700 dark:text-gray-300"><span class="text-primary-500">&#10003;</span> Team collaboration</li>
+          <li class="flex items-center gap-2 text-gray-400"><span>&#8212;</span> Dedicated support</li>
+        </ul>
+        <a href="contact.html" class="block text-center py-2.5 bg-gradient-to-r from-primary-500 to-secondary-500 text-white rounded-xl text-sm font-semibold hover:opacity-90">Start Pro Trial</a>
+      </div>
+      <div class="reveal bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-6 flex flex-col gap-3">
+        <div class="text-xs font-bold uppercase tracking-widest text-gray-500">Enterprise</div>
+        <div class="text-4xl font-extrabold">Custom</div>
+        <p class="text-sm text-gray-500 dark:text-gray-400">Tailored solutions for large organizations with complex needs.</p>
+        <ul class="space-y-2 text-sm flex-1">
+          <li class="flex items-center gap-2 text-gray-700 dark:text-gray-300"><span class="text-primary-500">&#10003;</span> Everything in Pro</li>
+          <li class="flex items-center gap-2 text-gray-700 dark:text-gray-300"><span class="text-primary-500">&#10003;</span> Unlimited storage</li>
+          <li class="flex items-center gap-2 text-gray-700 dark:text-gray-300"><span class="text-primary-500">&#10003;</span> Dedicated support</li>
+          <li class="flex items-center gap-2 text-gray-700 dark:text-gray-300"><span class="text-primary-500">&#10003;</span> SLA guarantee</li>
+          <li class="flex items-center gap-2 text-gray-700 dark:text-gray-300"><span class="text-primary-500">&#10003;</span> Custom contracts</li>
+          <li class="flex items-center gap-2 text-gray-700 dark:text-gray-300"><span class="text-primary-500">&#10003;</span> On-premise option</li>
+          <li class="flex items-center gap-2 text-gray-700 dark:text-gray-300"><span class="text-primary-500">&#10003;</span> Security audit</li>
+        </ul>
+        <a href="contact.html" class="block text-center py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl text-sm font-semibold hover:border-primary-500 hover:text-primary-500 transition-colors">Contact Sales</a>
+      </div>
+    </div>
+    <div class="max-w-3xl mx-auto" x-data="{ open: null }">
+      <h2 class="text-2xl font-bold text-center mb-8">Pricing <span class="bg-gradient-to-r from-primary-500 to-secondary-500 bg-clip-text text-transparent">FAQ</span></h2>
+      <div class="space-y-3">
+        <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden" :class="open===0 ? 'border-primary-500' : ''">
+          <button @click="open = open===0 ? null : 0" class="w-full flex justify-between items-center px-5 py-4 text-left font-medium text-sm">Can I change plans at any time?<span class="text-primary-500 text-lg" x-text="open===0 ? '&#8722;' : '&#43;'">+</span></button>
+          <div x-show="open===0" x-cloak class="px-5 pb-4 text-sm text-gray-500 dark:text-gray-400">Yes, you can upgrade or downgrade your plan at any time. Changes take effect immediately and are prorated.</div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden" :class="open===1 ? 'border-primary-500' : ''">
+          <button @click="open = open===1 ? null : 1" class="w-full flex justify-between items-center px-5 py-4 text-left font-medium text-sm">Is there a free trial?<span class="text-primary-500 text-lg" x-text="open===1 ? '&#8722;' : '&#43;'">+</span></button>
+          <div x-show="open===1" x-cloak class="px-5 pb-4 text-sm text-gray-500 dark:text-gray-400">Yes! The Pro plan comes with a 14-day free trial. No credit card required to start.</div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden" :class="open===2 ? 'border-primary-500' : ''">
+          <button @click="open = open===2 ? null : 2" class="w-full flex justify-between items-center px-5 py-4 text-left font-medium text-sm">What payment methods do you accept?<span class="text-primary-500 text-lg" x-text="open===2 ? '&#8722;' : '&#43;'">+</span></button>
+          <div x-show="open===2" x-cloak class="px-5 pb-4 text-sm text-gray-500 dark:text-gray-400">We accept all major credit cards, PayPal, and bank transfers for annual plans. Enterprise customers can also pay by invoice.</div>
+        </div>
+        <div class="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl overflow-hidden" :class="open===3 ? 'border-primary-500' : ''">
+          <button @click="open = open===3 ? null : 3" class="w-full flex justify-between items-center px-5 py-4 text-left font-medium text-sm">What happens when I cancel?<span class="text-primary-500 text-lg" x-text="open===3 ? '&#8722;' : '&#43;'">+</span></button>
+          <div x-show="open===3" x-cloak class="px-5 pb-4 text-sm text-gray-500 dark:text-gray-400">You can cancel anytime. Your account remains active until the end of the billing period. We do not offer refunds for partial months.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

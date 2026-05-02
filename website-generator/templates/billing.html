@@ -1,0 +1,141 @@
+{% extends 'base.html' %}
+{% block title %}Billing & API — WebGen{% endblock %}
+{% block content %}
+<div class="billing-page">
+  <div class="container">
+    <h2>Billing & API Keys</h2>
+
+    <!-- New API key display (one-time) -->
+    {% if new_key %}
+    <div class="new-key-banner">
+      <div class="nkb-icon">🔑</div>
+      <div class="nkb-content">
+        <strong>Your new API key — copy it now, it won't be shown again:</strong>
+        <div class="nkb-key-row">
+          <code id="newKeyCode">{{ new_key }}</code>
+          <button onclick="copyKey()" class="nkb-copy-btn">📋 Copy</button>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <div class="billing-grid">
+
+      <!-- Current plan -->
+      <div class="billing-card">
+        <h3>Current Plan</h3>
+        <div class="plan-display">
+          <div class="plan-badge" style="background:{{ plan_info.badge_color }}20;color:{{ plan_info.badge_color }};border:1px solid {{ plan_info.badge_color }}40">
+            {{ plan_info.name }}
+          </div>
+          <div class="plan-price">
+            {% if plan_info.price_monthly == 0 %}Free{% else %}${{ "%.2f"|format(plan_info.price_monthly) }}/mo{% endif %}
+          </div>
+        </div>
+        <ul class="plan-features-list">
+          {% for f in plan_info.features %}<li>✓ {{ f }}</li>{% endfor %}
+        </ul>
+        {% if sub and sub.current_period_end %}
+        <p class="billing-period">Renews: {{ sub.current_period_end[:10] }}</p>
+        {% endif %}
+        <div class="plan-actions">
+          <a href="{{ url_for('pricing') }}" class="billing-btn">View All Plans</a>
+          {% if plan != 'free' %}
+          <form method="POST" action="{{ url_for('billing_downgrade') }}" style="display:inline" onsubmit="return confirm('Downgrade to Free?')">
+            <button type="submit" class="billing-btn billing-btn-danger">Downgrade</button>
+          </form>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Usage -->
+      <div class="billing-card">
+        <h3>Usage Limits</h3>
+        <div class="usage-rows">
+          <div class="usage-row">
+            <span>AI Generations / hour</span>
+            <strong>{{ plan_info.generations }}</strong>
+          </div>
+          <div class="usage-row">
+            <span>Max Projects</span>
+            <strong>{{ plan_info.projects }}</strong>
+          </div>
+          <div class="usage-row">
+            <span>API Access</span>
+            <strong>{{ '✓ Yes' if plan == 'business' else '— No' }}</strong>
+          </div>
+        </div>
+        {% if plan == 'free' %}
+        <a href="{{ url_for('pricing') }}" class="billing-btn billing-btn-primary" style="margin-top:1rem;display:block;text-align:center">⚡ Upgrade for More</a>
+        {% endif %}
+      </div>
+
+      <!-- API Keys -->
+      <div class="billing-card billing-card-wide">
+        <div class="billing-card-header">
+          <h3>API Keys</h3>
+          {% if plan == 'business' %}
+          <form method="POST" action="{{ url_for('create_api_key_route') }}" class="create-key-form">
+            <input name="name" type="text" placeholder="Key name (e.g. Production)" required/>
+            <button type="submit" class="billing-btn billing-btn-primary">+ Create Key</button>
+          </form>
+          {% else %}
+          <a href="{{ url_for('pricing') }}" class="billing-btn">Upgrade to Business for API access</a>
+          {% endif %}
+        </div>
+        {% if api_keys %}
+        <table class="billing-table">
+          <thead><tr><th>Name</th><th>Prefix</th><th>Last Used</th><th>Created</th><th></th></tr></thead>
+          <tbody>
+          {% for key in api_keys %}
+          <tr>
+            <td>{{ key.name }}</td>
+            <td><code>{{ key.key_prefix }}...</code></td>
+            <td>{{ key.last_used[:10] if key.last_used else 'Never' }}</td>
+            <td>{{ key.created_at[:10] }}</td>
+            <td>
+              <form method="POST" action="{{ url_for('delete_api_key_route', key_id=key.id) }}"
+                    onsubmit="return confirm('Delete this API key?')">
+                <button type="submit" class="billing-btn billing-btn-danger">Delete</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <p class="billing-empty">No API keys yet.{% if plan == 'business' %} Create one above.{% endif %}</p>
+        {% endif %}
+
+        {% if plan == 'business' %}
+        <div class="api-docs-box">
+          <h4>API Usage</h4>
+          <pre><code>curl -X POST https://yourapp.com/api/v1/generate \
+  -H "Authorization: Bearer wg_your_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{"prompt": "Create a portfolio website with dark theme"}'</code></pre>
+        </div>
+        {% endif %}
+      </div>
+
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function copyKey() {
+  const code = document.getElementById('newKeyCode')?.textContent;
+  if (code) {
+    navigator.clipboard.writeText(code).catch(() => {
+      const ta = document.createElement('textarea');
+      ta.value = code; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); document.body.removeChild(ta);
+    });
+    const btn = document.querySelector('.nkb-copy-btn');
+    if (btn) { btn.textContent = '✅ Copied!'; setTimeout(() => { btn.textContent = '📋 Copy'; }, 2000); }
+  }
+}
+</script>
+{% endblock %}

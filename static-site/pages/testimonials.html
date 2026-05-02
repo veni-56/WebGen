@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="{{site_name}} Testimonials — What our customers say about us."/>
+  <title>Testimonials — {{site_name}}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:'class'}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="stylesheet" href="../style.css"/>
+  <style>:root{--primary:{{primary_color}};--secondary:{{secondary_color}};--primary-rgb:{{primary_rgb}};--secondary-rgb:{{secondary_rgb}}}</style>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 antialiased">
+<div id="scrollProgress"></div>
+<div id="navbar"></div>
+
+<section class="py-20 px-4 bg-gradient-to-br from-indigo-50 via-white to-pink-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900 text-center border-b border-gray-100 dark:border-gray-800">
+  <div class="max-w-3xl mx-auto reveal">
+    <span class="text-primary text-sm font-semibold uppercase tracking-wider">Social Proof</span>
+    <h1 class="text-4xl md:text-5xl font-black mt-2 mb-4 dark:text-white">What Our <span class="gradient-text">Customers Say</span></h1>
+    <p class="text-lg text-gray-500 dark:text-gray-400">Don't take our word for it — hear from the teams building with {{site_name}} every day.</p>
+  </div>
+</section>
+
+<!-- Rating summary -->
+<section class="py-12 px-4 bg-gray-50 dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800" aria-label="Overall rating summary">
+  <div class="max-w-4xl mx-auto flex flex-wrap items-center justify-center gap-8 reveal">
+    <div class="text-center">
+      <div class="text-6xl font-black gradient-text" aria-label="4.9 out of 5 stars">4.9</div>
+      <div class="text-amber-400 text-xl mt-1" aria-hidden="true">⭐⭐⭐⭐⭐</div>
+      <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">Average Rating</div>
+    </div>
+    <div class="w-px h-16 bg-gray-200 dark:bg-gray-700 hidden sm:block" aria-hidden="true"></div>
+    <div class="text-center"><div class="text-4xl font-black text-primary">2,400+</div><div class="text-sm text-gray-500 dark:text-gray-400 mt-1">Reviews</div></div>
+    <div class="w-px h-16 bg-gray-200 dark:bg-gray-700 hidden sm:block" aria-hidden="true"></div>
+    <div class="text-center"><div class="text-4xl font-black text-primary">98%</div><div class="text-sm text-gray-500 dark:text-gray-400 mt-1">Would Recommend</div></div>
+    <div class="w-px h-16 bg-gray-200 dark:bg-gray-700 hidden sm:block" aria-hidden="true"></div>
+    <div class="text-center"><div class="text-4xl font-black text-primary">G2</div><div class="text-sm text-gray-500 dark:text-gray-400 mt-1">Leader 2025</div></div>
+  </div>
+</section>
+
+<section class="py-24 px-4">
+  <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+    <blockquote class="reveal card-hover card-gradient-border relative glass rounded-2xl p-7 border border-gray-100 dark:border-gray-800">
+      <div class="absolute top-5 right-6 text-5xl text-primary opacity-20 font-black leading-none" aria-hidden="true">"</div>
+      <div class="flex gap-0.5 mb-4 text-amber-400" aria-label="5 stars">⭐⭐⭐⭐⭐</div>
+      <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed italic mb-5">"{{site_name}} cut our deployment time by 80%. The auto-scaling alone saved us thousands in infrastructure costs. Absolutely game-changing."</p>
+      <footer class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full btn-gradient flex items-center justify-center text-white font-bold text-sm flex-shrink-0" aria-hidden="true">SC</div>
+        <div><cite class="font-semibold text-sm dark:text-white not-italic">Sarah Chen</cite><div class="text-xs text-gray-400">CTO, TechFlow Inc.</div></div>
+      </footer>
+    </blockquote>
+
+    <blockquote class="reveal card-hover card-gradient-border relative glass rounded-2xl p-7 border border-gray-100 dark:border-gray-800">
+      <div class="absolute top-5 right-6 text-5xl text-primary opacity-20 font-black leading-none" aria-hidden="true">"</div>
+      <div class="flex gap-0.5 mb-4 text-amber-400" aria-label="5 stars">⭐⭐⭐⭐⭐</div>
+      <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed italic mb-5">"The best developer experience I've had in 10 years. The documentation is excellent and support is incredibly fast. Highly recommend."</p>
+      <footer class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full btn-gradient flex items-center justify-center text-white font-bold text-sm flex-shrink-0" aria-hidden="true">MJ</div>
+        <div><cite class="font-semibold text-sm dark:text-white not-italic">Marcus Johnson</cite><div class="text-xs text-gray-400">Lead Engineer, StartupX</div></div>
+      </footer>
+    </blockquote>
+
+    <blockquote class="reveal card-hover card-gradient-border relative glass rounded-2xl p-7 border border-gray-100 dark:border-gray-800">
+      <div class="absolute top-5 right-6 text-5xl text-primary opacity-20 font-black leading-none" aria-hidden="true">"</div>
+      <div class="flex gap-0.5 mb-4 text-amber-400" aria-label="5 stars">⭐⭐⭐⭐⭐</div>
+      <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed italic mb-5">"We migrated 50+ microservices to {{site_name}} in a weekend. Zero downtime, zero issues. The team support was outstanding throughout."</p>
+      <footer class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full btn-gradient flex items-center justify-center text-white font-bold text-sm flex-shrink-0" aria-hidden="true">AP</div>
+        <div><cite class="font-semibold text-sm dark:text-white not-italic">Aisha Patel</cite><div class="text-xs text-gray-400">VP Engineering, ScaleUp</div></div>
+      </footer>
+    </blockquote>
+
+    <blockquote class="reveal card-hover card-gradient-border relative glass rounded-2xl p-7 border border-gray-100 dark:border-gray-800">
+      <div class="absolute top-5 right-6 text-5xl text-primary opacity-20 font-black leading-none" aria-hidden="true">"</div>
+      <div class="flex gap-0.5 mb-4 text-amber-400" aria-label="5 stars">⭐⭐⭐⭐⭐</div>
+      <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed italic mb-5">"Our infrastructure costs dropped by 60% after switching to {{site_name}}. The ROI was immediate and the performance improvements were dramatic."</p>
+      <footer class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full btn-gradient flex items-center justify-center text-white font-bold text-sm flex-shrink-0" aria-hidden="true">DL</div>
+        <div><cite class="font-semibold text-sm dark:text-white not-italic">David Lee</cite><div class="text-xs text-gray-400">CTO, FinanceApp</div></div>
+      </footer>
+    </blockquote>
+
+    <blockquote class="reveal card-hover card-gradient-border relative glass rounded-2xl p-7 border border-gray-100 dark:border-gray-800">
+      <div class="absolute top-5 right-6 text-5xl text-primary opacity-20 font-black leading-none" aria-hidden="true">"</div>
+      <div class="flex gap-0.5 mb-4 text-amber-400" aria-label="5 stars">⭐⭐⭐⭐⭐</div>
+      <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed italic mb-5">"The AI-powered insights have transformed how we understand our users. We've increased conversion by 35% in just two months."</p>
+      <footer class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full btn-gradient flex items-center justify-center text-white font-bold text-sm flex-shrink-0" aria-hidden="true">RN</div>
+        <div><cite class="font-semibold text-sm dark:text-white not-italic">Rachel Nguyen</cite><div class="text-xs text-gray-400">Product Lead, GrowthCo</div></div>
+      </footer>
+    </blockquote>
+
+    <blockquote class="reveal card-hover card-gradient-border relative glass rounded-2xl p-7 border border-gray-100 dark:border-gray-800">
+      <div class="absolute top-5 right-6 text-5xl text-primary opacity-20 font-black leading-none" aria-hidden="true">"</div>
+      <div class="flex gap-0.5 mb-4 text-amber-400" aria-label="5 stars">⭐⭐⭐⭐⭐</div>
+      <p class="text-sm text-gray-600 dark:text-gray-300 leading-relaxed italic mb-5">"I've tried every major cloud platform. {{site_name}} is the only one that actually delivers on its promises. The uptime is real, the support is real."</p>
+      <footer class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-full btn-gradient flex items-center justify-center text-white font-bold text-sm flex-shrink-0" aria-hidden="true">TM</div>
+        <div><cite class="font-semibold text-sm dark:text-white not-italic">Tom Martinez</cite><div class="text-xs text-gray-400">Founder, DevStudio</div></div>
+      </footer>
+    </blockquote>
+
+  </div>
+</section>
+
+<section class="py-16 px-4 bg-gradient-to-r from-indigo-50 to-pink-50 dark:from-gray-900 dark:to-gray-900 border-t border-gray-100 dark:border-gray-800 text-center">
+  <div class="max-w-xl mx-auto reveal">
+    <h2 class="text-2xl font-black mb-3 dark:text-white">Ready to join them?</h2>
+    <p class="text-gray-500 dark:text-gray-400 mb-6">Start your free trial today. No credit card required.</p>
+    <div class="flex flex-wrap gap-4 justify-center">
+      <a href="contact.html" class="btn-gradient px-7 py-3 rounded-full font-bold text-sm
+               focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2">
+        Start Free Trial
+      </a>
+      <a href="pricing.html" class="btn-outline-primary px-7 py-3 rounded-full font-bold text-sm
+               focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2">
+        View Pricing →
+      </a>
+    </div>
+  </div>
+</section>
+
+<div id="footer"></div>
+<script src="../script.js"></script>
+</body>
+</html>

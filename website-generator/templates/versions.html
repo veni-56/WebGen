@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}Version History — {{ project.name }}{% endblock %}
+{% block content %}
+<div class="versions-page">
+  <div class="container">
+    <div class="page-header">
+      <div>
+        <h2>Version History</h2>
+        <p class="muted">{{ project.name }}</p>
+      </div>
+      <a href="{{ url_for('editor', project_id=project.id) }}" class="btn-back">← Back to Editor</a>
+    </div>
+
+    {% if versions %}
+    <div class="versions-list">
+      {% for v in versions %}
+      <div class="version-card">
+        <div class="version-info">
+          <span class="version-label">{{ v.label or 'Auto-save' }}</span>
+          <span class="version-date">{{ v.created_at[:16] }}</span>
+        </div>
+        <div class="version-config">
+          {% set cfg = v.config | from_json %}
+          <span>{{ cfg.get('site_name','—') }}</span>
+          <span class="dot">·</span>
+          <span>{{ cfg.get('project_type','—') }}</span>
+          <span class="dot">·</span>
+          <span>{{ cfg.get('sections', [])|join(', ') }}</span>
+        </div>
+        <button class="btn-action" onclick="restoreVersion('{{ project.id }}', {{ v.config | tojson | e }})">
+          ↩ Restore
+        </button>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <p>No version history yet. Versions are saved automatically when you edit.</p>
+    </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+async function restoreVersion(projectId, configStr) {
+  if (!confirm('Restore this version? Current state will be saved first.')) return;
+  const res = await fetch('/api/version/restore', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({project_id: projectId, config: configStr})
+  });
+  const data = await res.json();
+  if (data.ok) {
+    alert('Version restored!');
+    window.location.href = '/editor/' + projectId;
+  } else {
+    alert('Error: ' + (data.error || 'Unknown error'));
+  }
+}
+</script>
+{% endblock %}

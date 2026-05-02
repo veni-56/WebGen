@@ -1,0 +1,169 @@
+{% extends 'base.html' %}
+{% block title %}Become a Supplier — ShopWave{% endblock %}
+{% block content %}
+
+<div class="row justify-content-center">
+  <div class="col-lg-10">
+
+    {# ── Hero ── #}
+    <div class="text-center py-5 mb-4"
+         style="background: linear-gradient(135deg, #6610f2, #0d6efd); border-radius:12px;">
+      <div class="text-white">
+        <i class="bi bi-shop fs-1"></i>
+        <h2 class="fw-bold mt-2">Become a ShopWave Seller</h2>
+        <p class="lead mb-4">Reach millions of customers across India. Start selling in minutes.</p>
+        <a href="{{ url_for('auth.signup', role='seller') }}" class="btn btn-light btn-lg fw-semibold px-5">
+          <i class="bi bi-rocket-takeoff me-1"></i>Start Selling Now
+        </a>
+      </div>
+    </div>
+
+    {# ── Stats ── #}
+    <div class="row g-3 mb-5">
+      <div class="col-6 col-md-3">
+        <div class="card border-0 shadow-sm text-center p-3">
+          <div class="fs-2 fw-bold text-primary">{{ stats.sellers }}+</div>
+          <div class="text-muted small">Active Sellers</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="card border-0 shadow-sm text-center p-3">
+          <div class="fs-2 fw-bold text-success">{{ stats.products }}+</div>
+          <div class="text-muted small">Products Listed</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="card border-0 shadow-sm text-center p-3">
+          <div class="fs-2 fw-bold text-warning">{{ stats.orders }}+</div>
+          <div class="text-muted small">Orders Delivered</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="card border-0 shadow-sm text-center p-3">
+          <div class="fs-2 fw-bold text-info">{{ stats.customers }}+</div>
+          <div class="text-muted small">Customers</div>
+        </div>
+      </div>
+    </div>
+
+    {# ── Benefits ── #}
+    <h4 class="fw-bold mb-4 text-center">Why Sell on ShopWave?</h4>
+    <div class="row g-4 mb-5">
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center p-4">
+            <i class="bi bi-people fs-1 text-primary mb-3"></i>
+            <h5 class="fw-semibold mb-2">Massive Reach</h5>
+            <p class="text-muted small mb-0">
+              Access millions of active buyers across India. Your products, their screens.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center p-4">
+            <i class="bi bi-lightning-charge fs-1 text-warning mb-3"></i>
+            <h5 class="fw-semibold mb-2">Quick Setup</h5>
+            <p class="text-muted small mb-0">
+              Create your shop, upload products, and start selling — all in under 10 minutes.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center p-4">
+            <i class="bi bi-wallet2 fs-1 text-success mb-3"></i>
+            <h5 class="fw-semibold mb-2">Fast Payments</h5>
+            <p class="text-muted small mb-0">
+              Get paid directly to your bank account. Transparent earnings, no hidden fees.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center p-4">
+            <i class="bi bi-shield-check fs-1 text-info mb-3"></i>
+            <h5 class="fw-semibold mb-2">Secure Platform</h5>
+            <p class="text-muted small mb-0">
+              Fraud protection, secure payments, and buyer-seller dispute resolution.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center p-4">
+            <i class="bi bi-graph-up-arrow fs-1 text-danger mb-3"></i>
+            <h5 class="fw-semibold mb-2">Growth Tools</h5>
+            <p class="text-muted small mb-0">
+              Analytics, inventory management, and promotional tools to scale your business.
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card border-0 shadow-sm h-100">
+          <div class="card-body text-center p-4">
+            <i class="bi bi-headset fs-1 text-primary mb-3"></i>
+            <h5 class="fw-semibold mb-2">24/7 Support</h5>
+            <p class="text-muted small mb-0">
+              Dedicated seller support team ready to help you succeed.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {# ── How It Works ── #}
+    <div class="card border-0 shadow-sm mb-5">
+      <div class="card-body p-4">
+        <h5 class="fw-bold mb-4 text-center">How It Works</h5>
+        <div class="row g-4">
+          <div class="col-md-3 text-center">
+            <div class="rounded-circle bg-primary text-white d-inline-flex align-items-center justify-content-center mb-3"
+                 style="width:60px;height:60px;font-size:1.5rem;font-weight:bold;">1</div>
+            <h6 class="fw-semibold">Sign Up</h6>
+            <p class="text-muted small">Create your seller account in seconds.</p>
+          </div>
+          <div class="col-md-3 text-center">
+            <div class="rounded-circle bg-success text-white d-inline-flex align-items-center justify-content-center mb-3"
+                 style="width:60px;height:60px;font-size:1.5rem;font-weight:bold;">2</div>
+            <h6 class="fw-semibold">List Products</h6>
+            <p class="text-muted small">Upload photos, set prices, and go live.</p>
+          </div>
+          <div class="col-md-3 text-center">
+            <div class="rounded-circle bg-warning text-white d-inline-flex align-items-center justify-content-center mb-3"
+                 style="width:60px;height:60px;font-size:1.5rem;font-weight:bold;">3</div>
+            <h6 class="fw-semibold">Get Orders</h6>
+            <p class="text-muted small">Customers discover and buy your products.</p>
+          </div>
+          <div class="col-md-3 text-center">
+            <div class="rounded-circle bg-info text-white d-inline-flex align-items-center justify-content-center mb-3"
+                 style="width:60px;height:60px;font-size:1.5rem;font-weight:bold;">4</div>
+            <h6 class="fw-semibold">Get Paid</h6>
+            <p class="text-muted small">Earnings credited directly to your account.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {# ── CTA ── #}
+    <div class="text-center py-4">
+      <h4 class="fw-bold mb-3">Ready to grow your business?</h4>
+      <p class="text-muted mb-4">Join thousands of successful sellers on ShopWave today.</p>
+      <a href="{{ url_for('auth.signup') }}?role=seller" class="btn btn-primary btn-lg px-5 fw-semibold">
+        <i class="bi bi-rocket-takeoff me-1"></i>Start Selling Now
+      </a>
+      <div class="mt-3">
+        <small class="text-muted">Already have an account?</small>
+        <a href="{{ url_for('auth.login') }}" class="ms-1 small fw-semibold">Login</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}

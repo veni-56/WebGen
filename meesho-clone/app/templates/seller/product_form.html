@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}{% if product %}Edit{% else %}Add{% endif %} Product — Meesho{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-md-7">
+      <div class="card border-0 shadow rounded-4 p-4">
+        <h5 class="fw-bold mb-4">
+          {% if product %}<i class="bi bi-pencil"></i> Edit Product
+          {% else %}<i class="bi bi-plus-circle"></i> Add New Product{% endif %}
+        </h5>
+        <form method="POST" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label class="form-label">Product Name *</label>
+            <input type="text" name="name" class="form-control" required
+                   value="{{ product.name if product else '' }}"/>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea name="description" class="form-control" rows="3">{{ product.description if product else '' }}</textarea>
+          </div>
+          <div class="row g-3 mb-3">
+            <div class="col">
+              <label class="form-label">Price (₹) *</label>
+              <input type="number" name="price" class="form-control" step="0.01" min="0" required
+                     value="{{ product.price if product else '' }}"/>
+            </div>
+            <div class="col">
+              <label class="form-label">Stock *</label>
+              <input type="number" name="stock" class="form-control" min="0" required
+                     value="{{ product.stock if product else '' }}"/>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Category</label>
+            <select name="category" class="form-select">
+              {% for cat in categories %}
+              <option value="{{ cat }}" {% if product and product.category == cat %}selected{% endif %}>{{ cat }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="mb-4">
+            <label class="form-label">Product Image</label>
+            {% if product and product.image != 'default.png' %}
+            <div class="mb-2">
+              <img src="{{ url_for('static', filename='uploads/' + product.image) }}"
+                   style="height:80px;border-radius:8px" alt="current"/>
+              <span class="text-muted small ms-2">Current image</span>
+            </div>
+            {% endif %}
+            <input type="file" name="image" class="form-control" accept="image/*"/>
+          </div>
+          <div class="d-flex gap-2">
+            <button class="btn btn-primary rounded-pill px-4">
+              {% if product %}Save Changes{% else %}Add Product{% endif %}
+            </button>
+            <a href="{{ url_for('seller.dashboard') }}" class="btn btn-outline-secondary rounded-pill">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

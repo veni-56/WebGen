@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block title %}Shipments — ShopWave Seller{% endblock %}
+{% block content %}
+
+<h4 class="fw-bold mb-4"><i class="bi bi-truck me-1 text-primary"></i>Shipment Tracking</h4>
+
+{% if shipments %}
+<div class="card border-0 shadow-sm">
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Order #</th>
+            <th>Customer</th>
+            <th>Carrier</th>
+            <th>Tracking #</th>
+            <th>Status</th>
+            <th>Est. Delivery</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in shipments %}
+          <tr>
+            <td><a href="{{ url_for('customer.order_detail', oid=s.order_id) }}" class="text-primary fw-semibold">#{{ s.order_id }}</a></td>
+            <td class="small">{{ s.order.customer.name }}</td>
+            <td class="small">{{ s.carrier or '-' }}</td>
+            <td class="small font-monospace">{{ s.tracking_number or '-' }}</td>
+            <td>
+              {% if s.status == 'delivered' %}<span class="badge bg-success">Delivered</span>
+              {% elif s.status == 'in_transit' %}<span class="badge bg-info">In Transit</span>
+              {% elif s.status == 'dispatched' %}<span class="badge bg-primary">Dispatched</span>
+              {% elif s.status == 'out_for_delivery' %}<span class="badge bg-warning text-dark">Out for Delivery</span>
+              {% elif s.status == 'returned' %}<span class="badge bg-danger">Returned</span>
+              {% else %}<span class="badge bg-secondary">Pending</span>{% endif %}
+            </td>
+            <td class="small text-muted">
+              {{ s.estimated_delivery.strftime('%b %d, %Y') if s.estimated_delivery else '-' }}
+            </td>
+            <td>
+              <button class="btn btn-outline-primary btn-sm" type="button"
+                      data-bs-toggle="collapse" data-bs-target="#update-{{ s.id }}">
+                <i class="bi bi-pencil"></i> Update
+              </button>
+              <div class="collapse mt-2" id="update-{{ s.id }}">
+                <form method="POST" action="{{ url_for('seller.update_shipment', oid=s.order_id) }}"
+                      class="card card-body p-2 border-0 bg-light">
+                  <div class="row g-2">
+                    <div class="col-6">
+                      <input type="text" name="carrier" class="form-control form-control-sm"
+                             placeholder="Carrier" value="{{ s.carrier or '' }}" />
+                    </div>
+                    <div class="col-6">
+                      <input type="text" name="tracking_number" class="form-control form-control-sm"
+                             placeholder="Tracking #" value="{{ s.tracking_number or '' }}" />
+                    </div>
+                    <div class="col-6">
+                      <select name="status" class="form-select form-select-sm">
+                        {% for st in ['pending','dispatched','in_transit','out_for_delivery','delivered','returned'] %}
+                        <option value="{{ st }}" {% if s.status == st %}selected{% endif %}>{{ st|replace('_',' ')|title }}</option>
+                        {% endfor %}
+                      </select>
+                    </div>
+                    <div class="col-6">
+                      <input type="date" name="estimated_delivery" class="form-control form-control-sm"
+                             value="{{ s.estimated_delivery.strftime('%Y-%m-%d') if s.estimated_delivery else '' }}" />
+                    </div>
+                    <div class="col-12">
+                      <button type="submit" class="btn btn-primary btn-sm w-100">Save</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% else %}
+<div class="text-center py-5">
+  <i class="bi bi-truck fs-1 text-muted"></i>
+  <h5 class="mt-3 text-muted">No shipments yet</h5>
+  <p class="text-muted">Shipments will appear here once orders are placed.</p>
+</div>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Withdrawal Requests — Admin{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h4 class="fw-bold mb-0"><i class="bi bi-wallet2 me-2 text-primary"></i>Withdrawal Requests</h4>
+  <a href="{{ url_for('admin.dashboard') }}" class="btn btn-outline-secondary btn-sm">← Dashboard</a>
+</div>
+<div class="card border-0 shadow-sm">
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr><th>#</th><th>Seller</th><th>Amount</th><th>UPI ID</th><th>Status</th><th>Date</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+          {% for r in reqs %}
+          <tr>
+            <td>{{ r.id }}</td>
+            <td class="fw-semibold">{{ r.seller.name }}</td>
+            <td class="fw-bold text-success">${{ '%.2f' % r.amount }}</td>
+            <td class="small">{{ r.upi_id }}</td>
+            <td>
+              <span class="badge {% if r.status=='approved' %}bg-success{% elif r.status=='rejected' %}bg-danger{% else %}bg-warning text-dark{% endif %}">
+                {{ r.status|capitalize }}
+              </span>
+            </td>
+            <td class="text-muted small">{{ r.created_at.strftime('%b %d, %Y') }}</td>
+            <td>
+              {% if r.status == 'pending' %}
+              <form method="POST" action="{{ url_for('admin.withdrawal_action', rid=r.id) }}" class="d-flex gap-1">
+                <input type="text" name="note" class="form-control form-control-sm" placeholder="Note (optional)" style="width:140px"/>
+                <button name="action" value="approved" class="btn btn-sm btn-success">Approve</button>
+                <button name="action" value="rejected" class="btn btn-sm btn-danger">Reject</button>
+              </form>
+              {% else %}
+              <span class="text-muted small">{{ r.note or '—' }}</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% else %}
+          <tr><td colspan="7" class="text-center text-muted py-4">No withdrawal requests.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

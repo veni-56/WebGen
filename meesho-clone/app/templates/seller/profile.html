@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Shop Profile — Meesho{% endblock %}
+{% block content %}
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-md-7">
+      <div class="card border-0 shadow rounded-4 p-4">
+        <h5 class="fw-bold mb-4"><i class="bi bi-shop text-primary"></i> Shop Profile</h5>
+
+        <!-- Preview -->
+        <div class="d-flex align-items-center gap-3 mb-4 p-3 bg-light rounded-3">
+          {% if profile.shop_logo != 'default.png' %}
+          <img src="{{ url_for('static', filename='uploads/' + profile.shop_logo) }}"
+               class="rounded-circle" style="width:60px;height:60px;object-fit:cover"/>
+          {% else %}
+          <div class="avatar-lg">{{ current_user.username[0]|upper }}</div>
+          {% endif %}
+          <div>
+            <p class="fw-bold mb-0">{{ profile.shop_name or current_user.username }}</p>
+            <p class="text-muted small mb-0">{{ profile.description or 'No description yet.' }}</p>
+          </div>
+        </div>
+
+        <form method="POST" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label class="form-label">Shop Name</label>
+            <input type="text" name="shop_name" class="form-control"
+                   value="{{ profile.shop_name or '' }}" placeholder="{{ current_user.username }}"/>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Shop Description</label>
+            <textarea name="description" class="form-control" rows="3"
+                      placeholder="Tell customers about your shop…">{{ profile.description or '' }}</textarea>
+          </div>
+          <div class="mb-4">
+            <label class="form-label">Shop Logo</label>
+            <input type="file" name="shop_logo" class="form-control" accept="image/*"/>
+          </div>
+          <div class="d-flex gap-2">
+            <button class="btn btn-primary rounded-pill px-4">Save Profile</button>
+            <a href="{{ url_for('seller.dashboard') }}" class="btn btn-outline-secondary rounded-pill">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

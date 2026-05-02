@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% block title %}Support — ShopWave Seller{% endblock %}
+{% block content %}
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h4 class="fw-bold mb-0"><i class="bi bi-headset me-1 text-primary"></i>Support Tickets</h4>
+  <button class="btn btn-primary btn-sm" type="button"
+          data-bs-toggle="collapse" data-bs-target="#newTicketForm">
+    <i class="bi bi-plus-circle me-1"></i>New Ticket
+  </button>
+</div>
+
+<div class="collapse mb-4" id="newTicketForm">
+  <div class="card border-0 shadow-sm">
+    <div class="card-header bg-white fw-semibold border-0">Create Support Ticket</div>
+    <div class="card-body">
+      <form method="POST" action="{{ url_for('seller.create_ticket') }}">
+        <div class="row g-3">
+          <div class="col-md-8">
+            <label class="form-label fw-semibold small">Subject</label>
+            <input type="text" name="subject" class="form-control"
+                   placeholder="Brief description of your issue" required />
+          </div>
+          <div class="col-md-4">
+            <label class="form-label fw-semibold small">Priority</label>
+            <select name="priority" class="form-select">
+              <option value="low">Low</option>
+              <option value="normal" selected>Normal</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+          <div class="col-12">
+            <label class="form-label fw-semibold small">Description</label>
+            <textarea name="description" class="form-control" rows="4"
+                      placeholder="Describe your issue in detail..." required></textarea>
+          </div>
+          <div class="col-12">
+            <button type="submit" class="btn btn-primary fw-semibold">
+              <i class="bi bi-send me-1"></i>Submit Ticket
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% if tickets %}
+<div class="card border-0 shadow-sm">
+  <div class="card-body p-0">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>#</th>
+            <th>Subject</th>
+            <th>Priority</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Admin Reply</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for t in tickets %}
+          <tr>
+            <td class="fw-semibold text-muted small">{{ t.id }}</td>
+            <td>
+              <div class="fw-semibold small">{{ t.subject }}</div>
+              <div class="text-muted small text-truncate" style="max-width:250px;">{{ t.description }}</div>
+            </td>
+            <td>
+              {% if t.priority == 'high' %}<span class="badge bg-danger">High</span>
+              {% elif t.priority == 'low' %}<span class="badge bg-secondary">Low</span>
+              {% else %}<span class="badge bg-info">Normal</span>{% endif %}
+            </td>
+            <td>
+              {% if t.status == 'open' %}<span class="badge bg-warning text-dark">Open</span>
+              {% elif t.status == 'in_progress' %}<span class="badge bg-primary">In Progress</span>
+              {% elif t.status == 'resolved' %}<span class="badge bg-success">Resolved</span>
+              {% else %}<span class="badge bg-secondary">Closed</span>{% endif %}
+            </td>
+            <td class="small text-muted">{{ t.created_at.strftime('%b %d, %Y') }}</td>
+            <td class="small">
+              {% if t.admin_reply %}
+              <span class="text-success"><i class="bi bi-check-circle me-1"></i>{{ t.admin_reply[:80] }}{% if t.admin_reply|length > 80 %}...{% endif %}</span>
+              {% else %}
+              <span class="text-muted">Awaiting response</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% else %}
+<div class="text-center py-5">
+  <i class="bi bi-headset fs-1 text-muted"></i>
+  <h5 class="mt-3 text-muted">No support tickets</h5>
+  <p class="text-muted">Create a ticket if you need help from our team.</p>
+</div>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+{% block title %}AI Generate — WebGen{% endblock %}
+{% block content %}
+<div class="qgen-page">
+  <div class="qgen-hero">
+    <div class="hero-badge">✨ Powered by NLP</div>
+    <h1>Describe Your Website</h1>
+    <p>Type what you want in plain English. WebGen will parse your intent and generate a complete website instantly.</p>
+  </div>
+
+  <div class="qgen-card">
+    <form method="POST" action="{{ url_for('quick_generate') }}" id="qgenForm">
+      <div class="qgen-input-wrap">
+        <textarea name="prompt" id="promptInput" rows="4"
+          placeholder="e.g. Create a modern dark portfolio website with hero, about, gallery and contact sections&#10;e.g. Build an e-commerce seller dashboard like Meesho with product management&#10;e.g. Make a minimal blog with Inter font and green theme"></textarea>
+        <div class="qgen-char-count"><span id="charCount">0</span>/300</div>
+      </div>
+
+      <!-- Example prompts -->
+      <div class="example-prompts">
+        <span>Try:</span>
+        <button type="button" class="ex-chip" onclick="setPrompt(this)">Create a dark portfolio with gallery and contact form</button>
+        <button type="button" class="ex-chip" onclick="setPrompt(this)">Build an e-commerce seller dashboard like Meesho</button>
+        <button type="button" class="ex-chip" onclick="setPrompt(this)">Make a minimal business site with services and testimonials</button>
+        <button type="button" class="ex-chip" onclick="setPrompt(this)">Create a blog with Inter font and green theme</button>
+        <button type="button" class="ex-chip" onclick="setPrompt(this)">Build a Flask portfolio with login system and SQLite database</button>
+      </div>
+
+      <button type="submit" class="btn-submit qgen-submit" id="genBtn">
+        <span id="genBtnText">⚡ Generate Website</span>
+        <span id="genBtnSpinner" style="display:none">⏳ Parsing & Generating...</span>
+      </button>
+    </form>
+  </div>
+
+  <!-- Theme preview grid -->
+  <div class="theme-showcase">
+    <h3>Available Themes</h3>
+    <div class="theme-grid">
+      {% for name, t in themes.items() %}
+      <div class="theme-preview-card" onclick="setPrompt2('{{ name }}')">
+        <div class="theme-swatch" style="background:linear-gradient(135deg,{{ t.primary }},{{ t.secondary }})"></div>
+        <span>{{ name|capitalize }}</span>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- How it works -->
+  <div class="how-it-works">
+    <h3>What the AI detects</h3>
+    <div class="hiw-grid">
+      <div class="hiw-item"><span>🎯</span><strong>Website Type</strong><p>Portfolio, Business, E-commerce, Blog</p></div>
+      <div class="hiw-item"><span>🎨</span><strong>Theme & Colors</strong><p>Dark, Minimal, Modern, Ocean, etc.</p></div>
+      <div class="hiw-item"><span>📐</span><strong>Sections</strong><p>Hero, About, Services, Gallery, Contact...</p></div>
+      <div class="hiw-item"><span>⚙️</span><strong>Stack</strong><p>Static HTML or Flask + SQLite backend</p></div>
+      <div class="hiw-item"><span>🔐</span><strong>Features</strong><p>Login system, database, forms</p></div>
+      <div class="hiw-item"><span>🔤</span><strong>Typography</strong><p>Font family from your description</p></div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const textarea = document.getElementById('promptInput');
+const counter  = document.getElementById('charCount');
+textarea.addEventListener('input', () => {
+  counter.textContent = textarea.value.length;
+  if (textarea.value.length > 280) counter.style.color = '#f44336';
+  else counter.style.color = '';
+});
+
+function setPrompt(btn) {
+  textarea.value = btn.textContent.trim();
+  counter.textContent = textarea.value.length;
+  textarea.focus();
+}
+function setPrompt2(theme) {
+  textarea.value = `Create a ${theme} theme website`;
+  counter.textContent = textarea.value.length;
+  textarea.focus();
+}
+
+document.getElementById('qgenForm').addEventListener('submit', () => {
+  document.getElementById('genBtnText').style.display = 'none';
+  document.getElementById('genBtnSpinner').style.display = 'inline';
+  document.getElementById('genBtn').disabled = true;
+});
+</script>
+{% endblock %}

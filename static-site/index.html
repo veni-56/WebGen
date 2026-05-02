@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="{{site_name}} — Build the future faster than ever. Cutting-edge software solutions for modern teams."/>
+  <meta property="og:title"       content="{{site_name}} — Build the Future"/>
+  <meta property="og:description" content="Cutting-edge software solutions that help businesses scale, innovate, and lead."/>
+  <meta property="og:type"        content="website"/>
+  <title>{{site_name}} — Build the Future</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config={darkMode:'class'}</script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <link rel="stylesheet" href="style.css"/>
+
+  <!-- Generator theme injection point -->
+  <style>
+    :root {
+      --primary:       {{primary_color}};
+      --secondary:     {{secondary_color}};
+      --primary-rgb:   {{primary_rgb}};
+      --secondary-rgb: {{secondary_rgb}};
+    }
+  </style>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 antialiased">
+
+<!-- Scroll progress -->
+<div id="scrollProgress"></div>
+
+<!-- Navbar (component) -->
+<div id="navbar"></div>
+
+<!-- ── HERO ──────────────────────────────────────────────────── -->
+<section class="relative overflow-hidden py-24 md:py-36 px-4" aria-labelledby="hero-heading">
+  <div class="absolute inset-0 bg-gradient-to-br from-indigo-50 via-white to-pink-50 dark:from-gray-900 dark:via-gray-950 dark:to-gray-900"></div>
+  <div class="absolute top-20 left-1/4 w-80 h-80 rounded-full opacity-20 blur-3xl pointer-events-none" style="background:var(--primary)"></div>
+  <div class="absolute bottom-10 right-1/4 w-60 h-60 rounded-full opacity-15 blur-3xl pointer-events-none" style="background:var(--secondary)"></div>
+
+  <div class="relative max-w-5xl mx-auto text-center">
+    <span class="reveal inline-block bg-primary-10 border border-primary-15 text-primary text-xs font-semibold px-4 py-1.5 rounded-full mb-5 tracking-wide uppercase">
+      ✨ Trusted by 10,000+ teams worldwide
+    </span>
+    <h1 id="hero-heading" class="reveal text-5xl md:text-7xl font-black leading-tight mb-6 dark:text-white">
+      Build the Future<br><span class="gradient-text">Faster Than Ever</span>
+    </h1>
+    <p class="reveal text-lg md:text-xl text-gray-500 dark:text-gray-400 max-w-2xl mx-auto mb-10">
+      {{site_name}} delivers cutting-edge software solutions that help businesses scale, innovate, and lead their industries.
+    </p>
+    <div class="reveal flex flex-wrap gap-4 justify-center">
+      <a href="pages/contact.html"
+         class="btn-gradient px-8 py-3.5 rounded-full font-bold text-base
+                focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2"
+         aria-label="Start your free trial">
+        Start Free Trial
+      </a>
+      <a href="pages/about.html"
+         class="btn-outline-primary px-8 py-3.5 rounded-full font-bold text-base
+                focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2">
+        Learn More →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── STATS ──────────────────────────────────────────────────── -->
+<section class="py-14 bg-gray-50 dark:bg-gray-900 border-y border-gray-100 dark:border-gray-800" aria-label="Company statistics">
+  <div class="max-w-5xl mx-auto px-4 stats-row grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+    <div class="reveal">
+      <div class="text-4xl font-black text-primary counter-val" data-target="10000" data-suffix="+">0</div>
+      <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">Happy Clients</div>
+    </div>
+    <div class="reveal">
+      <div class="text-4xl font-black text-primary counter-val" data-target="500" data-suffix="+">0</div>
+      <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">Projects Shipped</div>
+    </div>
+    <div class="reveal">
+      <div class="text-4xl font-black text-primary counter-val" data-target="99" data-suffix=".9%">0</div>
+      <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">Uptime SLA</div>
+    </div>
+    <div class="reveal">
+      <div class="text-4xl font-black text-primary counter-val" data-target="24" data-suffix="/7">0</div>
+      <div class="text-sm text-gray-500 dark:text-gray-400 mt-1">Support</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FEATURES ───────────────────────────────────────────────── -->
+<section class="py-24 px-4" aria-labelledby="features-heading">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <span class="text-primary text-sm font-semibold uppercase tracking-wider">Platform</span>
+      <h2 id="features-heading" class="text-4xl md:text-5xl font-black mt-2 mb-4 dark:text-white">
+        Everything You Need to <span class="gradient-text">Scale</span>
+      </h2>
+      <p class="text-gray-500 dark:text-gray-400 max-w-xl mx-auto">
+        A complete platform built for modern teams who demand performance, reliability, and developer experience.
+      </p>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <article class="reveal card-hover card-gradient-border bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7">
+        <div class="text-3xl mb-4" aria-hidden="true">⚡</div>
+        <h3 class="font-bold text-lg mb-2 dark:text-white">Lightning Performance</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">Sub-100ms response times globally. Our edge network ensures your users always get the fastest experience.</p>
+      </article>
+      <article class="reveal card-hover card-gradient-border bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7">
+        <div class="text-3xl mb-4" aria-hidden="true">🔒</div>
+        <h3 class="font-bold text-lg mb-2 dark:text-white">Enterprise Security</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">SOC 2 Type II certified. End-to-end encryption, zero-trust architecture, and automated threat detection.</p>
+      </article>
+      <article class="reveal card-hover card-gradient-border bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7">
+        <div class="text-3xl mb-4" aria-hidden="true">📈</div>
+        <h3 class="font-bold text-lg mb-2 dark:text-white">Auto Scaling</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">Handle traffic spikes effortlessly. Our infrastructure scales from 1 to 1 million users without configuration.</p>
+      </article>
+      <article class="reveal card-hover card-gradient-border bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7">
+        <div class="text-3xl mb-4" aria-hidden="true">🤖</div>
+        <h3 class="font-bold text-lg mb-2 dark:text-white">AI-Powered Insights</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">Real-time analytics with AI recommendations. Understand your users and optimize performance automatically.</p>
+      </article>
+      <article class="reveal card-hover card-gradient-border bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7">
+        <div class="text-3xl mb-4" aria-hidden="true">🔗</div>
+        <h3 class="font-bold text-lg mb-2 dark:text-white">200+ Integrations</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">Connect with Slack, GitHub, Stripe, and 200+ tools your team already uses. One-click setup.</p>
+      </article>
+      <article class="reveal card-hover card-gradient-border bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 rounded-2xl p-7">
+        <div class="text-3xl mb-4" aria-hidden="true">🌍</div>
+        <h3 class="font-bold text-lg mb-2 dark:text-white">Global CDN</h3>
+        <p class="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">Deploy to 50+ edge locations worldwide. Your content is always close to your users, wherever they are.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- Wave divider -->
+<div class="wave-divider" aria-hidden="true">
+  <svg viewBox="0 0 1440 60" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+    <path d="M0 30C240 60 480 0 720 30C960 60 1200 0 1440 30V60H0V30Z" fill="rgb(249 250 251)" class="dark:fill-gray-900"/>
+  </svg>
+</div>
+
+<!-- ── TESTIMONIALS ────────────────────────────────────────────── -->
+<section class="py-24 px-4 bg-gray-50 dark:bg-gray-900" aria-labelledby="testimonials-heading">
+  <div class="max-w-6xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <span class="text-primary text-sm font-semibold uppercase tracking-wider">Testimonials</span>
+      <h2 id="testimonials-heading" class="text-4xl md:text-5xl font-black mt-2 dark:text-white">
+        Loved by <span class="gradient-text">Thousands</span>
+      </h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <blockquote class="reveal card-hover glass rounded-2xl p-7 border border-gray-100 dark:border-gray-700">
+        <div class="flex gap-0.5 mb-4 text-amber-400" aria-label="5 stars">⭐⭐⭐⭐⭐</div>
+        <p class="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-5 italic">"{{site_name}} cut our deployment time by 80%. The auto-scaling alone saved us thousands in infrastructure costs."</p>
+        <footer class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full btn-gradient flex items-center justify-center text-white font-bold text-sm" aria-hidden="true">SC</div>
+          <div><cite class="font-semibold text-sm dark:text-white not-italic">Sarah Chen</cite><div class="text-xs text-gray-400">CTO, TechFlow Inc.</div></div>
+        </footer>
+      </blockquote>
+      <blockquote class="reveal card-hover glass rounded-2xl p-7 border border-gray-100 dark:border-gray-700">
+        <div class="flex gap-0.5 mb-4 text-amber-400" aria-label="5 stars">⭐⭐⭐⭐⭐</div>
+        <p class="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-5 italic">"The best developer experience I've had in 10 years. Documentation is excellent and support is incredibly fast."</p>
+        <footer class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full btn-gradient flex items-center justify-center text-white font-bold text-sm" aria-hidden="true">MJ</div>
+          <div><cite class="font-semibold text-sm dark:text-white not-italic">Marcus Johnson</cite><div class="text-xs text-gray-400">Lead Engineer, StartupX</div></div>
+        </footer>
+      </blockquote>
+      <blockquote class="reveal card-hover glass rounded-2xl p-7 border border-gray-100 dark:border-gray-700">
+        <div class="flex gap-0.5 mb-4 text-amber-400" aria-label="5 stars">⭐⭐⭐⭐⭐</div>
+        <p class="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-5 italic">"We migrated 50+ microservices in a weekend. Zero downtime, zero issues. Absolutely incredible."</p>
+        <footer class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full btn-gradient flex items-center justify-center text-white font-bold text-sm" aria-hidden="true">AP</div>
+          <div><cite class="font-semibold text-sm dark:text-white not-italic">Aisha Patel</cite><div class="text-xs text-gray-400">VP Engineering, ScaleUp</div></div>
+        </footer>
+      </blockquote>
+    </div>
+    <div class="text-center mt-10 reveal">
+      <a href="pages/testimonials.html" class="btn-outline-primary px-6 py-2.5 rounded-full text-sm font-bold
+               focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2">
+        Read All Reviews →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ── CTA ────────────────────────────────────────────────────── -->
+<section class="py-24 px-4 text-center" aria-labelledby="cta-heading">
+  <div class="max-w-2xl mx-auto reveal">
+    <h2 id="cta-heading" class="text-4xl md:text-5xl font-black mb-4 dark:text-white">
+      Ready to <span class="gradient-text">Get Started?</span>
+    </h2>
+    <p class="text-gray-500 dark:text-gray-400 mb-10">
+      Join 10,000+ teams already building with {{site_name}}. Free plan available — no credit card required.
+    </p>
+    <div class="flex flex-wrap gap-4 justify-center">
+      <a href="pages/contact.html" class="btn-gradient px-8 py-3.5 rounded-full font-bold
+               focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2">
+        Start Free Trial
+      </a>
+      <a href="pages/about.html" class="btn-outline-primary px-8 py-3.5 rounded-full font-bold
+               focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:ring-offset-2">
+        Meet the Team →
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer (component) -->
+<div id="footer"></div>
+
+<script src="script.js"></script>
+</body>
+</html>

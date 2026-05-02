@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{% block title %}WebGen{% endblock %}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+</head>
+<body>
+
+<header class="platform-header">
+  <nav class="platform-nav">
+    <a href="{{ url_for('index') }}" class="platform-logo">⚡ WebGen</a>
+    <div class="nav-center">
+      {% if session.user_id %}
+        <a href="{{ url_for('dashboard') }}" class="nav-link {% if request.endpoint=='dashboard' %}active{% endif %}">Dashboard</a>
+        <a href="{{ url_for('generate_page') }}" class="nav-link {% if request.endpoint=='generate_page' %}active{% endif %}">⚡ Generate</a>
+        <a href="{{ url_for('chat_builder') }}" class="nav-link {% if request.endpoint=='chat_builder' %}active{% endif %}">🤖 Chat</a>
+        <a href="{{ url_for('quick_generate') }}" class="nav-link {% if request.endpoint=='quick_generate' %}active{% endif %}">✨ AI</a>
+        <a href="{{ url_for('wizard_step1') }}" class="nav-link {% if 'wizard' in (request.endpoint or '') %}active{% endif %}">Wizard</a>
+        {% if session.is_admin %}
+          <a href="{{ url_for('admin') }}" class="nav-link nav-admin">⚙️ Admin</a>
+          <a href="{{ url_for('admin_analytics') }}" class="nav-link nav-admin">📊 Analytics</a>
+        {% endif %}
+      {% endif %}
+    </div>
+    <div class="nav-right">
+      {% if session.username %}
+        <div class="nav-user-menu">
+          <button class="nav-user-btn" onclick="toggleUserMenu()">
+            <span class="nav-avatar">{{ session.username[0]|upper }}</span>
+            {{ session.username }}
+            <span class="nav-caret">▾</span>
+          </button>
+          <div class="nav-user-dropdown" id="userDropdown">
+            <a href="{{ url_for('account') }}">👤 Account</a>
+            <a href="{{ url_for('dashboard') }}">📁 Projects</a>
+            <a href="{{ url_for('billing_portal') }}">💳 Billing</a>
+            <hr/>
+            <a href="{{ url_for('logout') }}">🚪 Logout</a>
+          </div>
+        </div>
+      {% else %}
+        <a href="{{ url_for('pricing') }}" class="nav-link">Pricing</a>
+        <a href="{{ url_for('login') }}" class="nav-link">Login</a>
+        <a href="{{ url_for('signup') }}" class="btn-nav">Sign Up Free</a>
+      {% endif %}
+    </div>
+  </nav>
+</header>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for cat, msg in messages %}
+      <div class="flash flash-{{ cat }}">{{ msg }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+{% block content %}{% endblock %}
+
+<script src="{{ url_for('static', filename='js/main.js') }}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>
