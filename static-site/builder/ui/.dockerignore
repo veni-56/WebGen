@@ -1,0 +1,37 @@
+# .dockerignore — exclude files from Docker build context
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Data directories (mounted as volumes)
+uploads/
+published/
+logs/
+backups/
+*.db
+
+# Secrets
+.env
+*.key
+*.pem
+nginx_ssl/
+
+# Dev tools
+.git/
+.gitignore
+*.md
+.vscode/
+.idea/
+
+# Test artifacts
+*.log
+tmp/

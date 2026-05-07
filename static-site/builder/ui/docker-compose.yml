@@ -1,0 +1,126 @@
+version: "3.9"
+
+# ── Shared build context ──────────────────────────────────────────────────────
+x-build-common: &build-common
+  context: .
+  dockerfile: Dockerfile
+
+# ── Shared environment ────────────────────────────────────────────────────────
+x-app-env: &app-env
+  env_file: .env
+  environment:
+    DB_PATH:      /data/db/projects.db
+    UPLOADS_DIR:  /data/uploads
+    PUBLISH_DIR:  /data/published
+    LOG_DIR:      /data/logs
+    FLASK_DEBUG:  "0"
+
+# ── Shared volume mounts ──────────────────────────────────────────────────────
+x-data-volumes: &data-volumes
+  - db_data:/data/db
+  - uploads_data:/data/uploads
+  - published_data:/data/published
+  - logs_data:/data/logs
+
+services:
+
+  # ── Web (Flask + Gunicorn) ──────────────────────────────────────────────────
+  web:
+    build: *build-common
+    container_name: wbs_web
+    restart: unless-stopped
+    <<: *app-env
+    environment:
+      DB_PATH:      /data/db/projects.db
+      UPLOADS_DIR:  /data/uploads
+      PUBLISH_DIR:  /data/published
+      LOG_DIR:      /data/logs
+      PORT:         "4000"
+      FLASK_DEBUG:  "0"
+      WORKER_COUNT: "0"   # web container does NOT run workers
+    volumes: *data-volumes
+    expose:
+      - "4000"
+    healthcheck:
+      test: ["CMD", "python", "-c",
+             "import urllib.request; urllib.request.urlopen('http://localhost:4000/health')"]
+      interval: 30s
+      timeout:  10s
+      retries:  3
+      start_period: 20s
+    depends_on:
+      - worker
+    networks:
+      - internal
+
+  # ── Worker (persistent job queue) ──────────────────────────────────────────
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile.worker
+    container_name: wbs_worker
+    restart: unless-stopped
+    <<: *app-env
+    environment:
+      DB_PATH:      /data/db/projects.db
+      UPLOADS_DIR:  /data/uploads
+      PUBLISH_DIR:  /data/published
+      LOG_DIR:      /data/logs
+      WORKER_COUNT: "2"
+    volumes: *data-volumes
+    healthcheck:
+      test: ["CMD", "python", "-c",
+             "import sys; sys.path.insert(0,'.');
+              from worker import JobQueue;
+              JobQueue.configure('/data/db/projects.db');
+              print(JobQueue.queue_stats())"]
+      interval: 30s
+      timeout:  10s
+      retries:  3
+      start_period: 10s
+    networks:
+      - internal
+
+  # ── Nginx reverse proxy ─────────────────────────────────────────────────────
+  nginx:
+    image: nginx:1.25-alpine
+    container_name: wbs_nginx
+    restart: unless-stopped
+    ports:
+      - "${NGINX_HTTP_PORT:-80}:80"
+      - "${NGINX_HTTPS_PORT:-443}:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx_ssl:/etc/nginx/ssl:ro          # mount your certs here
+      - published_data:/data/published:ro
+      - uploads_data:/data/uploads:ro
+      - logs_data:/data/logs/nginx
+    depends_on:
+      - web
+    healthcheck:
+      test: ["CMD", "nginx", "-t"]
+      interval: 30s
+      timeout:  5s
+      retries:  3
+    networks:
+      - internal
+      - external
+
+# ── Volumes ───────────────────────────────────────────────────────────────────
+volumes:
+  db_data:
+    driver: local
+  uploads_data:
+    driver: local
+  published_data:
+    driver: local
+  logs_data:
+    driver: local
+
+# ── Networks ──────────────────────────────────────────────────────────────────
+networks:
+  internal:
+    driver: bridge
+    internal: true    # web + worker not directly reachable from outside
+  external:
+    driver: bridge    # nginx is the only public-facing service
