@@ -41,7 +41,7 @@ UPLOADS_DIR.mkdir(exist_ok=True)
 PUBLISH_DIR.mkdir(exist_ok=True)
 
 # â”€â”€ Flask app â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
-app = Flask(__name__, static_folder=str(UI_DIR))
+app = Flask(__name__, static_folder=str(UI_DIR), static_url_path="")
 app.secret_key          = os.environ.get("SECRET_KEY", secrets.token_hex(32))
 app.config["MAX_CONTENT_LENGTH"] = 32 * 1024 * 1024   # 32 MB upload limit
 app.config["SESSION_COOKIE_HTTPONLY"] = True
