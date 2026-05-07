@@ -1,0 +1,67 @@
+services:
+  # ── Web Service (Flask + Gunicorn) ─────────────────────────────────────────
+  - type: web
+    name: webgen-builder
+    runtime: python
+    region: singapore          # closest to India
+    plan: free                 # change to starter/standard for production
+    rootDir: static-site/builder/ui
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn -c gunicorn.conf.py server:app
+    healthCheckPath: /health
+
+    envVars:
+      - key: FLASK_DEBUG
+        value: "0"
+      - key: PORT
+        value: "10000"          # Render assigns this automatically
+      - key: PYTHON_VERSION
+        value: "3.12.0"
+      - key: SECRET_KEY
+        generateValue: true     # Render auto-generates a secure random value
+      - key: DB_PATH
+        value: /opt/render/project/data/projects.db
+      - key: UPLOADS_DIR
+        value: /opt/render/project/data/uploads
+      - key: PUBLISH_DIR
+        value: /opt/render/project/data/published
+      - key: LOG_DIR
+        value: /opt/render/project/data/logs
+      - key: WORKER_COUNT
+        value: "2"
+      - key: ENV
+        value: production
+
+    disk:
+      name: webgen-data
+      mountPath: /opt/render/project/data
+      sizeGB: 1                 # free tier: 1 GB persistent disk
+
+  # ── Worker Service (background job processor) ──────────────────────────────
+  - type: worker
+    name: webgen-worker
+    runtime: python
+    region: singapore
+    plan: free
+    rootDir: static-site/builder/ui
+    buildCommand: pip install -r requirements.txt
+    startCommand: python worker_process.py
+
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.12.0"
+      - key: DB_PATH
+        value: /opt/render/project/data/projects.db
+      - key: UPLOADS_DIR
+        value: /opt/render/project/data/uploads
+      - key: PUBLISH_DIR
+        value: /opt/render/project/data/published
+      - key: LOG_DIR
+        value: /opt/render/project/data/logs
+      - key: WORKER_COUNT
+        value: "2"
+
+    disk:
+      name: webgen-data
+      mountPath: /opt/render/project/data
+      sizeGB: 1
