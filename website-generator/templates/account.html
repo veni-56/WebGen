@@ -1,5 +1,24 @@
 {% extends 'base.html' %}
-{% block title %}Account — WebGen{% endblock %}
+{% block title %}Account — WebGen
+      <!-- Quick Links -->
+      <div class="account-card">
+        <h3>Quick Links</h3>
+        <div style="display:flex;flex-direction:column;gap:.75rem;margin-top:.5rem">
+          <a href="/api-keys" style="display:flex;align-items:center;gap:.75rem;padding:.75rem 1rem;background:#f8f9ff;border:1px solid #e5e7eb;border-radius:.5rem;text-decoration:none;color:#374151">
+            <span style="font-size:1.25rem">&#128273;</span>
+            <div><strong>API Keys</strong><br><small style="color:#888">Manage API access keys</small></div>
+          </a>
+          <a href="/pricing" style="display:flex;align-items:center;gap:.75rem;padding:.75rem 1rem;background:#f8f9ff;border:1px solid #e5e7eb;border-radius:.5rem;text-decoration:none;color:#374151">
+            <span style="font-size:1.25rem">&#128179;</span>
+            <div><strong>Billing and Plans</strong><br><small style="color:#888">Upgrade your plan</small></div>
+          </a>
+          <a href="/notifications" style="display:flex;align-items:center;gap:.75rem;padding:.75rem 1rem;background:#f8f9ff;border:1px solid #e5e7eb;border-radius:.5rem;text-decoration:none;color:#374151">
+            <span style="font-size:1.25rem">&#128276;</span>
+            <div><strong>Notifications</strong><br><small style="color:#888">View announcements</small></div>
+          </a>
+        </div>
+      </div>
+{% endblock %}
 {% block content %}
 <div class="account-page">
   <div class="container">
@@ -40,4 +59,23 @@
     </div>
   </div>
 </div>
+
+      <!-- Quick Links -->
+      <div class="account-card">
+        <h3>Quick Links</h3>
+        <div style="display:flex;flex-direction:column;gap:.75rem;margin-top:.5rem">
+          <a href="/api-keys" style="display:flex;align-items:center;gap:.75rem;padding:.75rem 1rem;background:#f8f9ff;border:1px solid #e5e7eb;border-radius:.5rem;text-decoration:none;color:#374151">
+            <span style="font-size:1.25rem">&#128273;</span>
+            <div><strong>API Keys</strong><br><small style="color:#888">Manage API access keys</small></div>
+          </a>
+          <a href="/pricing" style="display:flex;align-items:center;gap:.75rem;padding:.75rem 1rem;background:#f8f9ff;border:1px solid #e5e7eb;border-radius:.5rem;text-decoration:none;color:#374151">
+            <span style="font-size:1.25rem">&#128179;</span>
+            <div><strong>Billing and Plans</strong><br><small style="color:#888">Upgrade your plan</small></div>
+          </a>
+          <a href="/notifications" style="display:flex;align-items:center;gap:.75rem;padding:.75rem 1rem;background:#f8f9ff;border:1px solid #e5e7eb;border-radius:.5rem;text-decoration:none;color:#374151">
+            <span style="font-size:1.25rem">&#128276;</span>
+            <div><strong>Notifications</strong><br><small style="color:#888">View announcements</small></div>
+          </a>
+        </div>
+      </div>
 {% endblock %}

@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block title %}API Keys — WebGen{% endblock %}
+{% block content %}
+<div class="container" style="max-width:800px;margin:2rem auto;padding:0 1rem">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem">
+    <div>
+      <h2 style="margin:0">🔑 API Keys</h2>
+      <p style="margin:.25rem 0 0;color:#888">Use API keys to access WebGen programmatically.</p>
+    </div>
+    <a href="{{ url_for('dashboard.index') }}" style="color:#6c63ff;text-decoration:none">← Dashboard</a>
+  </div>
+
+  <!-- Create new key -->
+  <div class="card mb-4">
+    <div class="card-header"><h3>Create New API Key</h3></div>
+    <div class="card-body">
+      <form method="POST" action="{{ url_for('auth.create_api_key') }}" style="display:flex;gap:1rem;align-items:flex-end">
+        <div style="flex:1">
+          <label style="display:block;font-size:.85rem;font-weight:600;margin-bottom:.4rem">Key Name</label>
+          <input type="text" name="name" placeholder="e.g. My App, CI/CD Pipeline" required
+                 style="width:100%;padding:.75rem 1rem;border:1px solid #e5e7eb;border-radius:.5rem;font-size:.95rem"/>
+        </div>
+        <button type="submit" style="padding:.75rem 1.5rem;background:#6c63ff;color:#fff;border:none;border-radius:.5rem;font-weight:700;cursor:pointer;white-space:nowrap">
+          Generate Key
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Existing keys -->
+  <div class="card">
+    <div class="card-header"><h3>Your API Keys ({{ api_keys|length }})</h3></div>
+    <div class="card-body">
+      {% if api_keys %}
+      <table class="admin-table">
+        <thead>
+          <tr><th>Name</th><th>Key</th><th>Created</th><th>Last Used</th><th>Action</th></tr>
+        </thead>
+        <tbody>
+          {% for key in api_keys %}
+          <tr>
+            <td><strong>{{ key.name }}</strong></td>
+            <td><code style="background:#f3f4f6;padding:.2rem .5rem;border-radius:.25rem">{{ key.key_prefix }}</code></td>
+            <td>{{ key.created_at[:10] }}</td>
+            <td>{{ key.last_used[:10] if key.last_used else 'Never' }}</td>
+            <td>
+              <form method="POST" action="{{ url_for('auth.delete_api_key', key_id=key.id) }}" style="display:inline">
+                <button type="submit" onclick="return confirm('Delete this API key?')"
+                        style="background:#ef4444;color:#fff;border:none;padding:.3rem .75rem;border-radius:.4rem;cursor:pointer;font-size:.8rem">
+                  Delete
+                </button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div style="text-align:center;padding:2rem;color:#888">
+        <div style="font-size:2.5rem;margin-bottom:.75rem">🔑</div>
+        <p>No API keys yet. Create one above to get started.</p>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- API Usage docs -->
+  <div class="card mt-4">
+    <div class="card-header"><h3>📖 API Usage</h3></div>
+    <div class="card-body">
+      <p style="margin-bottom:1rem;color:#555">Use your API key in the <code>X-API-Key</code> header:</p>
+      <pre style="background:#1e1b4b;color:#c4b5fd;padding:1.25rem;border-radius:.75rem;overflow-x:auto;font-size:.85rem">curl -X POST https://webgen-yuho.onrender.com/api/generate \
+  -H "X-API-Key: wbg_your_key_here" \
+  -H "Content-Type: application/json" \
+  -d '{"prompt": "Build a portfolio website for a photographer", "theme": "dark"}'</pre>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:1.5rem">
+        {% for ep in [
+          {'method':'POST','path':'/api/generate','desc':'Generate website from prompt'},
+          {'method':'GET', 'path':'/api/themes','desc':'List available themes'},
+          {'method':'GET', 'path':'/api/health','desc':'API health check'},
+          {'method':'POST','path':'/api/generate-structured','desc':'Structured generation'},
+        ] %}
+        <div style="background:#f8f9ff;border:1px solid #e5e7eb;border-radius:.5rem;padding:.75rem">
+          <span style="background:{% if ep.method=='GET' %}#d1fae5;color:#065f46{% else %}#dbeafe;color:#1e40af{% endif %};padding:.15rem .5rem;border-radius:.25rem;font-size:.7rem;font-weight:700">{{ ep.method }}</span>
+          <code style="display:block;margin:.4rem 0 .25rem;font-size:.8rem">{{ ep.path }}</code>
+          <small style="color:#888">{{ ep.desc }}</small>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

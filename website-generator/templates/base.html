@@ -16,7 +16,7 @@
       {% if session.user_id %}
         <a href="{{ url_for('dashboard.index') }}" class="nav-link {% if request.endpoint=='dashboard' %}active{% endif %}">Dashboard</a>
         <a href="{{ url_for('generate.generate_page') }}" class="nav-link {% if request.endpoint=='generate_page' %}active{% endif %}">⚡ Generate</a>
-        <a href="{{ url_for('generate.generate_page') }}" class="nav-link {% if request.endpoint=='chat_builder' %}active{% endif %}">🤖 Chat</a>
+        <a href="{{ url_for('generate.chat_builder') }}" class="nav-link {% if request.endpoint=='chat_builder' %}active{% endif %}">🤖 Chat</a>
         <a href="{{ url_for('dashboard.quick_generate') }}" class="nav-link {% if request.endpoint=='quick_generate' %}active{% endif %}">✨ AI</a>
         <a href="{{ url_for('generate.wizard_step1') }}" class="nav-link {% if 'wizard' in (request.endpoint or '') %}active{% endif %}">Wizard</a>
         {% if session.is_admin %}
@@ -38,8 +38,9 @@
           <div class="nav-user-dropdown" id="userDropdown">
             <a href="{{ url_for('auth.account') }}">👤 Account</a>
             <a href="{{ url_for('dashboard.index') }}">📁 Projects</a>
+            <a href="{{ url_for('auth.api_keys') }}">🔑 API Keys</a>
             <a href="{{ url_for('admin.user_notifications') }}">🔔 Notifications</a>
-            <a href="{{ url_for('auth.account') }}">💳 Billing</a>
+            <a href="{{ url_for('generate.pricing') }}">💳 Billing</a>
             <hr/>
             <a href="{{ url_for('auth.logout') }}">🚪 Logout</a>
           </div>

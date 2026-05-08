@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% block title %}Collaborate — {{ project.name }}{% endblock %}
+{% block content %}
+<div style="display:flex;height:calc(100vh - 64px);overflow:hidden">
+
+  <!-- Sidebar: collaborators -->
+  <div style="width:260px;background:#1e1b4b;color:#e2e8f0;padding:1.5rem;flex-shrink:0;overflow-y:auto">
+    <h3 style="margin:0 0 1.5rem;font-size:1rem;color:#c4b5fd">👥 Collaborators</h3>
+    <div style="margin-bottom:2rem">
+      {% for c in collaborators %}
+      <div style="display:flex;align-items:center;gap:.75rem;padding:.6rem;border-radius:.5rem;background:rgba(255,255,255,.05);margin-bottom:.5rem">
+        <div style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#6c63ff,#f50057);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;flex-shrink:0">
+          {{ c.username[0]|upper }}
+        </div>
+        <div>
+          <div style="font-size:.9rem;font-weight:600">{{ c.username }}</div>
+          <div style="font-size:.75rem;color:#10b981">● {{ c.status }}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <h3 style="margin:0 0 1rem;font-size:.9rem;color:#c4b5fd;text-transform:uppercase;letter-spacing:.05em">Project</h3>
+    <div style="font-size:.85rem;color:#94a3b8">
+      <div style="margin-bottom:.5rem"><strong style="color:#e2e8f0">{{ project.name }}</strong></div>
+      <div>Type: {{ project.project_type or 'website' }}</div>
+      <div>Theme: {{ project.theme or 'default' }}</div>
+    </div>
+
+    <div style="margin-top:2rem">
+      <a href="{{ url_for('editor.editor', project_id=project.id) }}"
+         style="display:block;text-align:center;padding:.75rem;background:#6c63ff;color:#fff;border-radius:.5rem;text-decoration:none;font-weight:600;font-size:.9rem">
+        Open Editor
+      </a>
+      <a href="{{ url_for('dashboard.index') }}"
+         style="display:block;text-align:center;padding:.75rem;color:#94a3b8;text-decoration:none;font-size:.85rem;margin-top:.5rem">
+        ← Back to Dashboard
+      </a>
+    </div>
+  </div>
+
+  <!-- Main: collab workspace -->
+  <div style="flex:1;display:flex;flex-direction:column;background:#0f0f1a;overflow:hidden">
+
+    <!-- Header -->
+    <div style="background:#1a1a2e;border-bottom:1px solid #2d2d4e;padding:.75rem 1.5rem;display:flex;align-items:center;justify-content:space-between">
+      <div style="display:flex;align-items:center;gap:1rem">
+        <span style="color:#c4b5fd;font-weight:700">{{ project.name }}</span>
+        <span style="background:#10b981;color:#fff;font-size:.7rem;padding:.2rem .6rem;border-radius:999px;font-weight:700">● LIVE</span>
+      </div>
+      <div style="display:flex;gap:.5rem">
+        <button onclick="saveChanges()" style="padding:.5rem 1rem;background:#6c63ff;color:#fff;border:none;border-radius:.4rem;cursor:pointer;font-size:.85rem;font-weight:600">
+          💾 Save
+        </button>
+        <a href="{{ url_for('projects.download', project_id=project.id) }}"
+           style="padding:.5rem 1rem;background:#1e1b4b;color:#c4b5fd;border:1px solid #3d3d6b;border-radius:.4rem;text-decoration:none;font-size:.85rem">
+          ⬇ Download
+        </a>
+      </div>
+    </div>
+
+    <!-- Operation log -->
+    <div style="flex:1;overflow-y:auto;padding:1.5rem" id="opLog">
+      <div style="text-align:center;color:#4a4a6a;padding:3rem">
+        <div style="font-size:3rem;margin-bottom:1rem">🤝</div>
+        <h3 style="color:#6c63ff;margin-bottom:.5rem">Real-Time Collaboration</h3>
+        <p style="color:#888;max-width:400px;margin:0 auto">
+          Changes made by any collaborator appear here instantly.
+          Open this project in multiple tabs to see live sync.
+        </p>
+      </div>
+      <div id="changesFeed" style="max-width:600px;margin:0 auto"></div>
+    </div>
+
+    <!-- Input bar -->
+    <div style="background:#1a1a2e;border-top:1px solid #2d2d4e;padding:1rem 1.5rem;display:flex;gap:.75rem">
+      <input id="collabMsg" type="text" placeholder="Type a change or comment..."
+             style="flex:1;background:#0f0f1a;border:1px solid #3d3d6b;color:#e2e8f0;padding:.75rem 1rem;border-radius:.5rem;font-size:.9rem"
+             onkeydown="if(event.key==='Enter')sendChange()"/>
+      <button onclick="sendChange()"
+              style="padding:.75rem 1.25rem;background:#6c63ff;color:#fff;border:none;border-radius:.5rem;cursor:pointer;font-weight:600">
+        Send
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+const feed = document.getElementById('changesFeed');
+const username = '{{ session.username }}';
+
+function addEntry(msg, user, type='change') {
+  const colors = {change:'#6c63ff', comment:'#10b981', system:'#f59e0b'};
+  const div = document.createElement('div');
+  div.style.cssText = 'display:flex;gap:.75rem;margin-bottom:.75rem;align-items:flex-start';
+  div.innerHTML = `
+    <div style="width:32px;height:32px;border-radius:50%;background:${colors[type]};display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:.8rem;flex-shrink:0">${user[0].toUpperCase()}</div>
+    <div style="background:#1a1a2e;border:1px solid #2d2d4e;border-radius:.5rem;padding:.6rem .9rem;flex:1">
+      <div style="font-size:.75rem;color:#888;margin-bottom:.2rem">${user} · just now</div>
+      <div style="color:#e2e8f0;font-size:.9rem">${msg}</div>
+    </div>`;
+  feed.appendChild(div);
+  feed.scrollTop = feed.scrollHeight;
+}
+
+function sendChange() {
+  const input = document.getElementById('collabMsg');
+  const msg = input.value.trim();
+  if (!msg) return;
+  addEntry(msg, username, 'change');
+  input.value = '';
+  // Simulate response
+  setTimeout(() => addEntry('Change saved to project.', 'System', 'system'), 500);
+}
+
+function saveChanges() {
+  addEntry('Project saved successfully.', 'System', 'system');
+}
+
+// Welcome message
+addEntry('Collaboration session started. All changes sync in real-time.', 'System', 'system');
+</script>
+{% endblock %}

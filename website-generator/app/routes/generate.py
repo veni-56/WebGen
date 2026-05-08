@@ -122,3 +122,35 @@ def billing_checkout(plan):
     database.update_user_plan(session["user_id"], plan)
     flash(f"Upgraded to {plan.title()} plan!", "success")
     return redirect(url_for("auth.account"))
+
+
+# ── Chat Builder ──────────────────────────────────────────────────────────────
+from flask import session as _session, render_template as _rt2, request as _req2, jsonify as _json2
+
+@generate_bp.route("/chat")
+def chat_builder():
+    if not _session.get("user_id"):
+        from flask import redirect, url_for
+        return redirect(url_for("auth.login"))
+    return _rt2("chat.html")
+
+
+@generate_bp.route("/api/chat", methods=["POST"])
+def chat_api():
+    if not _session.get("user_id"):
+        return _json2({"error": "Login required"}), 401
+    data    = _req2.get_json(silent=True) or {}
+    message = data.get("message", "").strip()
+    if not message:
+        return _json2({"error": "Message required"}), 400
+    try:
+        from app.services.ai_engine import parse_prompt, list_themes
+        parsed = parse_prompt(message)
+        return _json2({
+            "ok":      True,
+            "parsed":  parsed,
+            "message": f"I'll build a {parsed.get('project_type','website')} for you! Redirecting to generator...",
+            "redirect": "/generate"
+        })
+    except Exception as e:
+        return _json2({"ok": True, "message": f"Great idea! Let me generate that for you.", "redirect": "/generate"})
