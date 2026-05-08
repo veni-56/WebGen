@@ -670,3 +670,11 @@ def get_full_analytics() -> dict:
         "total_gens":     total_gens,
         "revenue_est":    round(revenue_est, 2),
     }
+
+
+def update_user_plan(user_id, plan: str) -> None:
+    """Update a user's subscription plan."""
+    conn = get_db()
+    conn.execute("UPDATE users SET plan=? WHERE id=?", (plan, user_id))
+    conn.commit()
+    conn.close()

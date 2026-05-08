@@ -46,7 +46,7 @@
             {% endif %}
           {% else %}
             {% if session.user_id %}
-            <form method="POST" action="{{ url_for('billing_checkout', plan=plan_key) }}">
+            <form method="POST" action="{{ url_for('generate.billing_checkout', plan=plan_key) }}">
               <button type="submit" class="pricing-btn {% if plan_key == 'pro' %}pricing-btn-primary{% else %}pricing-btn-outline{% endif %}">
                 Upgrade to {{ plan.name }}
               </button>

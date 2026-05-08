@@ -21,7 +21,9 @@
         <a href="{{ url_for('generate.wizard_step1') }}" class="nav-link {% if 'wizard' in (request.endpoint or '') %}active{% endif %}">Wizard</a>
         {% if session.is_admin %}
           <a href="{{ url_for('admin.index') }}" class="nav-link nav-admin">⚙️ Admin</a>
-          <a href="{{ url_for('admin.index') }}" class="nav-link nav-admin">📊 Analytics</a>
+          <a href="{{ url_for('admin.analytics') }}" class="nav-link nav-admin">📊 Analytics</a>
+          <a href="{{ url_for('admin.plugins') }}" class="nav-link nav-admin">🧩 Plugins</a>
+          <a href="{{ url_for('admin.notifications') }}" class="nav-link nav-admin">🔔 Notify</a>
         {% endif %}
       {% endif %}
     </div>
@@ -36,6 +38,7 @@
           <div class="nav-user-dropdown" id="userDropdown">
             <a href="{{ url_for('auth.account') }}">👤 Account</a>
             <a href="{{ url_for('dashboard.index') }}">📁 Projects</a>
+            <a href="{{ url_for('admin.user_notifications') }}">🔔 Notifications</a>
             <a href="{{ url_for('auth.account') }}">💳 Billing</a>
             <hr/>
             <a href="{{ url_for('auth.logout') }}">🚪 Logout</a>

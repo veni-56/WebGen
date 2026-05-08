@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% block title %}Plugin Marketplace — Admin{% endblock %}
+{% block content %}
+<div class="admin-page">
+  <div class="container">
+    <div class="admin-header">
+      <h1>🧩 Plugin Marketplace</h1>
+      <p>Install and manage plugins to extend WebGen functionality.</p>
+    </div>
+
+    <!-- Install New Plugin -->
+    <div class="card mb-4">
+      <div class="card-header"><h3>Install New Plugin</h3></div>
+      <div class="card-body">
+        <form method="POST" action="{{ url_for('admin.install_plugin') }}" class="plugin-install-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label>Plugin Slug *</label>
+              <input type="text" name="slug" placeholder="e.g. seo-optimizer" required class="form-control"/>
+            </div>
+            <div class="form-group">
+              <label>Display Name *</label>
+              <input type="text" name="name" placeholder="SEO Optimizer" required class="form-control"/>
+            </div>
+            <div class="form-group">
+              <label>Version</label>
+              <input type="text" name="version" value="1.0.0" class="form-control"/>
+            </div>
+            <div class="form-group">
+              <label>Author</label>
+              <input type="text" name="author" placeholder="Author name" class="form-control"/>
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <textarea name="description" rows="2" placeholder="What does this plugin do?" class="form-control"></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary">Install Plugin</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Installed Plugins -->
+    <div class="card">
+      <div class="card-header"><h3>Installed Plugins ({{ plugins|length }})</h3></div>
+      <div class="card-body">
+        {% if plugins %}
+        <table class="admin-table">
+          <thead>
+            <tr><th>Name</th><th>Slug</th><th>Version</th><th>Author</th><th>Status</th><th>Actions</th></tr>
+          </thead>
+          <tbody>
+            {% for plugin in plugins %}
+            <tr>
+              <td><strong>{{ plugin.name }}</strong><br><small>{{ plugin.description }}</small></td>
+              <td><code>{{ plugin.slug }}</code></td>
+              <td>{{ plugin.version }}</td>
+              <td>{{ plugin.author or '—' }}</td>
+              <td>
+                {% if plugin.installed %}
+                  <span class="badge badge-success">Installed</span>
+                {% else %}
+                  <span class="badge badge-secondary">Not Installed</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if plugin.installed %}
+                <form method="POST" action="{{ url_for('admin.uninstall_plugin', slug=plugin.slug) }}" style="display:inline">
+                  <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Uninstall {{ plugin.name }}?')">Uninstall</button>
+                </form>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        {% else %}
+        <div class="empty-state">
+          <p>No plugins installed yet. Use the form above to install your first plugin.</p>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Built-in Plugins -->
+    <div class="card mt-4">
+      <div class="card-header"><h3>Built-in Plugins</h3></div>
+      <div class="card-body">
+        <div class="plugin-grid">
+          {% for p in [
+            {'name': 'SEO Optimizer', 'icon': '🔍', 'desc': 'Auto-inject meta tags, OG tags, sitemap', 'status': 'active'},
+            {'name': 'Analytics', 'icon': '📊', 'desc': 'Google Analytics & Plausible integration', 'status': 'active'},
+            {'name': 'Contact Forms', 'icon': '✉️', 'desc': 'Form handling with email notifications', 'status': 'active'},
+            {'name': 'Image Optimizer', 'icon': '🖼️', 'desc': 'Auto-compress and WebP conversion', 'status': 'active'},
+            {'name': 'Dark Mode', 'icon': '🌙', 'desc': 'Automatic dark/light theme toggle', 'status': 'active'},
+            {'name': 'PWA Support', 'icon': '📱', 'desc': 'Service worker and manifest generation', 'status': 'beta'},
+          ] %}
+          <div class="plugin-card">
+            <div class="plugin-icon">{{ p.icon }}</div>
+            <div class="plugin-info">
+              <h4>{{ p.name }}</h4>
+              <p>{{ p.desc }}</p>
+            </div>
+            <span class="badge badge-{{ 'success' if p.status == 'active' else 'warning' }}">{{ p.status }}</span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

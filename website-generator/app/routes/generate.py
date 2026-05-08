@@ -101,3 +101,24 @@ def generate_page():
         except Exception as exc:
             flash(f"Generation failed: {exc}", "error")
     return render_template("generate.html", themes=list_themes())
+
+
+# ── Pricing page ──────────────────────────────────────────────────────────────
+from flask import render_template as _rt
+from billing import PLANS, get_user_plan
+
+@generate_bp.route("/pricing")
+def pricing():
+    user_plan = get_user_plan(session.get("user_id")) if session.get("user_id") else "free"
+    return _rt("pricing.html", plans=PLANS, user_plan=user_plan)
+
+@generate_bp.route("/billing/checkout/<plan>", methods=["POST"])
+def billing_checkout(plan):
+    from flask import flash, redirect, url_for, session
+    if not session.get("user_id"):
+        return redirect(url_for("auth.login"))
+    # Mock upgrade — works without Stripe keys
+    import db as database
+    database.update_user_plan(session["user_id"], plan)
+    flash(f"Upgraded to {plan.title()} plan!", "success")
+    return redirect(url_for("auth.account"))

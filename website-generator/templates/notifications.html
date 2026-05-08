@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block title %}Notifications — WebGen{% endblock %}
+{% block content %}
+<div class="container" style="max-width:700px;margin:2rem auto;padding:0 1rem">
+  <h2 style="margin-bottom:1.5rem">🔔 Notifications</h2>
+
+  {% if notifications %}
+    {% for n in notifications %}
+    <div style="background:{% if n.type=='success' %}#f0fdf4{% elif n.type=='warning' %}#fffbeb{% elif n.type=='error' %}#fef2f2{% else %}#eff6ff{% endif %};
+                border-left:4px solid {% if n.type=='success' %}#10b981{% elif n.type=='warning' %}#f59e0b{% elif n.type=='error' %}#ef4444{% else %}#3b82f6{% endif %};
+                border-radius:.5rem;padding:1rem 1.25rem;margin-bottom:1rem">
+      <div style="display:flex;align-items:flex-start;gap:.75rem">
+        <span style="font-size:1.25rem">
+          {% if n.type=='success' %}✅{% elif n.type=='warning' %}⚠️{% elif n.type=='error' %}❌{% else %}ℹ️{% endif %}
+        </span>
+        <div>
+          <h4 style="margin:0 0 .25rem;font-size:1rem">{{ n.title }}</h4>
+          <p style="margin:0 0 .5rem;color:#555">{{ n.message }}</p>
+          <small style="color:#888">{{ n.created_at }}</small>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  {% else %}
+    <div style="text-align:center;padding:3rem;color:#888">
+      <div style="font-size:3rem;margin-bottom:1rem">🔔</div>
+      <p>No notifications yet. Check back later!</p>
+      <a href="{{ url_for('dashboard.index') }}" class="btn btn-primary" style="margin-top:1rem">Back to Dashboard</a>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}
