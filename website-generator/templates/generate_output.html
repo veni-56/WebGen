@@ -6,7 +6,7 @@
   <!-- Top bar -->
   <div class="gout-topbar">
     <div class="gout-topbar-left">
-      <a href="{{ url_for('generate_page') }}" class="gout-back">← New</a>
+      <a href="{{ url_for('generate.generate_page') }}" class="gout-back">← New</a>
       <div class="gout-title">
         <h2>{{ result.site_name }}</h2>
         <div class="gout-badges">
@@ -86,8 +86,8 @@
           <a href="{{ url_for('preview', project_id=result.project_id) }}" target="_blank" class="ov-action-btn"><span>👁</span> Preview</a>
           <a href="{{ url_for('download', project_id=result.project_id) }}" class="ov-action-btn"><span>⬇</span> Download ZIP</a>
           <a href="{{ url_for('editor', project_id=result.project_id) }}" class="ov-action-btn ov-action-primary"><span>✏️</span> Open Editor</a>
-          <a href="{{ url_for('dashboard') }}" class="ov-action-btn"><span>📁</span> Dashboard</a>
-          <a href="{{ url_for('generate_page') }}" class="ov-action-btn"><span>⚡</span> Generate Another</a>
+          <a href="{{ url_for('dashboard.index') }}" class="ov-action-btn"><span>📁</span> Dashboard</a>
+          <a href="{{ url_for('generate.generate_page') }}" class="ov-action-btn"><span>⚡</span> Generate Another</a>
         </div>
       </div>
     </div>
@@ -319,7 +319,7 @@
       <span>{{ result.total_files }} files · {{ result.total_lines }} lines · {{ result.summary.complexity }} complexity</span>
     </div>
     <div class="gbc-right">
-      <a href="{{ url_for('generate_page') }}" class="gbc-btn">⚡ Generate Another</a>
+      <a href="{{ url_for('generate.generate_page') }}" class="gbc-btn">⚡ Generate Another</a>
       <a href="{{ url_for('download', project_id=result.project_id) }}" class="gbc-btn gbc-primary">⬇ Download ZIP</a>
     </div>
   </div>

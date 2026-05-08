@@ -14,7 +14,7 @@
     <h2>Customise your website</h2>
     <p class="wizard-sub">Type: <strong>{{ wiz_type }}</strong> &nbsp;|&nbsp; Stack: <strong>{{ wiz_stack }}</strong></p>
 
-    <form method="POST" action="{{ url_for('wizard_step3') }}">
+    <form method="POST" action="{{ url_for('generate.wizard_step3') }}">
 
       <!-- Basic info -->
       <div class="wiz-section">
@@ -119,7 +119,7 @@
       {% endif %}
 
       <div class="wiz-footer">
-        <a href="{{ url_for('wizard_step1') }}" class="btn-back">← Back</a>
+        <a href="{{ url_for('generate.wizard_step1') }}" class="btn-back">← Back</a>
         <button type="submit" class="btn-submit">Next: Generate →</button>
       </div>
     </form>

@@ -9,8 +9,8 @@
     <h1>Build Production-Ready<br/><span class="gradient-text">Websites with AI</span></h1>
     <p>Describe your website in plain English. Our AI analyzes intent, designs the architecture, and generates complete working code — instantly.</p>
     <div class="hero-cta">
-      <a href="{{ url_for('signup') }}" class="btn-hero">Start Building Free</a>
-      <a href="{{ url_for('generate_page') }}" class="btn-hero-outline">Try AI Generator</a>
+      <a href="{{ url_for('auth.signup') }}" class="btn-hero">Start Building Free</a>
+      <a href="{{ url_for('generate.generate_page') }}" class="btn-hero-outline">Try AI Generator</a>
     </div>
     <div class="hero-social-proof">
       <div class="hsp-item"><strong>6</strong><span>Project Types</span></div>
@@ -138,8 +138,8 @@
   <h2>Ready to build?</h2>
   <p>Describe your website and get complete working code in seconds.</p>
   <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
-    <a href="{{ url_for('signup') }}" class="btn-hero">Get Started Free</a>
-    <a href="{{ url_for('generate_page') }}" class="btn-hero-outline" style="border-color:rgba(255,255,255,.3);color:#fff">Try AI Generator</a>
+    <a href="{{ url_for('auth.signup') }}" class="btn-hero">Get Started Free</a>
+    <a href="{{ url_for('generate.generate_page') }}" class="btn-hero-outline" style="border-color:rgba(255,255,255,.3);color:#fff">Try AI Generator</a>
   </div>
 </section>
 

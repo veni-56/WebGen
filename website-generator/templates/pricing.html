@@ -38,11 +38,11 @@
             <button class="pricing-btn pricing-btn-current" disabled>Current Plan</button>
           {% elif plan_key == 'free' %}
             {% if session.user_id %}
-            <form method="POST" action="{{ url_for('billing_downgrade') }}">
+            <form method="POST" action="{{ url_for('auth.account') }}">
               <button type="submit" class="pricing-btn pricing-btn-outline">Downgrade to Free</button>
             </form>
             {% else %}
-            <a href="{{ url_for('signup') }}" class="pricing-btn pricing-btn-outline">Get Started Free</a>
+            <a href="{{ url_for('auth.signup') }}" class="pricing-btn pricing-btn-outline">Get Started Free</a>
             {% endif %}
           {% else %}
             {% if session.user_id %}
@@ -52,7 +52,7 @@
               </button>
             </form>
             {% else %}
-            <a href="{{ url_for('signup') }}" class="pricing-btn pricing-btn-primary">Get Started</a>
+            <a href="{{ url_for('auth.signup') }}" class="pricing-btn pricing-btn-primary">Get Started</a>
             {% endif %}
           {% endif %}
         </div>

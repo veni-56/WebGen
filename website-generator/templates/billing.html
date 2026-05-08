@@ -39,9 +39,9 @@
         <p class="billing-period">Renews: {{ sub.current_period_end[:10] }}</p>
         {% endif %}
         <div class="plan-actions">
-          <a href="{{ url_for('pricing') }}" class="billing-btn">View All Plans</a>
+          <a href="{{ '#pricing' }}" class="billing-btn">View All Plans</a>
           {% if plan != 'free' %}
-          <form method="POST" action="{{ url_for('billing_downgrade') }}" style="display:inline" onsubmit="return confirm('Downgrade to Free?')">
+          <form method="POST" action="{{ url_for('auth.account') }}" style="display:inline" onsubmit="return confirm('Downgrade to Free?')">
             <button type="submit" class="billing-btn billing-btn-danger">Downgrade</button>
           </form>
           {% endif %}
@@ -66,7 +66,7 @@
           </div>
         </div>
         {% if plan == 'free' %}
-        <a href="{{ url_for('pricing') }}" class="billing-btn billing-btn-primary" style="margin-top:1rem;display:block;text-align:center">⚡ Upgrade for More</a>
+        <a href="{{ '#pricing' }}" class="billing-btn billing-btn-primary" style="margin-top:1rem;display:block;text-align:center">⚡ Upgrade for More</a>
         {% endif %}
       </div>
 
@@ -80,7 +80,7 @@
             <button type="submit" class="billing-btn billing-btn-primary">+ Create Key</button>
           </form>
           {% else %}
-          <a href="{{ url_for('pricing') }}" class="billing-btn">Upgrade to Business for API access</a>
+          <a href="{{ '#pricing' }}" class="billing-btn">Upgrade to Business for API access</a>
           {% endif %}
         </div>
         {% if api_keys %}

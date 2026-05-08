@@ -11,14 +11,14 @@
         <p class="sub">{{ projects|length }} project{{ 's' if projects|length != 1 }}</p>
       </div>
       <div class="dash-actions">
-        <a href="{{ url_for('quick_generate') }}" class="btn-ai">✨ AI Generate</a>
-        <a href="{{ url_for('wizard_step1') }}" class="btn-submit" style="width:auto;padding:.65rem 1.5rem">+ New Project</a>
+        <a href="{{ url_for('dashboard.quick_generate') }}" class="btn-ai">✨ AI Generate</a>
+        <a href="{{ url_for('generate.wizard_step1') }}" class="btn-submit" style="width:auto;padding:.65rem 1.5rem">+ New Project</a>
       </div>
     </div>
 
     <!-- Quick prompt bar -->
     <div class="quick-prompt-bar">
-      <form method="POST" action="{{ url_for('quick_generate') }}" class="qp-form">
+      <form method="POST" action="{{ url_for('dashboard.quick_generate') }}" class="qp-form">
         <span class="qp-icon">✨</span>
         <input name="prompt" type="text" placeholder='Describe your website... e.g. "Create a dark portfolio with gallery and contact form"' autocomplete="off"/>
         <button type="submit">Generate</button>
@@ -36,11 +36,11 @@
             <button class="menu-btn" onclick="toggleMenu('{{ p.id }}')">⋯</button>
             <div class="menu-dropdown" id="menu-{{ p.id }}">
               <button onclick="startRename('{{ p.id }}', '{{ p.name }}')">✏️ Rename</button>
-              <form method="POST" action="{{ url_for('duplicate_project', project_id=p.id) }}" style="margin:0">
+              <form method="POST" action="{{ url_for('projects.duplicate', project_id=p.id) }}" style="margin:0">
                 <button type="submit">📋 Duplicate</button>
               </form>
-              <a href="{{ url_for('project_versions', project_id=p.id) }}">🕐 History</a>
-              <form method="POST" action="{{ url_for('delete_project', project_id=p.id) }}"
+              <a href="{{ url_for('projects.versions', project_id=p.id) }}">🕐 History</a>
+              <form method="POST" action="{{ url_for('projects.delete', project_id=p.id) }}"
                     onsubmit="return confirm('Delete {{ p.name }}?')" style="margin:0">
                 <button type="submit" class="menu-danger">🗑 Delete</button>
               </form>
@@ -73,8 +73,8 @@
       <h3>No projects yet</h3>
       <p>Generate your first website in seconds — no coding needed.</p>
       <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
-        <a href="{{ url_for('quick_generate') }}" class="btn-ai">✨ AI Generate</a>
-        <a href="{{ url_for('wizard_step1') }}" class="btn-submit" style="width:auto;padding:.75rem 2rem">Use Wizard</a>
+        <a href="{{ url_for('dashboard.quick_generate') }}" class="btn-ai">✨ AI Generate</a>
+        <a href="{{ url_for('generate.wizard_step1') }}" class="btn-submit" style="width:auto;padding:.75rem 2rem">Use Wizard</a>
       </div>
     </div>
     {% endif %}
