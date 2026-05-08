@@ -4,31 +4,17 @@ services:
     runtime: python
     region: oregon
     plan: free
+    rootDir: website-generator
     buildCommand: pip install -r requirements.txt
-    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120
-    healthCheckPath: /health
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120 --access-logfile - --error-logfile -
+    healthCheckPath: /
 
     envVars:
       - key: FLASK_DEBUG
         value: "0"
       - key: PYTHON_VERSION
-        value: "3.12.0"
+        value: "3.11.0"
       - key: SECRET_KEY
         generateValue: true
-      - key: DB_PATH
-        value: /opt/render/project/data/projects.db
-      - key: UPLOADS_DIR
-        value: /opt/render/project/data/uploads
-      - key: PUBLISH_DIR
-        value: /opt/render/project/data/published
-      - key: LOG_DIR
-        value: /opt/render/project/data/logs
-      - key: WORKER_COUNT
-        value: "0"
       - key: ENV
         value: production
-
-    disk:
-      name: webgen-data
-      mountPath: /opt/render/project/data
-      sizeGB: 1
