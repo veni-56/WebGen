@@ -70,6 +70,25 @@ log_request(app)
 # ── Register blueprints ───────────────────────────────────────────────────────
 app.register_blueprint(health_bp)
 
+# Register new blueprint-based routes (auth, dashboard, generate, etc.)
+try:
+    from app.routes.auth      import auth_bp
+    from app.routes.dashboard import dashboard_bp
+    from app.routes.generate  import generate_bp
+    from app.routes.editor    import editor_bp
+    from app.routes.projects  import projects_bp
+    from app.routes.admin     import admin_bp
+    from app.routes.api       import api_bp
+    app.register_blueprint(auth_bp)
+    app.register_blueprint(dashboard_bp)
+    app.register_blueprint(generate_bp)
+    app.register_blueprint(editor_bp)
+    app.register_blueprint(projects_bp)
+    app.register_blueprint(admin_bp)
+    app.register_blueprint(api_bp)
+except Exception as _bp_err:
+    pass  # blueprints optional — old routes still work
+
 # ── AI engine singletons ──────────────────────────────────────────────────────
 _optimizer   = PromptOptimizer()
 _validator   = ResponseValidator()
