@@ -20,8 +20,8 @@
     </div>
     <div class="gout-topbar-right">
       <span class="gout-meta">{{ result.total_files }} files · {{ result.total_lines }} lines</span>
-      <a href="{{ url_for('download', project_id=result.project_id) }}" class="gout-dl-btn">⬇ ZIP</a>
-      <a href="{{ url_for('editor', project_id=result.project_id) }}" class="gout-edit-btn">✏️ Editor</a>
+      <a href="{{ url_for('projects.download', project_id=result.project_id) }}" class="gout-dl-btn">⬇ ZIP</a>
+      <a href="{{ url_for('editor.editor', project_id=result.project_id) }}" class="gout-edit-btn">✏️ Editor</a>
     </div>
   </div>
 
@@ -83,9 +83,9 @@
       <div class="ov-card ov-card-actions">
         <div class="ov-card-header"><span>⚡</span> actions</div>
         <div class="ov-actions-grid">
-          <a href="{{ url_for('preview', project_id=result.project_id) }}" target="_blank" class="ov-action-btn"><span>👁</span> Preview</a>
-          <a href="{{ url_for('download', project_id=result.project_id) }}" class="ov-action-btn"><span>⬇</span> Download ZIP</a>
-          <a href="{{ url_for('editor', project_id=result.project_id) }}" class="ov-action-btn ov-action-primary"><span>✏️</span> Open Editor</a>
+          <a href="{{ url_for('editor.preview', project_id=result.project_id) }}" target="_blank" class="ov-action-btn"><span>👁</span> Preview</a>
+          <a href="{{ url_for('projects.download', project_id=result.project_id) }}" class="ov-action-btn"><span>⬇</span> Download ZIP</a>
+          <a href="{{ url_for('editor.editor', project_id=result.project_id) }}" class="ov-action-btn ov-action-primary"><span>✏️</span> Open Editor</a>
           <a href="{{ url_for('dashboard.index') }}" class="ov-action-btn"><span>📁</span> Dashboard</a>
           <a href="{{ url_for('generate.generate_page') }}" class="ov-action-btn"><span>⚡</span> Generate Another</a>
         </div>
@@ -320,7 +320,7 @@
     </div>
     <div class="gbc-right">
       <a href="{{ url_for('generate.generate_page') }}" class="gbc-btn">⚡ Generate Another</a>
-      <a href="{{ url_for('download', project_id=result.project_id) }}" class="gbc-btn gbc-primary">⬇ Download ZIP</a>
+      <a href="{{ url_for('projects.download', project_id=result.project_id) }}" class="gbc-btn gbc-primary">⬇ Download ZIP</a>
     </div>
   </div>
 

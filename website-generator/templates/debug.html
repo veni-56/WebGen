@@ -9,7 +9,7 @@
         <p class="muted">{{ project.name }} · {{ project.project_type }}</p>
       </div>
       <div class="debug-header-actions">
-        <a href="{{ url_for('editor', project_id=project.id) }}" class="billing-btn">← Editor</a>
+        <a href="{{ url_for('editor.editor', project_id=project.id) }}" class="billing-btn">← Editor</a>
         <button class="billing-btn billing-btn-primary" onclick="analyzeProject()" id="analyzeBtn">🔍 Analyze</button>
         <button class="billing-btn" onclick="fixProject()" id="fixBtn" style="display:none">🔧 Auto-Fix All</button>
       </div>

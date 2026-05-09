@@ -16,8 +16,8 @@
         <p class="project-prompt">{{ p.prompt[:80] }}{% if p.prompt|length > 80 %}...{% endif %}</p>
         <p class="project-date">{{ p.created_at }}</p>
         <div class="project-actions">
-          <a href="{{ url_for('preview', project_id=p.id) }}" target="_blank" class="btn-action">Preview</a>
-          <a href="{{ url_for('download', project_id=p.id) }}" class="btn-action">Download ZIP</a>
+          <a href="{{ url_for('editor.preview', project_id=p.id) }}" target="_blank" class="btn-action">Preview</a>
+          <a href="{{ url_for('projects.download', project_id=p.id) }}" class="btn-action">Download ZIP</a>
         </div>
       </div>
       {% endfor %}

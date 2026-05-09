@@ -59,9 +59,9 @@
         <p class="project-date">{{ p.updated_at[:16] if p.updated_at else p.created_at[:16] }}</p>
 
         <div class="project-actions">
-          <a href="{{ url_for('editor', project_id=p.id) }}" class="pact-btn pact-primary">✏️ Edit</a>
-          <a href="{{ url_for('preview', project_id=p.id) }}" target="_blank" class="pact-btn">👁 Preview</a>
-          <a href="{{ url_for('download', project_id=p.id) }}" class="pact-btn">⬇ ZIP</a>
+          <a href="{{ url_for('editor.editor', project_id=p.id) }}" class="pact-btn pact-primary">✏️ Edit</a>
+          <a href="{{ url_for('editor.preview', project_id=p.id) }}" target="_blank" class="pact-btn">👁 Preview</a>
+          <a href="{{ url_for('projects.download', project_id=p.id) }}" class="pact-btn">⬇ ZIP</a>
         </div>
       </div>
       {% endfor %}

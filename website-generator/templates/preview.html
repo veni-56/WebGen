@@ -9,7 +9,7 @@
         <span class="type-badge type-{{ project.project_type }}">{{ project.project_type }}</span>
       </div>
       <div style="display:flex;gap:1rem">
-        <a href="{{ url_for('download', project_id=project.id) }}" class="btn-submit" style="padding:.6rem 1.4rem">⬇ Download ZIP</a>
+        <a href="{{ url_for('projects.download', project_id=project.id) }}" class="btn-submit" style="padding:.6rem 1.4rem">⬇ Download ZIP</a>
         <a href="{{ url_for('dashboard.index') }}" class="btn-back">← Dashboard</a>
       </div>
     </div>
