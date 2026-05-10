@@ -290,7 +290,7 @@
         </div>
 
         {# Desktop CTA #}
-        {% if product.stock > 0 and current_user.is_authenticated and current_user.role == 'customer' %}
+        {% if product.stock > 0 and current_user.is_authenticated and current_user.role in ('customer', 'seller') %}
         <div class="hidden md:flex gap-3">
           <button @click="addToCart()"
                   :disabled="adding"
@@ -390,7 +390,7 @@
           {% endif %}
 
           {# Write a review #}
-          {% if current_user.is_authenticated and current_user.role == 'customer' %}
+          {% if current_user.is_authenticated and current_user.role in ('customer', 'seller') %}
           <div x-data="{ open: false, rating: {{ user_review.rating if user_review else 0 }} }">
             <button @click="open = !open"
                     :aria-expanded="open.toString()"
@@ -503,7 +503,7 @@
      ══════════════════════════════════════════════════════════ #}
   {% if product.stock > 0 %}
   <div class="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-gray-200 px-4 py-3 flex gap-3 md:hidden shadow-[0_-4px_16px_rgba(0,0,0,.08)]">
-    {% if current_user.is_authenticated and current_user.role == 'customer' %}
+    {% if current_user.is_authenticated and current_user.role in ('customer', 'seller') %}
     <button @click="addToCart()"
             :disabled="adding"
             :class="adding ? 'opacity-60 cursor-not-allowed' : ''"
