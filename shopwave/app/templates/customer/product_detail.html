@@ -533,3 +533,63 @@
 
 </div>
 {% endblock %}
+
+{% block scripts %}
+<script>
+function productDetail(price, mrp) {
+  return {
+    allImages: [
+      {% for img in images %}
+        "{{ url_for('static', filename='uploads/' + img) }}",
+      {% endfor %}
+      {% if not images %}
+        "{{ url_for('static', filename='uploads/' + (product.image or 'default.png')) }}",
+      {% endif %}
+    ],
+    activeIdx:  0,
+    imgLoading: true,
+    get activeImage() {
+      return this.allImages[this.activeIdx] ||
+             "{{ url_for('static', filename='uploads/default.png') }}";
+    },
+    prevImage() { this.imgLoading=true; this.activeIdx=(this.activeIdx-1+this.allImages.length)%this.allImages.length; },
+    nextImage() { this.imgLoading=true; this.activeIdx=(this.activeIdx+1)%this.allImages.length; },
+    setImage(i)  { this.imgLoading=true; this.activeIdx=i; },
+    qty: 1,
+    maxQty: {{ product.stock or 1 }},
+    incQty() { if(this.qty < this.maxQty) this.qty++; },
+    decQty() { if(this.qty > 1) this.qty--; },
+    selectedSize:  "{{ (variants[0].size if variants else '') | e }}",
+    selectedColor: "{{ (variants[0].color if variants else '') | e }}",
+    price: price,
+    mrp:   mrp,
+    adding: false,
+    wishlisted: false,
+    async addToCart() {
+      this.adding = true;
+      try {
+        const r = await fetch('/cart/add/{{ product.id }}', {
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({qty:this.qty, size:this.selectedSize, color:this.selectedColor})
+        });
+        const d = await r.json().catch(()=>({}));
+        const badge = document.getElementById('cart-count');
+        if(badge && d.cart_count) badge.textContent = d.cart_count;
+        this.showToast(d.message || 'Added to cart!', 'success');
+      } catch(e) { this.showToast('Please login to add to cart','info'); }
+      this.adding = false;
+    },
+    buyNow() { this.addToCart().then(()=>{ window.location.href='/checkout'; }); },
+    toggleWishlist() { this.wishlisted=!this.wishlisted; this.showToast(this.wishlisted?'Added to wishlist ♥':'Removed from wishlist','info'); },
+    showToast(msg, type='success') {
+      const c={success:'#10b981',error:'#ef4444',info:'#6c63ff'};
+      const el=document.createElement('div');
+      el.style.cssText=`position:fixed;bottom:5rem;left:50%;transform:translateX(-50%);z-index:9999;background:${c[type]||c.success};color:#fff;padding:.65rem 1.25rem;border-radius:.75rem;font-size:.875rem;font-weight:600;box-shadow:0 8px 24px rgba(0,0,0,.2)`;
+      el.textContent=msg; document.body.appendChild(el);
+      setTimeout(()=>el.remove(),2500);
+    },
+  };
+}
+</script>
+{% endblock %}
