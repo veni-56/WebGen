@@ -1,49 +1,87 @@
-{% extends 'base.html' %}
-{% block title %}Login with OTP — ShopWave{% endblock %}
+{% extends 'base_tailwind.html' %}
+{% block title %}Login — ShopWave{% endblock %}
 {% block content %}
-<div class="row justify-content-center">
-  <div class="col-md-5 col-lg-4">
-    <div class="card border-0 shadow-sm mt-4">
-      <div class="card-body p-4">
-        <div class="text-center mb-4">
-          <i class="bi bi-phone fs-1 text-primary"></i>
-          <h4 class="fw-bold mt-2">Login with Mobile OTP</h4>
-          <p class="text-muted small">Enter your 10-digit mobile number to receive a one-time password.</p>
+<div class="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+  <div class="w-full max-w-sm">
+
+    <!-- Logo -->
+    <div class="text-center mb-6">
+      <a href="{{ url_for('customer.home') }}" class="inline-flex items-center gap-2">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-pink-500 to-pink-600 flex items-center justify-center">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+          </svg>
         </div>
+        <span class="text-2xl font-black text-gray-900">ShopWave</span>
+      </a>
+    </div>
 
-        <form method="POST" action="{{ url_for('auth.otp_request') }}">
-          <div class="mb-3">
-            <label class="form-label fw-semibold">Mobile Number</label>
-            <div class="input-group">
-              <span class="input-group-text"><i class="bi bi-phone"></i></span>
-              <input type="tel" name="mobile" class="form-control form-control-lg"
-                     placeholder="10-digit mobile number"
-                     pattern="\d{10}" maxlength="10" required
-                     autofocus />
+    <!-- Card -->
+    <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+
+      <!-- Banner image (Meesho style) -->
+      <div class="bg-gradient-to-r from-pink-500 to-pink-600 p-6 text-white text-center">
+        <div class="flex justify-center gap-3 mb-3">
+          <div class="bg-white/20 rounded-xl p-2 text-center w-20">
+            <div class="text-xs font-bold">₹250</div>
+            <div class="text-xs opacity-80">Sarees</div>
+          </div>
+          <div class="bg-white/20 rounded-xl p-2 text-center w-20">
+            <div class="text-xs font-bold">₹200</div>
+            <div class="text-xs opacity-80">Kurtis</div>
+          </div>
+          <div class="bg-white/20 rounded-xl p-2 text-center w-20">
+            <div class="text-xs font-bold">₹150</div>
+            <div class="text-xs opacity-80">Tops</div>
+          </div>
+        </div>
+        <p class="font-bold text-lg">Great Quality</p>
+        <p class="text-pink-100 text-sm">Lowest prices</p>
+      </div>
+
+      <!-- Form -->
+      <div class="p-6">
+        <h2 class="text-lg font-bold text-gray-900 mb-1">Sign Up to view your profile</h2>
+        <p class="text-sm text-gray-500 mb-5">Enter your mobile number to get OTP</p>
+
+        <form method="POST" action="{{ url_for('auth.otp_request') }}" id="otpRequestForm">
+          <div class="mb-4">
+            <label class="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">
+              Phone Number
+            </label>
+            <div class="flex gap-2">
+              <div class="flex items-center gap-1 px-3 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm font-semibold text-gray-700 flex-shrink-0">
+                <span class="text-xs">🇮🇳</span>
+                <span>+91</span>
+              </div>
+              <input type="tel" name="mobile" id="mobileInput"
+                     class="flex-1 px-4 py-3 border border-gray-200 rounded-xl text-base font-semibold focus:outline-none focus:border-pink-400 focus:ring-2 focus:ring-pink-100 transition-all"
+                     placeholder="Enter 10-digit number"
+                     pattern="\d{10}" maxlength="10" required autofocus
+                     oninput="this.value=this.value.replace(/\D/g,'').slice(0,10)"/>
             </div>
-            <div class="form-text">We'll send a 6-digit OTP to this number.</div>
           </div>
 
-          <div class="d-grid mb-3">
-            <button type="submit" class="btn btn-primary btn-lg fw-semibold">
-              <i class="bi bi-send me-1"></i>Send OTP
-            </button>
-          </div>
+          <button type="submit"
+                  class="w-full py-3.5 bg-pink-500 hover:bg-pink-600 text-white font-bold rounded-xl transition-colors text-base shadow-sm">
+            Continue
+          </button>
         </form>
 
-        <hr />
-        <div class="text-center">
-          <p class="mb-1 small text-muted">Prefer email login?</p>
-          <a href="{{ url_for('auth.login') }}" class="btn btn-outline-secondary btn-sm">
-            <i class="bi bi-envelope me-1"></i>Login with Email
+        <div class="mt-4 text-center">
+          <span class="text-sm text-gray-500">Prefer email login?</span>
+          <a href="{{ url_for('auth.login') }}" class="ml-1 text-sm font-semibold text-pink-500 hover:text-pink-600">
+            Login with Email
           </a>
-        </div>
-        <div class="text-center mt-3">
-          <span class="text-muted small">Don't have an account?</span>
-          <a href="{{ url_for('auth.signup') }}" class="ms-1 small fw-semibold">Sign Up</a>
         </div>
       </div>
     </div>
+
+    <p class="text-center text-xs text-gray-400 mt-4">
+      By continuing, you agree to our
+      <a href="#" class="text-pink-500">Terms</a> &
+      <a href="#" class="text-pink-500">Privacy Policy</a>
+    </p>
   </div>
 </div>
 {% endblock %}

@@ -1,50 +1,191 @@
-{% extends 'base.html' %}
+{% extends 'base_tailwind.html' %}
 {% block title %}Verify OTP — ShopWave{% endblock %}
 {% block content %}
-<div class="row justify-content-center">
-  <div class="col-md-5 col-lg-4">
-    <div class="card border-0 shadow-sm mt-4">
-      <div class="card-body p-4">
-        <div class="text-center mb-4">
-          <i class="bi bi-shield-lock fs-1 text-success"></i>
-          <h4 class="fw-bold mt-2">Enter OTP</h4>
-          <p class="text-muted small">
-            A 6-digit OTP was sent to
-            <strong>{{ mobile[:4] }}****{{ mobile[-2:] }}</strong>
-          </p>
+<div class="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+  <div class="w-full max-w-sm">
+
+    <!-- Logo -->
+    <div class="text-center mb-6">
+      <a href="{{ url_for('customer.home') }}" class="inline-flex items-center gap-2">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-pink-500 to-pink-600 flex items-center justify-center">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/>
+          </svg>
         </div>
+        <span class="text-2xl font-black text-gray-900">ShopWave</span>
+      </a>
+    </div>
 
-        <form method="POST" action="{{ url_for('auth.otp_verify') }}">
-          <div class="mb-3">
-            <label class="form-label fw-semibold">6-Digit OTP</label>
-            <input type="text" name="code" class="form-control form-control-lg text-center fw-bold ls-wide"
-                   placeholder="• • • • • •"
-                   pattern="\d{6}" maxlength="6" minlength="6"
-                   inputmode="numeric" autocomplete="one-time-code"
-                   required autofocus />
-            <div class="form-text text-center">OTP expires in 10 minutes.</div>
+    <!-- Card -->
+    <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+
+      <!-- Banner -->
+      <div class="bg-gradient-to-r from-pink-500 to-pink-600 p-6 text-white text-center">
+        <div class="flex justify-center gap-3 mb-3">
+          <div class="bg-white/20 rounded-xl p-2 text-center w-20">
+            <div class="text-xs font-bold">₹250</div>
+            <div class="text-xs opacity-80">Sarees</div>
+          </div>
+          <div class="bg-white/20 rounded-xl p-2 text-center w-20">
+            <div class="text-xs font-bold">₹200</div>
+            <div class="text-xs opacity-80">Kurtis</div>
+          </div>
+          <div class="bg-white/20 rounded-xl p-2 text-center w-20">
+            <div class="text-xs font-bold">₹150</div>
+            <div class="text-xs opacity-80">Tops</div>
+          </div>
+        </div>
+        <p class="font-bold text-lg">Great Quality</p>
+        <p class="text-pink-100 text-sm">Lowest prices</p>
+      </div>
+
+      <!-- OTP Form -->
+      <div class="p-6">
+        <h2 class="text-lg font-bold text-gray-900 mb-1">
+          Enter OTP sent to {{ mobile }}
+        </h2>
+        <a href="{{ url_for('auth.otp_request') }}"
+           class="text-sm font-semibold text-pink-500 hover:text-pink-600 mb-5 inline-block">
+          CHANGE NUMBER
+        </a>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% for cat, msg in messages %}
+          <div class="mb-3 p-3 rounded-xl text-sm font-semibold
+               {% if cat == 'danger' %}bg-red-50 text-red-600{% else %}bg-green-50 text-green-600{% endif %}">
+            {{ msg }}
+          </div>
+          {% endfor %}
+        {% endwith %}
+
+        <!-- Dev mode OTP hint -->
+        {% if config.DEBUG %}
+        <div class="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-xl text-xs text-yellow-700">
+          <strong>Dev Mode:</strong> Check your terminal/console for the OTP code.
+        </div>
+        {% endif %}
+
+        <form method="POST" action="{{ url_for('auth.otp_verify') }}" id="otpForm">
+          <input type="hidden" name="mobile" value="{{ mobile }}"/>
+
+          <!-- 6 OTP boxes -->
+          <div class="flex gap-2 justify-center mb-6" id="otpBoxes">
+            {% for i in range(6) %}
+            <input type="text"
+                   class="otp-box w-11 h-12 text-center text-xl font-bold border-b-2 border-gray-300 focus:border-pink-500 focus:outline-none transition-colors bg-transparent"
+                   maxlength="1" pattern="\d" inputmode="numeric"
+                   data-idx="{{ i }}" autocomplete="off"/>
+            {% endfor %}
+          </div>
+          <input type="hidden" name="code" id="otpCode"/>
+
+          <!-- Resend timer -->
+          <div class="text-center mb-5">
+            <span id="resendTimer" class="text-sm text-gray-500">
+              Resend OTP in <span id="countdown">30</span>s
+            </span>
+            <a href="{{ url_for('auth.otp_request') }}" id="resendLink"
+               class="text-sm font-semibold text-pink-500 hidden">
+              Resend OTP
+            </a>
           </div>
 
-          <div class="d-grid mb-3">
-            <button type="submit" class="btn btn-success btn-lg fw-semibold">
-              <i class="bi bi-check-circle me-1"></i>Verify & Login
-            </button>
-          </div>
+          <button type="submit" id="verifyBtn"
+                  class="w-full py-3.5 bg-pink-500 hover:bg-pink-600 disabled:opacity-50 text-white font-bold rounded-xl transition-colors text-base shadow-sm"
+                  disabled>
+            Verify
+          </button>
         </form>
 
-        <div class="text-center">
-          <p class="text-muted small mb-1">Didn't receive the OTP?</p>
-          <a href="{{ url_for('auth.otp_request') }}" class="btn btn-outline-primary btn-sm">
-            <i class="bi bi-arrow-repeat me-1"></i>Resend OTP
-          </a>
-        </div>
-        <div class="text-center mt-3">
-          <a href="{{ url_for('auth.login') }}" class="text-muted small">
-            <i class="bi bi-arrow-left me-1"></i>Back to Login
+        <div class="mt-4 text-center">
+          <a href="{{ url_for('auth.login') }}" class="text-sm text-gray-500 hover:text-pink-500">
+            Login with Email instead
           </a>
         </div>
       </div>
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function() {
+  const boxes   = document.querySelectorAll('.otp-box');
+  const hidden  = document.getElementById('otpCode');
+  const btn     = document.getElementById('verifyBtn');
+  const form    = document.getElementById('otpForm');
+
+  // Auto-focus first box
+  boxes[0]?.focus();
+
+  // Handle input in each box
+  boxes.forEach((box, i) => {
+    box.addEventListener('input', e => {
+      const val = e.target.value.replace(/\D/g, '');
+      e.target.value = val.slice(-1);
+
+      // Move to next box
+      if (val && i < boxes.length - 1) boxes[i + 1].focus();
+
+      updateHidden();
+    });
+
+    box.addEventListener('keydown', e => {
+      if (e.key === 'Backspace' && !box.value && i > 0) {
+        boxes[i - 1].focus();
+        boxes[i - 1].value = '';
+        updateHidden();
+      }
+      // Allow paste
+      if (e.key === 'v' && (e.ctrlKey || e.metaKey)) return;
+    });
+
+    // Handle paste — fill all boxes
+    box.addEventListener('paste', e => {
+      e.preventDefault();
+      const pasted = (e.clipboardData || window.clipboardData)
+                       .getData('text').replace(/\D/g, '').slice(0, 6);
+      pasted.split('').forEach((ch, j) => {
+        if (boxes[j]) boxes[j].value = ch;
+      });
+      if (boxes[pasted.length - 1]) boxes[pasted.length - 1].focus();
+      updateHidden();
+    });
+  });
+
+  function updateHidden() {
+    const code = [...boxes].map(b => b.value).join('');
+    hidden.value = code;
+    btn.disabled = code.length < 6;
+    if (code.length === 6) btn.classList.add('ring-2', 'ring-pink-300');
+    else btn.classList.remove('ring-2', 'ring-pink-300');
+  }
+
+  // Auto-submit when all 6 digits entered
+  function checkAutoSubmit() {
+    const code = [...boxes].map(b => b.value).join('');
+    if (code.length === 6) {
+      setTimeout(() => form.submit(), 300);
+    }
+  }
+  boxes[5]?.addEventListener('input', checkAutoSubmit);
+
+  // Countdown timer
+  let secs = 30;
+  const countEl   = document.getElementById('countdown');
+  const timerEl   = document.getElementById('resendTimer');
+  const resendLink = document.getElementById('resendLink');
+
+  const timer = setInterval(() => {
+    secs--;
+    if (countEl) countEl.textContent = secs;
+    if (secs <= 0) {
+      clearInterval(timer);
+      if (timerEl)   timerEl.classList.add('hidden');
+      if (resendLink) resendLink.classList.remove('hidden');
+    }
+  }, 1000);
+})();
+</script>
 {% endblock %}
