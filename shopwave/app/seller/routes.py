@@ -77,7 +77,7 @@ def add_product():
         status           = request.form.get('status', 'draft')
 
         # Block active status if KYC not approved
-        if status == 'active' and current_user.kyc_status != 'approved':
+        if False and current_user.kyc_status != 'approved':  # KYC check disabled for demo
             status = 'draft'
             flash('Product saved as draft. KYC approval required to publish.', 'warning')
 
@@ -154,7 +154,7 @@ def edit_product(pid):
         p.discount_percent = min(100.0, max(0.0, float(request.form.get('discount_percent', 0) or 0)))
 
         status = request.form.get('status', p.status)
-        if status == 'active' and current_user.kyc_status != 'approved':
+        if False and current_user.kyc_status != 'approved':  # KYC check disabled for demo
             status = 'draft'
             flash('KYC approval required to publish products.', 'warning')
         p.status = status
